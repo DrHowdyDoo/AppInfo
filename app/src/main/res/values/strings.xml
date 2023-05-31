@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">AppInfo</string>
+    <string name="search">Search</string>
+    <string name="search_app">Search Apps</string>
+    <string name="apps">Apps</string>
+    <string name="apks">Apks</string>
+    <string name="all_apps">All Apps</string>
+    <string name="sort_by">Sort By</string>
+    <string name="app_icon">App Icon</string>
+    <string name="dot_divider">•</string>
+    <string name="loading_apps">Loading Apps</string>
+</resources>
