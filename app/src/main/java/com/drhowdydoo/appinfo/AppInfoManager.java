@@ -15,10 +15,13 @@ import androidx.fragment.app.Fragment;
 
 import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.model.AppInfo;
+import com.drhowdydoo.appinfo.util.Constants;
+import com.drhowdydoo.appinfo.util.PermissionManager;
 
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -30,9 +33,19 @@ public class AppInfoManager {
 
     private Context context;
     private static final long LAST_USED_TIME_NOT_AVAILABLE = 63072000000L;
+    private UsageStatsManager usageStatsManager;
+    private StorageStatsManager storageStatsManager;
+    private long start;
+    private PackageManager packageManager;
 
     public AppInfoManager(Context context) {
         this.context = context;
+        this.usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -1);
+        this.start = calendar.getTimeInMillis();
+        packageManager = context.getPackageManager();
+        storageStatsManager = (StorageStatsManager) context.getSystemService(Context.STORAGE_STATS_SERVICE);
     }
 
 
@@ -49,44 +62,68 @@ public class AppInfoManager {
                 .flatMap(appInfo -> Observable.fromCallable(() -> getAppInfo(appInfo)).subscribeOn(Schedulers.io()))
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(appInfoList -> ((AppFragment) fragment).setData(appInfoList), Throwable::printStackTrace);
+                .subscribe(appInfoList -> ((AppFragment) fragment).setData(appInfoList,true), Throwable::printStackTrace);
 
     }
 
     private AppInfo getAppInfo(ApplicationInfo applicationInfo) throws PackageManager.NameNotFoundException, IOException {
-        PackageManager packageManager = context.getPackageManager();
         PackageInfo packageInfo = packageManager.getPackageInfo(applicationInfo.packageName,PackageManager.GET_META_DATA);
-        StorageStatsManager storageStatsManager = (StorageStatsManager) context.getSystemService(Context.STORAGE_STATS_SERVICE);
         StorageStats storageStats = storageStatsManager.queryStatsForUid(applicationInfo.storageUuid, applicationInfo.uid);
-        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, -1);
-        long start = calendar.getTimeInMillis();
-        long end = System.currentTimeMillis();
-        Map<String, UsageStats> usageStatsMap = usageStatsManager.queryAndAggregateUsageStats(start, end);
-        UsageStats usageStats = usageStatsMap.get(applicationInfo.packageName);
 
 
         String appName = packageManager.getApplicationLabel(applicationInfo).toString();
         Drawable appIcon = packageManager.getApplicationIcon(applicationInfo);
         long lastUpdated = now() - packageManager.getPackageInfo(applicationInfo.packageName,0).lastUpdateTime;
         long appSize = storageStats.getAppBytes() + storageStats.getCacheBytes() + storageStats.getDataBytes();
-        long lastUsed = usageStats != null ? (now() - usageStats.getLastTimeUsed()) : LAST_USED_TIME_NOT_AVAILABLE;
+
         boolean isSplit = packageInfo.applicationInfo.metaData != null && packageInfo.applicationInfo.metaData.getBoolean("com.android.vending.splits.required", false);
         String appVersion = packageInfo.versionName;
         boolean isSystemApp = ((applicationInfo.flags & (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0);
 
-
-        return new AppInfo(appName,
+        AppInfo appInfo = new AppInfo(appName,
                 appIcon,
                 lastUpdated,
                 appSize,
                 applicationInfo,
-                lastUsed,
                 isSplit,
                 appVersion,
                 isSystemApp);
+
+
+
+        return appInfo;
+    }
+
+    @SuppressLint("CheckResult")
+    public void addLastUsedTimeToAppInfo(List<AppInfo> appInfoList, AppFragment appFragment){
+
+        Observable.fromCallable(() -> {
+                    long end = System.currentTimeMillis();
+                    return usageStatsManager.queryAndAggregateUsageStats(start, end);
+                })
+                .flatMap(usageStatsMap -> Observable.fromIterable(appInfoList)
+                        .flatMap(appInfo -> Observable.fromCallable(() -> {
+                            appInfo.setLastTimeUsed(getLastUsedTime(appInfo.getAppInfo(), usageStatsMap));
+                            return appInfo;
+                        }).subscribeOn(Schedulers.computation()))
+                )
+                .toList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(processedList -> {
+                    appFragment.setData(processedList,true);
+                }, Throwable::printStackTrace);
+
+    }
+
+    private long getLastUsedTime(ApplicationInfo applicationInfo, Map<String, UsageStats> usageStatsMap){
+        try {
+            UsageStats usageStats = usageStatsMap.get(applicationInfo.packageName);
+            long lastUsed = usageStats != null ? (now() - usageStats.getLastTimeUsed()) : LAST_USED_TIME_NOT_AVAILABLE;
+            return lastUsed;
+        } catch (Exception e) {
+            return LAST_USED_TIME_NOT_AVAILABLE;
+        }
+
     }
 
     private long now(){

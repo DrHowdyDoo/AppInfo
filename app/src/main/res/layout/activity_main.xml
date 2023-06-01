@@ -62,14 +62,16 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:paddingTop="8dp"
-        android:clipToPadding="false"
-        android:animateLayoutChanges="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:paddingTop="8dp"
+            android:clipToPadding="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:animateLayoutChanges="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

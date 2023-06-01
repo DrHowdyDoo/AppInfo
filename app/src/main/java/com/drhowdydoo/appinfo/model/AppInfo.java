@@ -20,7 +20,6 @@ public class AppInfo {
                    long appLastUpdateTime,
                    long size,
                    ApplicationInfo appInfo,
-                   long lastTimeUsed,
                    boolean isSplitApp,
                    String appVersion, boolean isSystemApp) {
         this.appName = appName;
@@ -28,7 +27,6 @@ public class AppInfo {
         this.appLastUpdateTime = appLastUpdateTime;
         this.size = size;
         this.appInfo = appInfo;
-        this.lastTimeUsed = lastTimeUsed;
         this.isSplitApp = isSplitApp;
         this.appVersion = appVersion;
         this.isSystemApp = isSystemApp;

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:padding="26dp">
 
     <TextView
@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textAppearance="?textAppearanceTitleLarge"
-        android:text="Filter"/>
-
+        android:text="Sort By"/>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -28,33 +27,70 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/btnFilterAllApps"
+                android:id="@+id/btnSortByName"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="All Apps"/>
+                android:text="Name"/>
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <Button
-                android:id="@+id/btnFilterSystemApps"
+                android:id="@+id/btnSortBySize"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="System Apps"/>
+                android:text="Size"/>
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
             <Button
-                android:id="@+id/btnFilterNonSystemApps"
+                android:id="@+id/btnSortByLastUpdate"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Non System Apps"/>
+                android:text="Last updated"/>
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/tvLockedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="bottom|center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="?textAppearanceTitleMedium"
+        android:text="Usage access required"
+        android:drawablePadding="8dp"
+        app:drawableStartCompat="@drawable/outline_lock_24" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="24dp"
+        style="?attr/materialCardViewOutlinedStyle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnSortByLastUsed"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Last used"/>
+
 
         </LinearLayout>
 

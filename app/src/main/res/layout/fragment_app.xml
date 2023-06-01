@@ -52,7 +52,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingTop="24dp" />
+            android:paddingBottom="128dp"
+            android:paddingTop="16dp" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -105,5 +106,17 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:constraint_referenced_ids="imgProgressIcon,tvProgressText,progressBar"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabScrollBack"
+        style="?attr/floatingActionButtonSmallStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="92dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/double_arrow_up" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.drhowdydoo.appinfo.adapter;
 import android.content.Context;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,17 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.drhowdydoo.appinfo.util.AppInfoDiffCallback;
-import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.R;
-import com.drhowdydoo.appinfo.util.TimeFormatter;
 import com.drhowdydoo.appinfo.databinding.AppListItemBinding;
 import com.drhowdydoo.appinfo.model.AppInfo;
+import com.drhowdydoo.appinfo.util.AppInfoComparator;
+import com.drhowdydoo.appinfo.util.AppInfoDiffCallback;
+import com.drhowdydoo.appinfo.util.Constants;
+import com.drhowdydoo.appinfo.util.TimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("FieldMayBeFinal")
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
@@ -50,30 +53,41 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         AppInfo appInfo = appInfoList.get(position);
         holder.tvAppName.setText(appInfo.getAppName());
-        holder.tvAppSize.setText(Formatter.formatShortFileSize(context,appInfo.getSize()));
+        holder.tvAppSize.setText(Formatter.formatShortFileSize(context, appInfo.getSize()));
 
         if (flagSet.contains(Constants.SHOW_SQUARE_APP_ICON)) {
             Glide.with(context)
                     .load(appInfo
-                    .getAppIcon())
+                            .getAppIcon())
                     .transform(new RoundedCorners(32))
                     .error(R.drawable.round_pest_24)
                     .into(holder.imgAppIcon);
         } else {
             Glide.with(context)
                     .load(appInfo
-                    .getAppIcon())
+                            .getAppIcon())
                     .circleCrop()
                     .error(R.drawable.round_pest_24)
                     .into(holder.imgAppIcon);
         }
 
         if (flagSet.contains(Constants.SHOW_LAST_USED_TIME)) {
-            holder.tvAppStats.setText(TimeFormatter.format(appInfo.getLastTimeUsed(),"Used"));
+            holder.tvAppStats.setText(TimeFormatter.format(appInfo.getLastTimeUsed(), "Used"));
         } else {
-            holder.tvAppStats.setText(TimeFormatter.format(appInfo.getAppLastUpdateTime(),"Updated"));
+            holder.tvAppStats.setText(TimeFormatter.format(appInfo.getAppLastUpdateTime(), "Updated"));
         }
 
+        holder.tvAppVersion.setText("v" + appInfo.getAppVersion());
+
+        if (appInfo.isSplitApp()) {
+            holder.imgSplitApp.setVisibility(View.VISIBLE);
+        } else {
+            holder.imgSplitApp.setVisibility(View.GONE);
+        }
+
+        if (appInfo.isSystemApp()) {
+            holder.tvSystemApp.setVisibility(View.VISIBLE);
+        } else holder.tvSystemApp.setVisibility(View.GONE);
 
     }
 
@@ -82,31 +96,35 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return appInfoList.size();
     }
 
-
-    public void setFlags(Integer... flags){
+    public void setFlags(Integer... flags) {
         flagSet.clear();
-        Collections.addAll(flagSet,flags);
+        Collections.addAll(flagSet, flags);
     }
 
-    public void setData(List<AppInfo> newAppInfoList){
-        AppInfoDiffCallback appInfoDiffCallback = new AppInfoDiffCallback(appInfoList,newAppInfoList);
+    public void setData(List<AppInfo> newAppInfoList) {
+        AppInfoDiffCallback appInfoDiffCallback = new AppInfoDiffCallback(appInfoList, newAppInfoList);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(appInfoDiffCallback);
         appInfoList.clear();
         appInfoList.addAll(newAppInfoList);
         diffResult.dispatchUpdatesTo(this);
     }
 
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView imgAppIcon;
-        public TextView tvAppName,tvAppSize,tvAppStats;
-            public ViewHolder(@NonNull AppListItemBinding binding) {
-                super(binding.getRoot());
-                imgAppIcon = binding.imgAppIcon;
-                tvAppName = binding.tvAppName;
-                tvAppSize = binding.tvAppSize;
-                tvAppStats = binding.tvAppStats;
-            }
+        public ImageView imgAppIcon, imgSplitApp;
+        public TextView tvAppName, tvAppSize, tvAppStats, tvAppVersion, tvSystemApp;
+
+        public ViewHolder(@NonNull AppListItemBinding binding) {
+            super(binding.getRoot());
+            imgAppIcon = binding.imgAppIcon;
+            tvAppName = binding.tvAppName;
+            tvAppSize = binding.tvAppSize;
+            tvAppStats = binding.tvAppStats;
+            tvAppVersion = binding.tvAppVersion;
+            imgSplitApp = binding.imgSplitApp;
+            tvSystemApp = binding.tvSystemApp;
         }
+    }
 
 }

@@ -9,4 +9,5 @@
     <string name="app_icon">App Icon</string>
     <string name="dot_divider">•</string>
     <string name="loading_apps">Loading Apps</string>
+    <string name="system">System</string>
 </resources>
