@@ -18,6 +18,7 @@ import com.drhowdydoo.appinfo.model.AppInfo;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.PermissionManager;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,6 +54,7 @@ public class AppInfoManager {
     @SuppressLint("CheckResult")
     public void getAllApps(Fragment fragment) throws PackageManager.NameNotFoundException, IOException {
 
+        long begin = System.currentTimeMillis();
         Observable.fromCallable(() -> {
                     PackageManager packageManager = context.getPackageManager();
                     return packageManager.getInstalledApplications(0);
@@ -62,19 +64,20 @@ public class AppInfoManager {
                 .flatMap(appInfo -> Observable.fromCallable(() -> getAppInfo(appInfo)).subscribeOn(Schedulers.io()))
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(appInfoList -> ((AppFragment) fragment).setData(appInfoList,true), Throwable::printStackTrace);
+                .subscribe(appInfoList -> {
+                    long end = System.currentTimeMillis();
+                    System.out.println("Time : " + (end - begin));
+                    ((AppFragment) fragment).setData(appInfoList, true);
+                }, Throwable::printStackTrace);
 
     }
 
-    private AppInfo getAppInfo(ApplicationInfo applicationInfo) throws PackageManager.NameNotFoundException, IOException {
+    private AppInfo getAppInfo(ApplicationInfo applicationInfo) throws PackageManager.NameNotFoundException {
         PackageInfo packageInfo = packageManager.getPackageInfo(applicationInfo.packageName,PackageManager.GET_META_DATA);
-        StorageStats storageStats = storageStatsManager.queryStatsForUid(applicationInfo.storageUuid, applicationInfo.uid);
-
 
         String appName = packageManager.getApplicationLabel(applicationInfo).toString();
         Drawable appIcon = packageManager.getApplicationIcon(applicationInfo);
         long lastUpdated = now() - packageManager.getPackageInfo(applicationInfo.packageName,0).lastUpdateTime;
-        long appSize = storageStats.getAppBytes() + storageStats.getCacheBytes() + storageStats.getDataBytes();
 
         boolean isSplit = packageInfo.applicationInfo.metaData != null && packageInfo.applicationInfo.metaData.getBoolean("com.android.vending.splits.required", false);
         String appVersion = packageInfo.versionName;
@@ -83,13 +86,38 @@ public class AppInfoManager {
         AppInfo appInfo = new AppInfo(appName,
                 appIcon,
                 lastUpdated,
-                appSize,
                 applicationInfo,
                 isSplit,
                 appVersion,
                 isSystemApp);
 
+        if (PermissionManager.hasUsageStatsPermission(context)) {
+            long totalAppSize = 0;
+            try {
+                StorageStats storageStats = storageStatsManager.queryStatsForUid(applicationInfo.storageUuid, applicationInfo.uid);
+                totalAppSize = storageStats.getAppBytes() + storageStats.getCacheBytes() + storageStats.getDataBytes();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            appInfo.setSize(totalAppSize);
 
+        } else {
+            String[] splitSourceDirs = applicationInfo.splitSourceDirs;
+            long appSize = 0;
+
+            if (splitSourceDirs != null && splitSourceDirs.length > 0) {
+                appInfo.setSplitApp(true);
+                for (String splitSourceDir : splitSourceDirs) {
+                    File splitFile = new File(splitSourceDir);
+                    appSize += splitFile.length();
+                }
+            }
+            String appSourceDir = applicationInfo.sourceDir;
+            File appFile = new File(appSourceDir);
+            appSize += appFile.length();
+
+            appInfo.setSize(appSize);
+        }
 
         return appInfo;
     }

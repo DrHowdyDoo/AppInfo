@@ -18,14 +18,12 @@ public class AppInfo {
     public AppInfo(String appName,
                    Drawable appIcon,
                    long appLastUpdateTime,
-                   long size,
                    ApplicationInfo appInfo,
                    boolean isSplitApp,
                    String appVersion, boolean isSystemApp) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.appLastUpdateTime = appLastUpdateTime;
-        this.size = size;
         this.appInfo = appInfo;
         this.isSplitApp = isSplitApp;
         this.appVersion = appVersion;
