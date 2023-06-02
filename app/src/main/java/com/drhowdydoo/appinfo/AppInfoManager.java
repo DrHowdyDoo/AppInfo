@@ -64,7 +64,13 @@ public class AppInfoManager {
                 .flatMap(appInfo -> Observable.fromCallable(() -> getAppInfo(appInfo)).subscribeOn(Schedulers.io()))
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(appInfoList -> ((AppFragment) fragment).setData(appInfoList, true), Throwable::printStackTrace);
+                .subscribe(appInfoList -> {
+                    if (((AppFragment) fragment).sortedState == Constants.SORT_BY_LAST_USED) {
+                        addLastUsedTimeToAppInfo(appInfoList,(AppFragment)fragment);
+                    } else {
+                        ((AppFragment) fragment).setData(appInfoList, true);
+                    }
+                }, Throwable::printStackTrace);
 
     }
 

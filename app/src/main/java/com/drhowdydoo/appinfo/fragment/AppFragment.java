@@ -37,7 +37,7 @@ public class AppFragment extends Fragment {
     private FragmentAppBinding binding;
     private RecyclerViewAdapter adapter;
     private List<AppInfo> appInfoList = new ArrayList<>();
-    private int sortedState = Constants.DEFAULT_SORT;
+    public int sortedState = Constants.DEFAULT_SORT;
     private int filterState = Constants.NO_FILTER;
     private AppInfoManager appInfoManager;
 
