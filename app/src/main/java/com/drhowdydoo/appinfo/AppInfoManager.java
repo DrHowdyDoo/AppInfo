@@ -34,6 +34,7 @@ public class AppInfoManager {
 
     private Context context;
     private static final long LAST_USED_TIME_NOT_AVAILABLE = 63072000000L;
+    private static final long LAST_UPDATED_TIME_NOT_AVAILABLE = 63072000000L;
     private UsageStatsManager usageStatsManager;
     private StorageStatsManager storageStatsManager;
     private long start;
@@ -52,9 +53,8 @@ public class AppInfoManager {
 
 
     @SuppressLint("CheckResult")
-    public void getAllApps(Fragment fragment) throws PackageManager.NameNotFoundException, IOException {
+    public void getAllApps(Fragment fragment) {
 
-        long begin = System.currentTimeMillis();
         Observable.fromCallable(() -> {
                     PackageManager packageManager = context.getPackageManager();
                     return packageManager.getInstalledApplications(0);
@@ -64,28 +64,32 @@ public class AppInfoManager {
                 .flatMap(appInfo -> Observable.fromCallable(() -> getAppInfo(appInfo)).subscribeOn(Schedulers.io()))
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(appInfoList -> {
-                    long end = System.currentTimeMillis();
-                    System.out.println("Time : " + (end - begin));
-                    ((AppFragment) fragment).setData(appInfoList, true);
-                }, Throwable::printStackTrace);
+                .subscribe(appInfoList -> ((AppFragment) fragment).setData(appInfoList, true), Throwable::printStackTrace);
 
     }
 
-    private AppInfo getAppInfo(ApplicationInfo applicationInfo) throws PackageManager.NameNotFoundException {
-        PackageInfo packageInfo = packageManager.getPackageInfo(applicationInfo.packageName,PackageManager.GET_META_DATA);
+    private AppInfo getAppInfo(ApplicationInfo applicationInfo) {
+
+        long lastUpdateTime = LAST_UPDATED_TIME_NOT_AVAILABLE;
+        boolean isSplit = false;
+        String appVersion = "";
+
+        try {
+            PackageInfo packageInfo = packageManager.getPackageInfo(applicationInfo.packageName,PackageManager.GET_META_DATA);
+            lastUpdateTime = now() - packageInfo.lastUpdateTime;
+            isSplit = packageInfo.applicationInfo.metaData != null && packageInfo.applicationInfo.metaData.getBoolean("com.android.vending.splits.required", false);
+            appVersion = packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException notFoundException) {
+            notFoundException.printStackTrace();
+        }
 
         String appName = packageManager.getApplicationLabel(applicationInfo).toString();
         Drawable appIcon = packageManager.getApplicationIcon(applicationInfo);
-        long lastUpdated = now() - packageManager.getPackageInfo(applicationInfo.packageName,0).lastUpdateTime;
-
-        boolean isSplit = packageInfo.applicationInfo.metaData != null && packageInfo.applicationInfo.metaData.getBoolean("com.android.vending.splits.required", false);
-        String appVersion = packageInfo.versionName;
         boolean isSystemApp = ((applicationInfo.flags & (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0);
 
         AppInfo appInfo = new AppInfo(appName,
                 appIcon,
-                lastUpdated,
+                lastUpdateTime,
                 applicationInfo,
                 isSplit,
                 appVersion,

@@ -62,13 +62,8 @@ public class AppFragment extends Fragment {
         binding.recyclerView.setAdapter(adapter);
         new FastScrollerBuilder(binding.recyclerView).useMd2Style().build();
         appInfoManager = new AppInfoManager(requireActivity());
-        try {
-            binding.progressGroup.setVisibility(View.VISIBLE);
-            appInfoManager.getAllApps(this);
-        } catch (PackageManager.NameNotFoundException | IOException e) {
-            binding.progressGroup.setVisibility(View.GONE);
-            throw new RuntimeException(e);
-        }
+        binding.progressGroup.setVisibility(View.VISIBLE);
+        appInfoManager.getAllApps(this);
 
         binding.btnFilter.setOnClickListener(v -> {
             FilterBottomSheet filterBottomSheet = new FilterBottomSheet(this);
@@ -97,12 +92,7 @@ public class AppFragment extends Fragment {
         });
 
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            try {
-                appInfoManager.getAllApps(this);
-            } catch (PackageManager.NameNotFoundException | IOException e) {
-                binding.swipeRefreshLayout.setRefreshing(false);
-                throw new RuntimeException(e);
-            }
+            appInfoManager.getAllApps(this);
         });
 
         return rootView;
