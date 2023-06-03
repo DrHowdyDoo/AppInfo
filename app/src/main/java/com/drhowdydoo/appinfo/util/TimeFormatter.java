@@ -7,6 +7,8 @@ public class TimeFormatter {
 
     public static String format(long timeInMilliseconds, String prefix) {
 
+        if (timeInMilliseconds == Constants.LAST_UPDATED_TIME_NOT_AVAILABLE) return "N/A";
+
         long time = TimeUnit.MILLISECONDS.toSeconds(timeInMilliseconds);
 
         if (time >= TimeUnit.DAYS.toSeconds(365)) {

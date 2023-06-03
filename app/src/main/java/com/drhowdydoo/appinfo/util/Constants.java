@@ -17,8 +17,8 @@ public class Constants {
 
     public static final int SORT_BY_MOST_USED = 11;
 
-    public static final long LAST_USED_TIME_NOT_AVAILABLE = 63072000000L;
-    public static final long LAST_UPDATED_TIME_NOT_AVAILABLE = 63072000000L;
+    public static final long LAST_USED_TIME_NOT_AVAILABLE = Long.MAX_VALUE;
+    public static final long LAST_UPDATED_TIME_NOT_AVAILABLE = Long.MAX_VALUE;
     public static final long FOREGROUND_TIME_NOT_AVAILABLE = 0;
 
 
