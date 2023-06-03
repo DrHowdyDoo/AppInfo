@@ -22,6 +22,4 @@ public class Constants {
     public static final long FOREGROUND_TIME_NOT_AVAILABLE = 0;
 
 
-
-
 }

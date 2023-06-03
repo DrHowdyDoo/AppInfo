@@ -19,7 +19,7 @@ import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.PermissionManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class SortBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener{
+public class SortBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener {
 
     private Fragment fragment;
 
@@ -30,7 +30,7 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        BottomSheetSortBinding binding = BottomSheetSortBinding.inflate(inflater,container,false);
+        BottomSheetSortBinding binding = BottomSheetSortBinding.inflate(inflater, container, false);
         binding.btnSortByName.setOnClickListener(this);
         binding.btnSortBySize.setOnClickListener(this);
         binding.btnSortByLastUpdate.setOnClickListener(this);
@@ -53,15 +53,15 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
             AppFragment appFragment = (AppFragment) fragment;
             if (id == R.id.btnSortByName) appFragment.sort(Constants.SORT_BY_NAME);
             else if (id == R.id.btnSortBySize) appFragment.sort(Constants.SORT_BY_SIZE);
-            else if (id == R.id.btnSortByLastUpdate) appFragment.sort(Constants.SORT_BY_LAST_UPDATED);
+            else if (id == R.id.btnSortByLastUpdate)
+                appFragment.sort(Constants.SORT_BY_LAST_UPDATED);
             else if (id == R.id.btnSortByLastUsed) {
                 if (!PermissionManager.hasUsageStatsPermission(requireActivity())) {
                     getPermission();
                     return;
                 }
                 appFragment.sort(Constants.SORT_BY_LAST_USED);
-            }
-            else if (id == R.id.btnSortByMostUsed) {
+            } else if (id == R.id.btnSortByMostUsed) {
                 if (!PermissionManager.hasUsageStatsPermission(requireActivity())) {
                     getPermission();
                     return;
@@ -73,10 +73,10 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
         dismiss();
     }
 
-    private void getPermission(){
+    private void getPermission() {
         startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                    .setData(Uri.parse("package:" + "com.drhowdydoo.appinfo")));
+                .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                .setData(Uri.parse("package:" + "com.drhowdydoo.appinfo")));
     }
 
 }

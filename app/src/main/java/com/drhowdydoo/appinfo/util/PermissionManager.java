@@ -1,10 +1,8 @@
 package com.drhowdydoo.appinfo.util;
 
-import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 
 public class PermissionManager {
 

@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.search) {
                 if (binding.searchBar.isShown()) {
                     binding.searchBar.setVisibility(View.GONE);
-                }else {
+                } else {
                     binding.searchBar.setVisibility(View.VISIBLE);
                     binding.searchInput.requestFocus();
                     imm.showSoftInput(binding.searchInput, InputMethodManager.SHOW_IMPLICIT);

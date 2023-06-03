@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,8 +17,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.AppListItemBinding;
 import com.drhowdydoo.appinfo.model.AppInfo;
-import com.drhowdydoo.appinfo.util.AppInfoComparator;
-import com.drhowdydoo.appinfo.util.AppInfoDiffCallback;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.TimeFormatter;
 
@@ -27,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("FieldMayBeFinal")
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
@@ -77,7 +73,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         if (flagSet.contains(Constants.SHOW_LAST_USED_TIME)) {
             holder.tvAppStats.setText(TimeFormatter.format(appInfo.getLastTimeUsed(), "Used"));
-        } else if (flagSet.contains(Constants.HIDE_APP_STATS)){
+        } else if (flagSet.contains(Constants.HIDE_APP_STATS)) {
             holder.tvAppStats.setText(TimeFormatter.formatDuration(appInfo.getTotalForegroundTime()));
         } else {
             holder.tvAppStats.setText(TimeFormatter.format(appInfo.getAppLastUpdateTime(), "Updated"));

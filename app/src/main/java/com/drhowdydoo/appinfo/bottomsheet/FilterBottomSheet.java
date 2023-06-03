@@ -14,7 +14,7 @@ import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class FilterBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener{
+public class FilterBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener {
 
 
     private AppFragment fragment;
@@ -27,7 +27,7 @@ public class FilterBottomSheet extends BottomSheetDialogFragment implements View
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        BottomSheetFilterBinding binding = BottomSheetFilterBinding.inflate(inflater,container,false);
+        BottomSheetFilterBinding binding = BottomSheetFilterBinding.inflate(inflater, container, false);
         View rootView = binding.getRoot();
 
         binding.btnFilterAllApps.setOnClickListener(this);
