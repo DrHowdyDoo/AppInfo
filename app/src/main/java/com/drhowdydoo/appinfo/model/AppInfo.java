@@ -3,6 +3,8 @@ package com.drhowdydoo.appinfo.model;
 import android.content.pm.ApplicationInfo;
 import android.graphics.drawable.Drawable;
 
+import java.util.Objects;
+
 public class AppInfo {
 
     private String appName;
@@ -100,5 +102,18 @@ public class AppInfo {
 
     public void setSystemApp(boolean systemApp) {
         isSystemApp = systemApp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AppInfo appInfo1 = (AppInfo) o;
+        return appLastUpdateTime == appInfo1.appLastUpdateTime && size == appInfo1.size && lastTimeUsed == appInfo1.lastTimeUsed && isSplitApp == appInfo1.isSplitApp && isSystemApp == appInfo1.isSystemApp && Objects.equals(appName, appInfo1.appName) && Objects.equals(appIcon, appInfo1.appIcon) && Objects.equals(appInfo, appInfo1.appInfo) && Objects.equals(appVersion, appInfo1.appVersion);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(appName, appIcon, appLastUpdateTime, size, appInfo, lastTimeUsed, isSplitApp, appVersion, isSystemApp);
     }
 }

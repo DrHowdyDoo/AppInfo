@@ -156,8 +156,7 @@ public class AppInfoManager {
     private long getLastUsedTime(ApplicationInfo applicationInfo, Map<String, UsageStats> usageStatsMap){
         try {
             UsageStats usageStats = usageStatsMap.get(applicationInfo.packageName);
-            long lastUsed = usageStats != null ? (now() - usageStats.getLastTimeUsed()) : LAST_USED_TIME_NOT_AVAILABLE;
-            return lastUsed;
+            return usageStats != null ? (now() - usageStats.getLastTimeUsed()) : LAST_USED_TIME_NOT_AVAILABLE;
         } catch (Exception e) {
             return LAST_USED_TIME_NOT_AVAILABLE;
         }

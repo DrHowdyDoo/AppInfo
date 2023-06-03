@@ -60,6 +60,7 @@ public class AppFragment extends Fragment {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.setItemAnimator(null);
         binding.recyclerView.setAdapter(adapter);
+
         new FastScrollerBuilder(binding.recyclerView).useMd2Style().build();
         appInfoManager = new AppInfoManager(requireActivity());
         binding.progressGroup.setVisibility(View.VISIBLE);
