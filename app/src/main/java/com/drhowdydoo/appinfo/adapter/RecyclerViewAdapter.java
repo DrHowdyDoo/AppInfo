@@ -73,6 +73,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         if (flagSet.contains(Constants.SHOW_LAST_USED_TIME)) {
             holder.tvAppStats.setText(TimeFormatter.format(appInfo.getLastTimeUsed(), "Used"));
+        } else if (flagSet.contains(Constants.HIDE_APP_STATS)){
+            holder.tvAppStats.setVisibility(View.GONE);
+            holder.dotSeperator.setVisibility(View.GONE);
         } else {
             holder.tvAppStats.setText(TimeFormatter.format(appInfo.getAppLastUpdateTime(), "Updated"));
         }
@@ -113,7 +116,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imgAppIcon, imgSplitApp;
-        public TextView tvAppName, tvAppSize, tvAppStats, tvAppVersion, tvSystemApp;
+        public TextView tvAppName, tvAppSize, tvAppStats, tvAppVersion, tvSystemApp, dotSeperator;
 
         public ViewHolder(@NonNull AppListItemBinding binding) {
             super(binding.getRoot());
@@ -124,6 +127,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tvAppVersion = binding.tvAppVersion;
             imgSplitApp = binding.imgSplitApp;
             tvSystemApp = binding.tvSystemApp;
+            dotSeperator = binding.dotSeperator;
         }
     }
 

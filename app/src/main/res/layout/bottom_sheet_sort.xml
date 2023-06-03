@@ -73,6 +73,7 @@
         app:drawableStartCompat="@drawable/outline_lock_24" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardLockedSortOption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -90,6 +91,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Last used"/>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnSortByMostUsed"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Most used"/>
 
 
         </LinearLayout>

@@ -24,6 +24,8 @@ public class AppInfoComparator implements Comparator<AppInfo> {
 
             case Constants.SORT_BY_LAST_USED: return Long.compare(o1.getLastTimeUsed(), o2.getLastTimeUsed());
 
+            case Constants.SORT_BY_MOST_USED: return Long.compare(o2.getTotalForegroundTime(), o1.getTotalForegroundTime());
+
         }
 
         return 0;

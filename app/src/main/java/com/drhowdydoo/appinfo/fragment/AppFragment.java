@@ -142,6 +142,11 @@ public class AppFragment extends Fragment {
             appInfoManager.addLastUsedTimeToAppInfo(appInfoList,this);
             return;
         } else adapter.setFlags(Constants.SHOW_LAST_UPDATED_TIME);
+        if (sortBy == Constants.SORT_BY_MOST_USED) {
+            adapter.setFlags(Constants.HIDE_APP_STATS);
+            appInfoManager.addForegroundTimeToAppInfo(appInfoList,this);
+            return;
+        }
         dispatchData();
     }
 
@@ -151,6 +156,7 @@ public class AppFragment extends Fragment {
             case Constants.SORT_BY_NAME: return "Name";
             case Constants.SORT_BY_SIZE: return "Size";
             case Constants.SORT_BY_LAST_USED: return "Last used";
+            case Constants.SORT_BY_MOST_USED: return "Most used";
         }
         return "Sort By";
     }

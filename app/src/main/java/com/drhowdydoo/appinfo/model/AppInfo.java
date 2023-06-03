@@ -16,6 +16,7 @@ public class AppInfo {
     private boolean isSplitApp;
     private String appVersion;
     private boolean isSystemApp;
+    private long totalForegroundTime;
 
     public AppInfo(String appName,
                    Drawable appIcon,
@@ -104,16 +105,24 @@ public class AppInfo {
         isSystemApp = systemApp;
     }
 
+    public long getTotalForegroundTime() {
+        return totalForegroundTime;
+    }
+
+    public void setTotalForegroundTime(long totalForegroundTime) {
+        this.totalForegroundTime = totalForegroundTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AppInfo appInfo1 = (AppInfo) o;
-        return appLastUpdateTime == appInfo1.appLastUpdateTime && size == appInfo1.size && lastTimeUsed == appInfo1.lastTimeUsed && isSplitApp == appInfo1.isSplitApp && isSystemApp == appInfo1.isSystemApp && Objects.equals(appName, appInfo1.appName) && Objects.equals(appIcon, appInfo1.appIcon) && Objects.equals(appInfo, appInfo1.appInfo) && Objects.equals(appVersion, appInfo1.appVersion);
+        return appLastUpdateTime == appInfo1.appLastUpdateTime && size == appInfo1.size && lastTimeUsed == appInfo1.lastTimeUsed && isSplitApp == appInfo1.isSplitApp && isSystemApp == appInfo1.isSystemApp && Objects.equals(appName, appInfo1.appName) && Objects.equals(appIcon, appInfo1.appIcon) && Objects.equals(appInfo, appInfo1.appInfo) && Objects.equals(appVersion, appInfo1.appVersion) && totalForegroundTime == appInfo1.totalForegroundTime;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(appName, appIcon, appLastUpdateTime, size, appInfo, lastTimeUsed, isSplitApp, appVersion, isSystemApp);
+        return Objects.hash(appName, appIcon, appLastUpdateTime, size, appInfo, lastTimeUsed, isSplitApp, appVersion, isSystemApp, totalForegroundTime);
     }
 }

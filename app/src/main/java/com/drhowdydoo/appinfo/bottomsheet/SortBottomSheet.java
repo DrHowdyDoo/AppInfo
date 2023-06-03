@@ -35,6 +35,7 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
         binding.btnSortBySize.setOnClickListener(this);
         binding.btnSortByLastUpdate.setOnClickListener(this);
         binding.btnSortByLastUsed.setOnClickListener(this);
+        binding.btnSortByMostUsed.setOnClickListener(this);
 
         if (PermissionManager.hasUsageStatsPermission(requireActivity())) {
             binding.tvLockedTitle.setVisibility(View.GONE);
@@ -55,14 +56,27 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
             else if (id == R.id.btnSortByLastUpdate) appFragment.sort(Constants.SORT_BY_LAST_UPDATED);
             else if (id == R.id.btnSortByLastUsed) {
                 if (!PermissionManager.hasUsageStatsPermission(requireActivity())) {
-                    startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-                            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                            .setData(Uri.parse("package:" + "com.drhowdydoo.appinfo")));
+                    getPermission();
                     return;
                 }
                 appFragment.sort(Constants.SORT_BY_LAST_USED);
             }
+            else if (id == R.id.btnSortByMostUsed) {
+                if (!PermissionManager.hasUsageStatsPermission(requireActivity())) {
+                    getPermission();
+                    return;
+                }
+                appFragment.sort(Constants.SORT_BY_MOST_USED);
+            }
+
         }
         dismiss();
     }
+
+    private void getPermission(){
+        startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                    .setData(Uri.parse("package:" + "com.drhowdydoo.appinfo")));
+    }
+
 }

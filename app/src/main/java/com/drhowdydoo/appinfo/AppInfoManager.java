@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,19 +34,13 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class AppInfoManager {
 
     private Context context;
-    private static final long LAST_USED_TIME_NOT_AVAILABLE = 63072000000L;
-    private static final long LAST_UPDATED_TIME_NOT_AVAILABLE = 63072000000L;
     private UsageStatsManager usageStatsManager;
     private StorageStatsManager storageStatsManager;
-    private long start;
     private PackageManager packageManager;
 
     public AppInfoManager(Context context) {
         this.context = context;
         this.usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, -1);
-        this.start = calendar.getTimeInMillis();
         packageManager = context.getPackageManager();
         storageStatsManager = (StorageStatsManager) context.getSystemService(Context.STORAGE_STATS_SERVICE);
     }
@@ -67,7 +62,10 @@ public class AppInfoManager {
                 .subscribe(appInfoList -> {
                     if (((AppFragment) fragment).sortedState == Constants.SORT_BY_LAST_USED) {
                         addLastUsedTimeToAppInfo(appInfoList,(AppFragment)fragment);
-                    } else {
+                    } else if (((AppFragment) fragment).sortedState == Constants.SORT_BY_MOST_USED) {
+                        addForegroundTimeToAppInfo(appInfoList,(AppFragment)fragment);
+                    }
+                    else {
                         ((AppFragment) fragment).setData(appInfoList, true);
                     }
                 }, Throwable::printStackTrace);
@@ -76,14 +74,13 @@ public class AppInfoManager {
 
     private AppInfo getAppInfo(ApplicationInfo applicationInfo) {
 
-        long lastUpdateTime = LAST_UPDATED_TIME_NOT_AVAILABLE;
-        boolean isSplit = false;
+        long lastUpdateTime = Constants.LAST_UPDATED_TIME_NOT_AVAILABLE;
+        boolean isSplit;
         String appVersion = "";
 
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(applicationInfo.packageName,PackageManager.GET_META_DATA);
             lastUpdateTime = now() - packageInfo.lastUpdateTime;
-            isSplit = packageInfo.applicationInfo.metaData != null && packageInfo.applicationInfo.metaData.getBoolean("com.android.vending.splits.required", false);
             appVersion = packageInfo.versionName;
         } catch (PackageManager.NameNotFoundException notFoundException) {
             notFoundException.printStackTrace();
@@ -135,6 +132,9 @@ public class AppInfoManager {
     public void addLastUsedTimeToAppInfo(List<AppInfo> appInfoList, AppFragment appFragment){
 
         Observable.fromCallable(() -> {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.add(Calendar.YEAR, -1);
+                    long start = calendar.getTimeInMillis();
                     long end = System.currentTimeMillis();
                     return usageStatsManager.queryAndAggregateUsageStats(start, end);
                 })
@@ -152,12 +152,51 @@ public class AppInfoManager {
 
     }
 
+    @SuppressLint("CheckResult")
+    public void addForegroundTimeToAppInfo(List<AppInfo> appInfoList, AppFragment appFragment){
+
+        Observable.fromCallable(() -> {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.add(Calendar.DAY_OF_WEEK, -7);
+                    long start = calendar.getTimeInMillis();
+                    long end = System.currentTimeMillis();
+                    return usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST,start, end);
+                })
+                .flatMap(usageStatsList -> Observable.fromIterable(appInfoList)
+                        .flatMap(appInfo -> Observable.fromCallable(() -> {
+                            HashMap<String, UsageStats> usageStatsMap = new HashMap<>();
+                            for (UsageStats usageStats : usageStatsList) {
+                                String packageName = usageStats.getPackageName();
+                                usageStatsMap.put(packageName, usageStats);
+                            }
+                            appInfo.setTotalForegroundTime(getForegroundTime(appInfo.getAppInfo(),usageStatsMap));
+                            return appInfo;
+                        }).subscribeOn(Schedulers.computation()))
+                )
+                .toList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(processedList -> {
+                    appFragment.setData(processedList,true);
+                }, Throwable::printStackTrace);
+
+    }
+
     private long getLastUsedTime(ApplicationInfo applicationInfo, Map<String, UsageStats> usageStatsMap){
         try {
             UsageStats usageStats = usageStatsMap.get(applicationInfo.packageName);
-            return usageStats != null ? (now() - usageStats.getLastTimeUsed()) : LAST_USED_TIME_NOT_AVAILABLE;
+            return usageStats != null ? (now() - usageStats.getLastTimeUsed()) : Constants.LAST_USED_TIME_NOT_AVAILABLE;
         } catch (Exception e) {
-            return LAST_USED_TIME_NOT_AVAILABLE;
+            return Constants.LAST_USED_TIME_NOT_AVAILABLE;
+        }
+
+    }
+
+    private long getForegroundTime(ApplicationInfo applicationInfo, Map<String, UsageStats> usageStatsMap){
+        try {
+            UsageStats usageStats = usageStatsMap.get(applicationInfo.packageName);
+            return usageStats != null ? usageStats.getTotalTimeInForeground() : Constants.FOREGROUND_TIME_NOT_AVAILABLE;
+        } catch (Exception e) {
+            return Constants.FOREGROUND_TIME_NOT_AVAILABLE;
         }
 
     }
