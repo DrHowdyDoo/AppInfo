@@ -1,5 +1,6 @@
 package com.drhowdydoo.appinfo.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
@@ -71,11 +72,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     .into(holder.imgAppIcon);
         }
 
+        holder.tvAppStats.setVisibility(View.VISIBLE);
+        holder.dotSeperator.setVisibility(View.VISIBLE);
+
         if (flagSet.contains(Constants.SHOW_LAST_USED_TIME)) {
             holder.tvAppStats.setText(TimeFormatter.format(appInfo.getLastTimeUsed(), "Used"));
         } else if (flagSet.contains(Constants.HIDE_APP_STATS)){
-            holder.tvAppStats.setVisibility(View.GONE);
-            holder.dotSeperator.setVisibility(View.GONE);
+            holder.tvAppStats.setText(TimeFormatter.formatDuration(appInfo.getTotalForegroundTime()));
         } else {
             holder.tvAppStats.setText(TimeFormatter.format(appInfo.getAppLastUpdateTime(), "Updated"));
         }
@@ -104,12 +107,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Collections.addAll(flagSet, flags);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<AppInfo> newAppInfoList) {
-        AppInfoDiffCallback appInfoDiffCallback = new AppInfoDiffCallback(appInfoList, newAppInfoList);
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(appInfoDiffCallback);
+        //AppInfoDiffCallback appInfoDiffCallback = new AppInfoDiffCallback(appInfoList, newAppInfoList);
+        //DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(appInfoDiffCallback);
         appInfoList.clear();
         appInfoList.addAll(newAppInfoList);
-        diffResult.dispatchUpdatesTo(this);
+        //diffResult.dispatchUpdatesTo(this);
+        notifyDataSetChanged();
     }
 
 
