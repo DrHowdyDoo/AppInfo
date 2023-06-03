@@ -37,9 +37,7 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
         binding.btnSortByLastUsed.setOnClickListener(this);
 
         if (PermissionManager.hasUsageStatsPermission(requireActivity())) {
-            binding.tvLockedTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.round_lock_open_24,0,0,0);
-        } else {
-            binding.tvLockedTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.outline_lock_24,0,0,0);
+            binding.tvLockedTitle.setVisibility(View.GONE);
         }
 
         return binding.getRoot();

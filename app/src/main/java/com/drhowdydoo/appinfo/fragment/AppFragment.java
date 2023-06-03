@@ -118,6 +118,7 @@ public class AppFragment extends Fragment {
 
     @SuppressLint("DefaultLocale")
     public void filter(int filterKey){
+        if (filterKey == filterState) return;
         filterState = filterKey;
         dispatchData();
     }
@@ -134,6 +135,7 @@ public class AppFragment extends Fragment {
     }
 
     public void sort(int sortBy) {
+        if (sortBy == sortedState) return;
         sortedState = sortBy;
         if (sortBy == Constants.SORT_BY_LAST_USED) {
             adapter.setFlags(Constants.SHOW_LAST_USED_TIME);

@@ -92,6 +92,8 @@ public class AppInfoManager {
         String appName = packageManager.getApplicationLabel(applicationInfo).toString();
         Drawable appIcon = packageManager.getApplicationIcon(applicationInfo);
         boolean isSystemApp = ((applicationInfo.flags & (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0);
+        String[] splitSourceDirs = applicationInfo.splitSourceDirs;
+        isSplit = (splitSourceDirs != null && splitSourceDirs.length > 0);
 
         AppInfo appInfo = new AppInfo(appName,
                 appIcon,
@@ -112,11 +114,8 @@ public class AppInfoManager {
             appInfo.setSize(totalAppSize);
 
         } else {
-            String[] splitSourceDirs = applicationInfo.splitSourceDirs;
             long appSize = 0;
-
             if (splitSourceDirs != null && splitSourceDirs.length > 0) {
-                appInfo.setSplitApp(true);
                 for (String splitSourceDir : splitSourceDirs) {
                     File splitFile = new File(splitSourceDir);
                     appSize += splitFile.length();
