@@ -53,8 +53,7 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
             AppFragment appFragment = (AppFragment) fragment;
             if (id == R.id.btnSortByName) appFragment.sort(Constants.SORT_BY_NAME);
             else if (id == R.id.btnSortBySize) appFragment.sort(Constants.SORT_BY_SIZE);
-            else if (id == R.id.btnSortByLastUpdate)
-                appFragment.sort(Constants.SORT_BY_LAST_UPDATED);
+            else if (id == R.id.btnSortByLastUpdate) appFragment.sort(Constants.SORT_BY_LAST_UPDATED);
             else if (id == R.id.btnSortByLastUsed) {
                 if (!PermissionManager.hasUsageStatsPermission(requireActivity())) {
                     getPermission();

@@ -14,20 +14,25 @@ import androidx.core.splashscreen.SplashScreen;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.drhowdydoo.appinfo.adapter.ViewPagerAdapter;
+import com.drhowdydoo.appinfo.bottomsheet.FilterBottomSheet;
+import com.drhowdydoo.appinfo.bottomsheet.SortBottomSheet;
 import com.drhowdydoo.appinfo.databinding.ActivityMainBinding;
 import com.drhowdydoo.appinfo.fragment.ApkFragment;
 import com.drhowdydoo.appinfo.fragment.AppFragment;
+import com.drhowdydoo.appinfo.interfaces.OnSortFilterListener;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.elevation.SurfaceColors;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnSortFilterListener {
+
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
-        DynamicColors.applyToActivityIfAvailable(this);
-        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        //DynamicColors.applyToActivityIfAvailable(this);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getWindow().setNavigationBarColor(SurfaceColors.SURFACE_2.getColor(this));
 
@@ -75,6 +80,16 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        binding.btnFilter.setOnClickListener(v -> {
+            FilterBottomSheet filterBottomSheet = new FilterBottomSheet(pagerAdapter.createFragment(binding.viewPager.getCurrentItem()));
+            filterBottomSheet.show(getSupportFragmentManager(), "filterBottomSheet");
+        });
+
+        binding.btnSort.setOnClickListener(v -> {
+            SortBottomSheet sortBottomSheet = new SortBottomSheet(pagerAdapter.createFragment(binding.viewPager.getCurrentItem()));
+            sortBottomSheet.show(getSupportFragmentManager(), "sortBottomSheet");
+        });
     }
 
     @Override
@@ -92,5 +107,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return super.dispatchTouchEvent(event);
+    }
+
+
+    @Override
+    public void onSort(String text) {
+        binding.btnSort.setText(text);
+    }
+
+    @Override
+    public void onFilter(String text) {
+        binding.btnFilter.setText(text);
     }
 }

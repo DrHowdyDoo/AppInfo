@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.BottomSheetFilterBinding;
@@ -17,9 +18,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public class FilterBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener {
 
 
-    private AppFragment fragment;
+    private Fragment fragment;
 
-    public FilterBottomSheet(AppFragment fragment) {
+    public FilterBottomSheet(Fragment fragment) {
         this.fragment = fragment;
     }
 
@@ -41,12 +42,15 @@ public class FilterBottomSheet extends BottomSheetDialogFragment implements View
     public void onClick(View v) {
         int id = v.getId();
 
-        if (id == R.id.btnFilterAllApps) {
-            fragment.filter(Constants.NO_FILTER);
-        } else if (id == R.id.btnFilterSystemApps) {
-            fragment.filter(Constants.FILTER_SYSTEM_APPS);
-        } else if (id == R.id.btnFilterNonSystemApps) {
-            fragment.filter(Constants.FILTER_NON_SYSTEM_APPS);
+        if (fragment instanceof AppFragment) {
+            AppFragment appFragment = (AppFragment) fragment;
+            if (id == R.id.btnFilterAllApps) {
+                appFragment.filter(Constants.NO_FILTER);
+            } else if (id == R.id.btnFilterSystemApps) {
+                appFragment.filter(Constants.FILTER_SYSTEM_APPS);
+            } else if (id == R.id.btnFilterNonSystemApps) {
+                appFragment.filter(Constants.FILTER_NON_SYSTEM_APPS);
+            }
         }
 
         dismiss();

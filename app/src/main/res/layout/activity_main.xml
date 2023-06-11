@@ -5,13 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="?android:colorBackground"
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:colorBackground"
+        android:background="@android:color/transparent"
+        app:liftOnScroll="false"
         android:layout_gravity="top"
         android:animateLayoutChanges="true"
         android:fitsSystemWindows="true">
@@ -20,6 +22,8 @@
             android:id="@+id/collapsingToolBar"
             style="?attr/collapsingToolbarLayoutLargeStyle"
             android:layout_width="match_parent"
+            app:contentScrim="?android:colorBackground"
+            app:titleCollapseMode="scale"
             android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
             app:expandedTitleTextAppearance="?attr/textAppearanceDisplayMedium"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
@@ -27,13 +31,46 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/materialToolBar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="?actionBarSize"
                 android:elevation="0dp"
                 app:menu="@menu/app_bar"
                 app:layout_collapseMode="pin"
                 app:title="@string/app_name" />
 
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <LinearLayout
+            android:id="@+id/operationButtonLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnFilter"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:gravity="start|center_vertical"
+                android:text="@string/all_apps"
+                app:icon="@drawable/filter_list" />
+
+            <Button
+                android:id="@+id/btnSort"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:gravity="end|center_vertical"
+                android:text="@string/sort_by"
+                app:icon="@drawable/sort"
+                app:iconGravity="end" />
+
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/SearchBar"
@@ -60,12 +97,12 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
     </com.google.android.material.appbar.AppBarLayout>
 
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
-            android:paddingTop="8dp"
             android:clipToPadding="false"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:animateLayoutChanges="true"
@@ -78,6 +115,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
+        app:itemIconSize="22dp"
         android:layout_gravity="bottom"
         app:menu="@menu/bottom_navigation_menu" />
 

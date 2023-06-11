@@ -11,11 +11,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.drhowdydoo.appinfo.AppInfoManager;
+import com.drhowdydoo.appinfo.util.AppInfoManager;
 import com.drhowdydoo.appinfo.adapter.RecyclerViewAdapter;
-import com.drhowdydoo.appinfo.bottomsheet.FilterBottomSheet;
-import com.drhowdydoo.appinfo.bottomsheet.SortBottomSheet;
 import com.drhowdydoo.appinfo.databinding.FragmentAppBinding;
+import com.drhowdydoo.appinfo.interfaces.OnSortFilterListener;
 import com.drhowdydoo.appinfo.model.AppInfo;
 import com.drhowdydoo.appinfo.util.AppInfoComparator;
 import com.drhowdydoo.appinfo.util.Constants;
@@ -34,6 +33,8 @@ public class AppFragment extends Fragment {
     private List<AppInfo> appInfoList = new ArrayList<>();
     private int filterState = Constants.NO_FILTER;
     private AppInfoManager appInfoManager;
+
+    private OnSortFilterListener onSortFilterListener;
 
     public AppFragment() {
     }
@@ -60,15 +61,7 @@ public class AppFragment extends Fragment {
         binding.progressGroup.setVisibility(View.VISIBLE);
         appInfoManager.getAllApps(this);
 
-        binding.btnFilter.setOnClickListener(v -> {
-            FilterBottomSheet filterBottomSheet = new FilterBottomSheet(this);
-            filterBottomSheet.show(requireActivity().getSupportFragmentManager(), "filterBottomSheet");
-        });
-
-        binding.btnSort.setOnClickListener(v -> {
-            SortBottomSheet sortBottomSheet = new SortBottomSheet(this);
-            sortBottomSheet.show(requireActivity().getSupportFragmentManager(), "sortBottomSheet");
-        });
+        onSortFilterListener = (OnSortFilterListener) requireActivity();
 
 
         binding.fabScrollBack.setOnClickListener(v -> binding.recyclerView.smoothScrollToPosition(0));
@@ -104,8 +97,8 @@ public class AppFragment extends Fragment {
         List<AppInfo> filteredList = getFilteredList(filterState);
         AppInfoComparator appInfoComparator = new AppInfoComparator(sortedState);
         filteredList.sort(appInfoComparator);
-        binding.btnSort.setText(getSortButtonText(sortedState));
-        binding.btnFilter.setText(getFilterButtonText(filterState, filteredList.size()));
+        onSortFilterListener.onSort(getSortButtonText(sortedState));
+        onSortFilterListener.onFilter(getFilterButtonText(filterState, filteredList.size()));
         adapter.setData(filteredList);
     }
 

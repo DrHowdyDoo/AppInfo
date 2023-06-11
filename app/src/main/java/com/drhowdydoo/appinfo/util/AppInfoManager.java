@@ -1,4 +1,4 @@
-package com.drhowdydoo.appinfo;
+package com.drhowdydoo.appinfo.util;
 
 import android.annotation.SuppressLint;
 import android.app.usage.StorageStats;
