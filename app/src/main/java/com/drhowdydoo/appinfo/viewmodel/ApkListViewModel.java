@@ -12,7 +12,7 @@ public class ApkListViewModel extends ViewModel {
 
     private List<ApkInfo> apkInfoList = new ArrayList<>();
 
-    private List<ApkInfo> savedApkInfo = new ArrayList<>();
+    private List<ApkInfo> savedApkInfoList = new ArrayList<>();
 
     private int sortState = Constants.SORT_BY_SIZE;
 
@@ -26,12 +26,12 @@ public class ApkListViewModel extends ViewModel {
         this.apkInfoList = apkInfoList;
     }
 
-    public List<ApkInfo> getSavedApkInfo() {
-        return savedApkInfo;
+    public List<ApkInfo> getSavedApkInfoList() {
+        return savedApkInfoList;
     }
 
-    public void setSavedApkInfo(List<ApkInfo> savedApkInfo) {
-        this.savedApkInfo = savedApkInfo;
+    public void setSavedApkInfoList(List<ApkInfo> savedApkInfoList) {
+        this.savedApkInfoList = savedApkInfoList;
     }
 
     public int getSortState() {

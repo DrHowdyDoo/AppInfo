@@ -36,7 +36,7 @@
         android:id="@+id/imgProgressIcon"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintVertical_bias="0.28"
         android:src="@drawable/round_widgets_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,6 +74,23 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:constraint_referenced_ids="imgProgressIcon,tvProgressText,progressBar"/>
+
+
+    <TextView
+        android:id="@+id/tvNoResultsFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:drawablePadding="8dp"
+        android:textAppearance="?textAppearanceTitleMedium"
+        android:text="@string/no_results"
+        app:layout_constraintVertical_bias="0.28"
+        app:drawableTopCompat="@drawable/twotone_interests_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabScrollBack"

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -16,6 +17,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.ApkListItemBinding;
 import com.drhowdydoo.appinfo.model.ApkInfo;
+import com.drhowdydoo.appinfo.util.ApkInfoDiffCallback;
+import com.drhowdydoo.appinfo.util.AppInfoDiffCallback;
 import com.drhowdydoo.appinfo.util.Constants;
 
 import java.util.ArrayList;
@@ -85,6 +88,14 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         apkInfoList.clear();
         apkInfoList.addAll(newApkInfoList);
         notifyDataSetChanged();
+    }
+
+    public void updateData(List<ApkInfo> newApkInfoList) {
+        ApkInfoDiffCallback apkInfoDiffCallback = new ApkInfoDiffCallback(apkInfoList, newApkInfoList);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(apkInfoDiffCallback);
+        apkInfoList.clear();
+        apkInfoList.addAll(newApkInfoList);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

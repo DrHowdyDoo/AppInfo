@@ -13,4 +13,5 @@
     <string name="scanning_for_apks">Scanning for Apks</string>
     <string name="allow_access">Allow access</string>
     <string name="apk_icon">Apk Icon</string>
+    <string name="no_results">No results</string>
 </resources>

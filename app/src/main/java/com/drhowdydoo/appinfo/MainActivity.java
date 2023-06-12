@@ -4,6 +4,8 @@ import android.animation.LayoutTransition;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -21,8 +23,12 @@ import com.drhowdydoo.appinfo.databinding.ActivityMainBinding;
 import com.drhowdydoo.appinfo.fragment.ApkFragment;
 import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.interfaces.OnSortFilterListener;
+import com.drhowdydoo.appinfo.model.AppInfo;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.elevation.SurfaceColors;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnSortFilterListener {
 
@@ -53,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
             @Override
             public void onPageSelected(int position) {
                 binding.bottomNavigation.getMenu().getItem(position).setChecked(true);
+                onFragmentChanged(position);
                 super.onPageSelected(position);
             }
 
@@ -65,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
             int position = item.getItemId() == R.id.app ? 0 : 1;
             binding.viewPager.setCurrentItem(position);
+            onFragmentChanged(position);
             return true;
         });
 
@@ -74,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
                     binding.searchBar.setVisibility(View.GONE);
                 } else {
                     binding.searchBar.setVisibility(View.VISIBLE);
+                    setSearchHint();
                     binding.searchInput.requestFocus();
                     imm.showSoftInput(binding.searchInput, InputMethodManager.SHOW_IMPLICIT);
                 }
@@ -91,7 +100,30 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
             SortBottomSheet sortBottomSheet = new SortBottomSheet(getCurrentFragment());
             sortBottomSheet.show(getSupportFragmentManager(), "sortBottomSheet");
         });
+
+        binding.searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Fragment fragment = getCurrentFragment();
+                if (fragment instanceof AppFragment) ((AppFragment) fragment).search(s.toString());
+                else if (fragment instanceof ApkFragment) ((ApkFragment) fragment).search(s.toString());
+            }
+        });
     }
+
+    private void setSearchHint() {
+        if (binding.viewPager.getCurrentItem() == 0) binding.searchBar.setHint("Search Apps");
+        else binding.searchBar.setHint("Search Apks");
+    }
+
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -125,5 +157,9 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
         int current = binding.viewPager.getCurrentItem();
         if (current == 0) return getSupportFragmentManager().findFragmentByTag("f0");
         else return getSupportFragmentManager().findFragmentByTag("f1");
+    }
+
+    private void onFragmentChanged(int position){
+        setSearchHint();
     }
 }

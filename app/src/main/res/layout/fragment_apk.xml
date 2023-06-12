@@ -90,4 +90,20 @@
         android:visibility="gone"
         app:constraint_referenced_ids="tvProgressText,progressBar"/>
 
+    <TextView
+        android:id="@+id/tvNoResultsFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:drawablePadding="8dp"
+        android:textAppearance="?textAppearanceTitleMedium"
+        android:text="@string/no_results"
+        app:layout_constraintVertical_bias="0.28"
+        app:drawableTopCompat="@drawable/twotone_interests_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

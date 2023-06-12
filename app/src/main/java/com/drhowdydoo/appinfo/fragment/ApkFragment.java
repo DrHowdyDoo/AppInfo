@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.drhowdydoo.appinfo.MainActivity;
 import com.drhowdydoo.appinfo.R;
@@ -22,7 +21,6 @@ import com.drhowdydoo.appinfo.model.ApkInfo;
 import com.drhowdydoo.appinfo.model.AppInfo;
 import com.drhowdydoo.appinfo.util.ApkInfoComparator;
 import com.drhowdydoo.appinfo.util.ApkInfoManager;
-import com.drhowdydoo.appinfo.util.AppInfoComparator;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.viewmodel.ApkListViewModel;
 
@@ -55,7 +53,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener{
         checkStoragePermission();
         binding.btnStorageAccess.setOnClickListener(this);
         apkListViewModel = new ViewModelProvider(this).get(ApkListViewModel.class);
-        adapter = new ApkRecyclerViewAdapter(requireActivity(),apkListViewModel.getSavedApkInfo());
+        adapter = new ApkRecyclerViewAdapter(requireActivity(),apkListViewModel.getSavedApkInfoList());
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.setItemAnimator(null);
@@ -107,7 +105,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener{
         binding.progressGroup.setVisibility(View.GONE);
         List<ApkInfo> filteredList = getFilteredList(apkListViewModel.getFilterState());
         filteredList.sort(new ApkInfoComparator(apkListViewModel.getSortState()));
-        apkListViewModel.setSavedApkInfo(filteredList);
+        apkListViewModel.setSavedApkInfoList(filteredList);
         adapter.setData(filteredList);
         mainActivity.onFilter(getFilterText());
         mainActivity.onSort(getSortText());
@@ -152,6 +150,22 @@ public class ApkFragment extends Fragment implements View.OnClickListener{
             Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
             intent.setData(Uri.parse("package:" + "com.drhowdydoo.appinfo"));
             startActivity(intent);
+        }
+    }
+
+    public void search(String input) {
+        if (!input.isEmpty()) {
+            List<ApkInfo> searchResults = apkListViewModel.getSavedApkInfoList()
+                    .stream()
+                    .filter(apkInfo -> apkInfo.getApkName().toLowerCase().startsWith(input.toLowerCase()))
+                    .collect(Collectors.toList());
+            adapter.updateData(searchResults);
+            if (searchResults.isEmpty()) binding.tvNoResultsFound.setVisibility(View.VISIBLE);
+            else binding.tvNoResultsFound.setVisibility(View.GONE);
+        }
+        else {
+            adapter.updateData(apkListViewModel.getSavedApkInfoList());
+            binding.tvNoResultsFound.setVisibility(View.GONE);
         }
     }
 }

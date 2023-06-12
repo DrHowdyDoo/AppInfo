@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +18,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.AppListItemBinding;
 import com.drhowdydoo.appinfo.model.AppInfo;
+import com.drhowdydoo.appinfo.util.AppInfoDiffCallback;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.TimeFormatter;
 
@@ -105,12 +107,18 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
 
     @SuppressLint("NotifyDataSetChanged")
     public void setData(List<AppInfo> newAppInfoList) {
-        //AppInfoDiffCallback appInfoDiffCallback = new AppInfoDiffCallback(appInfoList, newAppInfoList);
-        //DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(appInfoDiffCallback);
         appInfoList.clear();
         appInfoList.addAll(newAppInfoList);
-        //diffResult.dispatchUpdatesTo(this);
+
         notifyDataSetChanged();
+    }
+
+    public void updateData(List<AppInfo> newAppInfoList){
+        AppInfoDiffCallback appInfoDiffCallback = new AppInfoDiffCallback(appInfoList, newAppInfoList);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(appInfoDiffCallback);
+        appInfoList.clear();
+        appInfoList.addAll(newAppInfoList);
+        diffResult.dispatchUpdatesTo(this);
     }
 
 

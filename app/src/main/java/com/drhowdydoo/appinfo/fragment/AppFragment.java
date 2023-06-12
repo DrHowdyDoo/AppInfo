@@ -202,4 +202,20 @@ public class AppFragment extends Fragment {
         mainActivity.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
         mainActivity.onSort(getSortButtonText(sortedState));
     }
+
+    public void search(String input) {
+        if (!input.isEmpty()) {
+            List<AppInfo> searchResults = appListViewModel.getSavedAppInfoList()
+                    .stream()
+                    .filter(appInfo -> appInfo.getAppName().toLowerCase().startsWith(input.toLowerCase()))
+                    .collect(Collectors.toList());
+            adapter.updateData(searchResults);
+            if (searchResults.isEmpty()) binding.tvNoResultsFound.setVisibility(View.VISIBLE);
+            else binding.tvNoResultsFound.setVisibility(View.GONE);
+        }
+        else {
+            adapter.updateData(appListViewModel.getSavedAppInfoList());
+            binding.tvNoResultsFound.setVisibility(View.GONE);
+        }
+    }
 }
