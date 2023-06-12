@@ -24,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 public class SortBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener {
 
     private Fragment fragment;
-    private BottomSheetSortBinding binding;
+    private BottomSheetSortBinding appBinding;
     private BottomSheetSortApkBinding apkBinding;
 
     public SortBottomSheet(Fragment fragment) {
@@ -37,28 +37,30 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
 
         if (fragment instanceof AppFragment) {
             AppFragment appFragment = (AppFragment) fragment;
-            binding = BottomSheetSortBinding.inflate(inflater, container, false);
-            binding.btnSortByName.setOnClickListener(this);
-            binding.btnSortBySize.setOnClickListener(this);
-            binding.btnSortByLastUpdate.setOnClickListener(this);
-            binding.btnSortByLastUsed.setOnClickListener(this);
-            binding.btnSortByMostUsed.setOnClickListener(this);
-            binding.switchReverseSort.setChecked(((AppFragment) fragment).isReversedSort());
-            binding.btnSortByMostUsed.setText(textSwitcher(binding.switchReverseSort.isChecked()));
-            binding.switchReverseSort.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                binding.btnSortByMostUsed.setText(textSwitcher(isChecked));
+            appBinding = BottomSheetSortBinding.inflate(inflater, container, false);
+            appBinding.btnSortByName.setOnClickListener(this);
+            appBinding.btnSortBySize.setOnClickListener(this);
+            appBinding.btnSortByLastUpdate.setOnClickListener(this);
+            appBinding.btnSortByLastUsed.setOnClickListener(this);
+            appBinding.btnSortByMostUsed.setOnClickListener(this);
+            appBinding.switchReverseSort.setChecked(((AppFragment) fragment).isReversedSort());
+            appBinding.btnSortByMostUsed.setText(textSwitcher(appBinding.switchReverseSort.isChecked()));
+            appBinding.switchReverseSort.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                appBinding.btnSortByMostUsed.setText(textSwitcher(isChecked));
                 appFragment.sort(appFragment.getSortedState(),isChecked);
                 dismiss();
             });
 
             if (PermissionManager.hasUsageStatsPermission(requireActivity())) {
-                binding.tvLockedTitle.setVisibility(View.GONE);
+                appBinding.tvLockedTitle.setVisibility(View.GONE);
             }
 
-            return binding.getRoot();
+            return appBinding.getRoot();
         }
         else {
             apkBinding = BottomSheetSortApkBinding.inflate(inflater, container, false);
+            apkBinding.btnSortBySize.setOnClickListener(this);
+            apkBinding.btnSortByName.setOnClickListener(this);
             return apkBinding.getRoot();
         }
 
@@ -71,7 +73,7 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
         int id = v.getId();
         if (fragment instanceof AppFragment) {
             AppFragment appFragment = (AppFragment) fragment;
-            boolean isReverseSort = binding.switchReverseSort.isChecked();
+            boolean isReverseSort = appBinding.switchReverseSort.isChecked();
             if (id == R.id.btnSortByName) appFragment.sort(Constants.SORT_BY_NAME,isReverseSort);
             else if (id == R.id.btnSortBySize) appFragment.sort(Constants.SORT_BY_SIZE,isReverseSort);
             else if (id == R.id.btnSortByLastUpdate) appFragment.sort(Constants.SORT_BY_LAST_UPDATED,isReverseSort);
@@ -91,6 +93,8 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
 
         } else if (fragment instanceof ApkFragment){
             ApkFragment apkFragment = (ApkFragment) fragment;
+            if (id == R.id.btnSortByName) apkFragment.sort(Constants.SORT_BY_NAME);
+            else if (id == R.id.btnSortBySize) apkFragment.sort(Constants.SORT_BY_SIZE);
         }
         dismiss();
     }

@@ -63,11 +63,11 @@ public class FilterBottomSheet extends BottomSheetDialogFragment implements View
         } else {
             ApkFragment apkFragment = (ApkFragment) fragment;
             if (id == R.id.btnFilterInstalledApks) {
-
+                apkFragment.filter(Constants.FILTER_INSTALLED_APKS);
             } else if (id == R.id.btnFilterNotInstalledApks){
-
+                apkFragment.filter(Constants.FILTER_NOT_INSTALLED_APKS);
             } else if (id == R.id.btnFilterAllApks){
-
+                apkFragment.filter(Constants.NO_FILTER);
             }
         }
 

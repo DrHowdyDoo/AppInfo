@@ -53,6 +53,7 @@
         android:id="@+id/switchReverseSort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_gravity="center_horizontal"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"

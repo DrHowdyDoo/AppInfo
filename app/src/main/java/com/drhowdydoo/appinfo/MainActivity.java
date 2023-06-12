@@ -21,6 +21,7 @@ import com.drhowdydoo.appinfo.databinding.ActivityMainBinding;
 import com.drhowdydoo.appinfo.fragment.ApkFragment;
 import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.interfaces.OnSortFilterListener;
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.elevation.SurfaceColors;
 
 public class MainActivity extends AppCompatActivity implements OnSortFilterListener {
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
-        //DynamicColors.applyToActivityIfAvailable(this);
+        DynamicColors.applyToActivityIfAvailable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getWindow().setNavigationBarColor(SurfaceColors.SURFACE_2.getColor(this));
