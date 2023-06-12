@@ -7,6 +7,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.drhowdydoo.appinfo.fragment.ApkFragment;
+import com.drhowdydoo.appinfo.fragment.AppFragment;
+
 import java.util.ArrayList;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
@@ -32,7 +35,10 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return fragments.get(position);
+        if (position == 0) {
+             return new AppFragment();
+        }
+        else return new ApkFragment();
     }
 
     @Override

@@ -36,6 +36,7 @@ android {
 dependencies {
 
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.6.1")
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0")) // To fix duplicate class error (org.jetbrains.kotlin:kotlin-stdlib:1.8.10)
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

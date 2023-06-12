@@ -26,14 +26,14 @@ import java.util.HashSet;
 import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerViewAdapter.ViewHolder> {
 
     private List<AppInfo> appInfoList;
     private Context context;
     private HashSet<Integer> flagSet = new HashSet<>();
 
 
-    public RecyclerViewAdapter(Context context, List<AppInfo> appInfoList) {
+    public AppRecyclerViewAdapter(Context context, List<AppInfo> appInfoList) {
         this.appInfoList = new ArrayList<>(appInfoList);
         this.context = context;
     }

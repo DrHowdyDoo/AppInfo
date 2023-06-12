@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.drhowdydoo.appinfo.adapter.ViewPagerAdapter;
@@ -20,7 +21,6 @@ import com.drhowdydoo.appinfo.databinding.ActivityMainBinding;
 import com.drhowdydoo.appinfo.fragment.ApkFragment;
 import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.interfaces.OnSortFilterListener;
-import com.google.android.material.color.DynamicColors;
 import com.google.android.material.elevation.SurfaceColors;
 
 public class MainActivity extends AppCompatActivity implements OnSortFilterListener {
@@ -82,12 +82,12 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
         });
 
         binding.btnFilter.setOnClickListener(v -> {
-            FilterBottomSheet filterBottomSheet = new FilterBottomSheet(pagerAdapter.createFragment(binding.viewPager.getCurrentItem()));
+            FilterBottomSheet filterBottomSheet = new FilterBottomSheet(getCurrentFragment());
             filterBottomSheet.show(getSupportFragmentManager(), "filterBottomSheet");
         });
 
         binding.btnSort.setOnClickListener(v -> {
-            SortBottomSheet sortBottomSheet = new SortBottomSheet(pagerAdapter.createFragment(binding.viewPager.getCurrentItem()));
+            SortBottomSheet sortBottomSheet = new SortBottomSheet(getCurrentFragment());
             sortBottomSheet.show(getSupportFragmentManager(), "sortBottomSheet");
         });
     }
@@ -118,5 +118,11 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
     @Override
     public void onFilter(String text) {
         binding.btnFilter.setText(text);
+    }
+
+    private Fragment getCurrentFragment(){
+        int current = binding.viewPager.getCurrentItem();
+        if (current == 0) return getSupportFragmentManager().findFragmentByTag("f0");
+        else return getSupportFragmentManager().findFragmentByTag("f1");
     }
 }

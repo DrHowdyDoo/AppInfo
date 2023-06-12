@@ -8,18 +8,20 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.drhowdydoo.appinfo.util.AppInfoManager;
-import com.drhowdydoo.appinfo.adapter.RecyclerViewAdapter;
+import com.drhowdydoo.appinfo.MainActivity;
+import com.drhowdydoo.appinfo.adapter.AppRecyclerViewAdapter;
 import com.drhowdydoo.appinfo.databinding.FragmentAppBinding;
 import com.drhowdydoo.appinfo.interfaces.OnSortFilterListener;
 import com.drhowdydoo.appinfo.model.AppInfo;
 import com.drhowdydoo.appinfo.util.AppInfoComparator;
+import com.drhowdydoo.appinfo.util.AppInfoManager;
 import com.drhowdydoo.appinfo.util.Constants;
+import com.drhowdydoo.appinfo.viewmodel.AppListViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,14 +29,14 @@ import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
 public class AppFragment extends Fragment {
 
-    public int sortedState = Constants.DEFAULT_SORT;
+    public int sortedState;
     private FragmentAppBinding binding;
-    private RecyclerViewAdapter adapter;
-    private List<AppInfo> appInfoList = new ArrayList<>();
-    private int filterState = Constants.NO_FILTER;
+    private AppRecyclerViewAdapter adapter;
+    private int filterState;
     private AppInfoManager appInfoManager;
-
     private OnSortFilterListener onSortFilterListener;
+    private AppListViewModel appListViewModel;
+    private MainActivity mainActivity;
 
     public AppFragment() {
     }
@@ -50,18 +52,27 @@ public class AppFragment extends Fragment {
         binding = FragmentAppBinding.inflate(inflater, container, false);
         View rootView = binding.getRoot();
 
-        adapter = new RecyclerViewAdapter(requireActivity(), appInfoList);
+        appListViewModel = new ViewModelProvider(this).get(AppListViewModel.class);
+        adapter = new AppRecyclerViewAdapter(requireActivity(), appListViewModel.getSavedAppInfoList());
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.setItemAnimator(null);
         binding.recyclerView.setAdapter(adapter);
+        mainActivity = (MainActivity) requireActivity();
 
         new FastScrollerBuilder(binding.recyclerView).useMd2Style().build();
         appInfoManager = new AppInfoManager(requireActivity());
-        binding.progressGroup.setVisibility(View.VISIBLE);
-        appInfoManager.getAllApps(this);
-
         onSortFilterListener = (OnSortFilterListener) requireActivity();
+        sortedState = appListViewModel.getSortedState();
+        filterState = appListViewModel.getFilterState();
+
+        if (appListViewModel.getSavedAppInfoList().isEmpty()) {
+            binding.progressGroup.setVisibility(View.VISIBLE);
+            appInfoManager.getAllApps(this);
+        }else {
+            onSortFilterListener.onSort(getSortButtonText(sortedState));
+            onSortFilterListener.onFilter(getFilterButtonText(filterState, appListViewModel.getSavedAppInfoList().size()));
+        }
 
 
         binding.fabScrollBack.setOnClickListener(v -> binding.recyclerView.smoothScrollToPosition(0));
@@ -87,7 +98,7 @@ public class AppFragment extends Fragment {
 
     @SuppressLint("DefaultLocale")
     public void setData(List<AppInfo> appInfoList, boolean dispatch) {
-        this.appInfoList = appInfoList;
+        appListViewModel.setAppInfoList(appInfoList);
         if (dispatch) dispatchData();
     }
 
@@ -96,7 +107,9 @@ public class AppFragment extends Fragment {
         binding.progressGroup.setVisibility(View.GONE);
         List<AppInfo> filteredList = getFilteredList(filterState);
         AppInfoComparator appInfoComparator = new AppInfoComparator(sortedState);
-        filteredList.sort(appInfoComparator);
+        if (appListViewModel.isReverseSort()) filteredList.sort(appInfoComparator.reversed());
+        else filteredList.sort(appInfoComparator);
+        appListViewModel.setSavedAppInfoList(filteredList);
         onSortFilterListener.onSort(getSortButtonText(sortedState));
         onSortFilterListener.onFilter(getFilterButtonText(filterState, filteredList.size()));
         adapter.setData(filteredList);
@@ -106,31 +119,34 @@ public class AppFragment extends Fragment {
     public void filter(int filterKey) {
         if (filterKey == filterState) return;
         filterState = filterKey;
+        appListViewModel.setFilterState(filterState);
         dispatchData();
     }
 
     private List<AppInfo> getFilteredList(int filter) {
         if (filter == Constants.NO_FILTER) {
-            return appInfoList;
+            return appListViewModel.getAppInfoList();
         } else if (filter == Constants.FILTER_SYSTEM_APPS) {
-            return appInfoList.stream().filter(AppInfo::isSystemApp).collect(Collectors.toList());
+            return appListViewModel.getAppInfoList().stream().filter(AppInfo::isSystemApp).collect(Collectors.toList());
         } else if (filter == Constants.FILTER_NON_SYSTEM_APPS) {
-            return appInfoList.stream().filter(appInfo -> !appInfo.isSystemApp()).collect(Collectors.toList());
+            return appListViewModel.getAppInfoList().stream().filter(appInfo -> !appInfo.isSystemApp()).collect(Collectors.toList());
         }
-        return appInfoList;
+        return appListViewModel.getAppInfoList();
     }
 
-    public void sort(int sortBy) {
-        if (sortBy == sortedState) return;
+    public void sort(int sortBy, boolean isReverseSort) {
+        if (sortBy == sortedState && isReverseSort == appListViewModel.isReverseSort()) return;
+        appListViewModel.setReverseSort(isReverseSort);
         sortedState = sortBy;
+        appListViewModel.setSortedState(sortedState);
         if (sortBy == Constants.SORT_BY_LAST_USED) {
             adapter.setFlags(Constants.SHOW_LAST_USED_TIME);
-            appInfoManager.addLastUsedTimeToAppInfo(appInfoList, this);
+            appInfoManager.addLastUsedTimeToAppInfo(appListViewModel.getAppInfoList(), this);
             return;
         } else adapter.setFlags(Constants.SHOW_LAST_UPDATED_TIME);
         if (sortBy == Constants.SORT_BY_MOST_USED) {
             adapter.setFlags(Constants.HIDE_APP_STATS);
-            appInfoManager.addForegroundTimeToAppInfo(appInfoList, this);
+            appInfoManager.addForegroundTimeToAppInfo(appListViewModel.getAppInfoList(), this);
             return;
         }
         dispatchData();
@@ -147,6 +163,7 @@ public class AppFragment extends Fragment {
             case Constants.SORT_BY_LAST_USED:
                 return "Last used";
             case Constants.SORT_BY_MOST_USED:
+                if (appListViewModel.isReverseSort()) return "Least used";
                 return "Most used";
         }
         return "Sort By";
@@ -167,4 +184,22 @@ public class AppFragment extends Fragment {
         return "Filter";
     }
 
+    public void setReversedSort(boolean isReverseSort){
+        appListViewModel.setReverseSort(isReverseSort);
+    }
+
+    public boolean isReversedSort(){
+        return appListViewModel.isReverseSort();
+    }
+
+    public int getSortedState(){
+        return appListViewModel.getSortedState();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mainActivity.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
+        mainActivity.onSort(getSortButtonText(sortedState));
+    }
 }

@@ -15,8 +15,6 @@ import androidx.fragment.app.Fragment;
 
 import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.model.AppInfo;
-import com.drhowdydoo.appinfo.util.Constants;
-import com.drhowdydoo.appinfo.util.PermissionManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +45,7 @@ public class AppInfoManager {
 
 
     @SuppressLint("CheckResult")
-    public void getAllApps(Fragment fragment) {
+    public void getAllApps(AppFragment appFragment) {
 
         Observable.fromCallable(() -> {
                     PackageManager packageManager = context.getPackageManager();
@@ -59,12 +57,12 @@ public class AppInfoManager {
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(appInfoList -> {
-                    if (((AppFragment) fragment).sortedState == Constants.SORT_BY_LAST_USED) {
-                        addLastUsedTimeToAppInfo(appInfoList, (AppFragment) fragment);
-                    } else if (((AppFragment) fragment).sortedState == Constants.SORT_BY_MOST_USED) {
-                        addForegroundTimeToAppInfo(appInfoList, (AppFragment) fragment);
+                    if (appFragment.sortedState == Constants.SORT_BY_LAST_USED) {
+                        addLastUsedTimeToAppInfo(appInfoList, appFragment);
+                    } else if (appFragment.sortedState == Constants.SORT_BY_MOST_USED) {
+                        addForegroundTimeToAppInfo(appInfoList, appFragment);
                     } else {
-                        ((AppFragment) fragment).setData(appInfoList, true);
+                        appFragment.setData(appInfoList, true);
                     }
                 }, Throwable::printStackTrace);
 
