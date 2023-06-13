@@ -40,7 +40,7 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <LinearLayout
+       <LinearLayout
             android:id="@+id/operationButtonLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
