@@ -18,7 +18,6 @@ import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.ApkListItemBinding;
 import com.drhowdydoo.appinfo.model.ApkInfo;
 import com.drhowdydoo.appinfo.util.ApkInfoDiffCallback;
-import com.drhowdydoo.appinfo.util.AppInfoDiffCallback;
 import com.drhowdydoo.appinfo.util.Constants;
 
 import java.util.ArrayList;
@@ -26,7 +25,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerViewAdapter.ViewHolder>{
+@SuppressWarnings("FieldMayBeFinal")
+public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerViewAdapter.ViewHolder> {
 
     private Context context;
     private List<ApkInfo> apkInfoList;
@@ -102,6 +102,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
 
         public ImageView imgApkIcon;
         public TextView tvApkName, tvApkSize, tvApkVersion, tvApkPath, tvApkStatus;
+
         public ViewHolder(@NonNull ApkListItemBinding binding) {
             super(binding.getRoot());
             imgApkIcon = binding.imgApkIcon;

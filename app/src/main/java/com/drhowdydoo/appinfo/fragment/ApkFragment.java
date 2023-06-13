@@ -18,7 +18,6 @@ import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.adapter.ApkRecyclerViewAdapter;
 import com.drhowdydoo.appinfo.databinding.FragmentApkBinding;
 import com.drhowdydoo.appinfo.model.ApkInfo;
-import com.drhowdydoo.appinfo.model.AppInfo;
 import com.drhowdydoo.appinfo.util.ApkInfoComparator;
 import com.drhowdydoo.appinfo.util.ApkInfoManager;
 import com.drhowdydoo.appinfo.util.Constants;
@@ -29,7 +28,7 @@ import java.util.stream.Collectors;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
-public class ApkFragment extends Fragment implements View.OnClickListener{
+public class ApkFragment extends Fragment implements View.OnClickListener {
 
     private FragmentApkBinding binding;
     private ApkRecyclerViewAdapter adapter;
@@ -53,7 +52,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener{
         checkStoragePermission();
         binding.btnStorageAccess.setOnClickListener(this);
         apkListViewModel = new ViewModelProvider(this).get(ApkListViewModel.class);
-        adapter = new ApkRecyclerViewAdapter(requireActivity(),apkListViewModel.getSavedApkInfoList());
+        adapter = new ApkRecyclerViewAdapter(requireActivity(), apkListViewModel.getSavedApkInfoList());
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.setItemAnimator(null);
@@ -76,7 +75,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (Environment.isExternalStorageManager()) {
                 binding.groupStoragePermission.setVisibility(View.GONE);
-                if (apkListViewModel.getApkInfoList().isEmpty()) {
+                if (apkListViewModel.getSavedApkInfoList().isEmpty()) {
                     binding.progressGroup.setVisibility(View.VISIBLE);
                     apkInfoManager.getAllApks(Environment.getExternalStorageDirectory(), this);
                 }
@@ -118,28 +117,32 @@ public class ApkFragment extends Fragment implements View.OnClickListener{
 
     private String getFilterText() {
         int filter = apkListViewModel.getFilterState();
-        if (filter == Constants.FILTER_INSTALLED_APKS) return "Installed (" + adapter.getItemCount() + ")";
-        else if (filter == Constants.FILTER_NOT_INSTALLED_APKS) return "Not Installed (" + adapter.getItemCount() + ")";
+        if (filter == Constants.FILTER_INSTALLED_APKS)
+            return "Installed (" + adapter.getItemCount() + ")";
+        else if (filter == Constants.FILTER_NOT_INSTALLED_APKS)
+            return "Not Installed (" + adapter.getItemCount() + ")";
         else return "All Apks (" + adapter.getItemCount() + ")";
     }
 
 
-    public void sort(int sortBy){
+    public void sort(int sortBy) {
         if (sortBy == apkListViewModel.getSortState()) return;
         apkListViewModel.setSortState(sortBy);
         dispatchData();
     }
 
-    public void filter(int filter){
+    public void filter(int filter) {
         if (filter == apkListViewModel.getFilterState()) return;
         apkListViewModel.setFilterState(filter);
         dispatchData();
     }
 
-    private List<ApkInfo> getFilteredList(int filter){
+    private List<ApkInfo> getFilteredList(int filter) {
         if (filter == Constants.NO_FILTER) return apkListViewModel.getApkInfoList();
-        if (filter == Constants.FILTER_INSTALLED_APKS) return apkListViewModel.getApkInfoList().stream().filter(ApkInfo::isInstalled).collect(Collectors.toList());
-        if (filter == Constants.FILTER_NOT_INSTALLED_APKS) return apkListViewModel.getApkInfoList().stream().filter(apkInfo -> !apkInfo.isInstalled()).collect(Collectors.toList());
+        if (filter == Constants.FILTER_INSTALLED_APKS)
+            return apkListViewModel.getApkInfoList().stream().filter(ApkInfo::isInstalled).collect(Collectors.toList());
+        if (filter == Constants.FILTER_NOT_INSTALLED_APKS)
+            return apkListViewModel.getApkInfoList().stream().filter(apkInfo -> !apkInfo.isInstalled()).collect(Collectors.toList());
         return apkListViewModel.getApkInfoList();
     }
 
@@ -160,11 +163,12 @@ public class ApkFragment extends Fragment implements View.OnClickListener{
                     .filter(apkInfo -> apkInfo.getApkName().toLowerCase().startsWith(input.toLowerCase()))
                     .collect(Collectors.toList());
             adapter.updateData(searchResults);
+            mainActivity.onFilter(getFilterText());
             if (searchResults.isEmpty()) binding.tvNoResultsFound.setVisibility(View.VISIBLE);
             else binding.tvNoResultsFound.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             adapter.updateData(apkListViewModel.getSavedApkInfoList());
+            mainActivity.onFilter(getFilterText());
             binding.tvNoResultsFound.setVisibility(View.GONE);
         }
     }

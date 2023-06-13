@@ -49,7 +49,7 @@ public class ApkInfoManager {
 
 
     @SuppressLint("CheckResult")
-    public void getAllApks(File directory, ApkFragment apkFragment){
+    public void getAllApks(File directory, ApkFragment apkFragment) {
 
         Observable<File> directoryObservable = Observable.fromArray(directory.listFiles())
                 .flatMap(file -> file.isDirectory() ? Observable.just(file) : Observable.empty());
@@ -60,22 +60,22 @@ public class ApkInfoManager {
         apkFilesObservable
                 .flatMap(Observable::fromIterable)
                 .subscribeOn(Schedulers.io())
-                        .map(this::getApkInfo)
-                        .toList()
+                .map(this::getApkInfo)
+                .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apkInfoList -> {
                     System.out.println("Apk List : " + apkInfoList.size());
-                    apkFragment.setData(apkInfoList,true);
+                    apkFragment.setData(apkInfoList, true);
                 }, throwable -> {
                     throwable.printStackTrace();
                 });
 
     }
 
-    private ApkInfo getApkInfo(File apkFile){
+    private ApkInfo getApkInfo(File apkFile) {
 
         System.out.println("Apk : " + apkFile.getAbsolutePath());
-        PackageInfo apkInfo = packageManager.getPackageArchiveInfo(apkFile.getAbsolutePath(),PackageManager.GET_PERMISSIONS|PackageManager.GET_RECEIVERS|PackageManager.GET_PROVIDERS|PackageManager.GET_ACTIVITIES|PackageManager.GET_SERVICES|PackageManager.GET_META_DATA);
+        PackageInfo apkInfo = packageManager.getPackageArchiveInfo(apkFile.getAbsolutePath(), PackageManager.GET_PERMISSIONS | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS | PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_META_DATA);
         long apkSize = apkFile.length();
         String apkName = apkFile.getName();
         String apkPath = apkFile.getParent();
@@ -92,10 +92,9 @@ public class ApkInfoManager {
             apkIcon = apkInfo.applicationInfo.loadIcon(packageManager);
         }
 
-        return new ApkInfo(apkName,apkIcon,apkSize,apkPath,apkVersion,apkInfo, isInstalled);
+        return new ApkInfo(apkName, apkIcon, apkSize, apkPath, apkVersion, apkInfo, isInstalled);
 
     }
-
 
 
 }

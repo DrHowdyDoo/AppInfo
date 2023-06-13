@@ -36,9 +36,8 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         if (position == 0) {
-             return new AppFragment();
-        }
-        else return new ApkFragment();
+            return new AppFragment();
+        } else return new ApkFragment();
     }
 
     @Override

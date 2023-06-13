@@ -38,7 +38,7 @@ public class FilterBottomSheet extends BottomSheetDialogFragment implements View
             binding.btnFilterSystemApps.setOnClickListener(this);
             binding.btnFilterNonSystemApps.setOnClickListener(this);
             return binding.getRoot();
-        } else{
+        } else {
             BottomSheetFilterApkBinding binding = BottomSheetFilterApkBinding.inflate(inflater, container, false);
             binding.btnFilterAllApks.setOnClickListener(this);
             binding.btnFilterInstalledApks.setOnClickListener(this);
@@ -64,9 +64,9 @@ public class FilterBottomSheet extends BottomSheetDialogFragment implements View
             ApkFragment apkFragment = (ApkFragment) fragment;
             if (id == R.id.btnFilterInstalledApks) {
                 apkFragment.filter(Constants.FILTER_INSTALLED_APKS);
-            } else if (id == R.id.btnFilterNotInstalledApks){
+            } else if (id == R.id.btnFilterNotInstalledApks) {
                 apkFragment.filter(Constants.FILTER_NOT_INSTALLED_APKS);
-            } else if (id == R.id.btnFilterAllApks){
+            } else if (id == R.id.btnFilterAllApks) {
                 apkFragment.filter(Constants.NO_FILTER);
             }
         }

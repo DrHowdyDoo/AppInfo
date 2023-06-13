@@ -109,11 +109,10 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
     public void setData(List<AppInfo> newAppInfoList) {
         appInfoList.clear();
         appInfoList.addAll(newAppInfoList);
-
         notifyDataSetChanged();
     }
 
-    public void updateData(List<AppInfo> newAppInfoList){
+    public void updateData(List<AppInfo> newAppInfoList) {
         AppInfoDiffCallback appInfoDiffCallback = new AppInfoDiffCallback(appInfoList, newAppInfoList);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(appInfoDiffCallback);
         appInfoList.clear();

@@ -47,8 +47,7 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
             appBinding.btnSortByMostUsed.setText(textSwitcher(appBinding.switchReverseSort.isChecked()));
             appBinding.switchReverseSort.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 appBinding.btnSortByMostUsed.setText(textSwitcher(isChecked));
-                appFragment.sort(appFragment.getSortedState(),isChecked);
-                dismiss();
+                appFragment.sort(appFragment.getSortedState(), isChecked);
             });
 
             if (PermissionManager.hasUsageStatsPermission(requireActivity())) {
@@ -56,8 +55,7 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
             }
 
             return appBinding.getRoot();
-        }
-        else {
+        } else {
             apkBinding = BottomSheetSortApkBinding.inflate(inflater, container, false);
             apkBinding.btnSortBySize.setOnClickListener(this);
             apkBinding.btnSortByName.setOnClickListener(this);
@@ -74,24 +72,26 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
         if (fragment instanceof AppFragment) {
             AppFragment appFragment = (AppFragment) fragment;
             boolean isReverseSort = appBinding.switchReverseSort.isChecked();
-            if (id == R.id.btnSortByName) appFragment.sort(Constants.SORT_BY_NAME,isReverseSort);
-            else if (id == R.id.btnSortBySize) appFragment.sort(Constants.SORT_BY_SIZE,isReverseSort);
-            else if (id == R.id.btnSortByLastUpdate) appFragment.sort(Constants.SORT_BY_LAST_UPDATED,isReverseSort);
+            if (id == R.id.btnSortByName) appFragment.sort(Constants.SORT_BY_NAME, isReverseSort);
+            else if (id == R.id.btnSortBySize)
+                appFragment.sort(Constants.SORT_BY_SIZE, isReverseSort);
+            else if (id == R.id.btnSortByLastUpdate)
+                appFragment.sort(Constants.SORT_BY_LAST_UPDATED, isReverseSort);
             else if (id == R.id.btnSortByLastUsed) {
                 if (!PermissionManager.hasUsageStatsPermission(requireActivity())) {
                     getPermission();
                     return;
                 }
-                appFragment.sort(Constants.SORT_BY_LAST_USED,isReverseSort);
+                appFragment.sort(Constants.SORT_BY_LAST_USED, isReverseSort);
             } else if (id == R.id.btnSortByMostUsed) {
                 if (!PermissionManager.hasUsageStatsPermission(requireActivity())) {
                     getPermission();
                     return;
                 }
-                appFragment.sort(Constants.SORT_BY_MOST_USED,isReverseSort);
+                appFragment.sort(Constants.SORT_BY_MOST_USED, isReverseSort);
             }
 
-        } else if (fragment instanceof ApkFragment){
+        } else if (fragment instanceof ApkFragment) {
             ApkFragment apkFragment = (ApkFragment) fragment;
             if (id == R.id.btnSortByName) apkFragment.sort(Constants.SORT_BY_NAME);
             else if (id == R.id.btnSortBySize) apkFragment.sort(Constants.SORT_BY_SIZE);
@@ -105,7 +105,7 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
                 .setData(Uri.parse("package:" + "com.drhowdydoo.appinfo")));
     }
 
-    private String textSwitcher(boolean isReverse){
+    private String textSwitcher(boolean isReverse) {
         return isReverse ? "Least used" : "Most used";
     }
 

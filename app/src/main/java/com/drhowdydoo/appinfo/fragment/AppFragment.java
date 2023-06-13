@@ -69,7 +69,7 @@ public class AppFragment extends Fragment {
         if (appListViewModel.getSavedAppInfoList().isEmpty()) {
             binding.progressGroup.setVisibility(View.VISIBLE);
             appInfoManager.getAllApps(this);
-        }else {
+        } else {
             onSortFilterListener.onSort(getSortButtonText(sortedState));
             onSortFilterListener.onFilter(getFilterButtonText(filterState, appListViewModel.getSavedAppInfoList().size()));
         }
@@ -184,15 +184,11 @@ public class AppFragment extends Fragment {
         return "Filter";
     }
 
-    public void setReversedSort(boolean isReverseSort){
-        appListViewModel.setReverseSort(isReverseSort);
-    }
-
-    public boolean isReversedSort(){
+    public boolean isReversedSort() {
         return appListViewModel.isReverseSort();
     }
 
-    public int getSortedState(){
+    public int getSortedState() {
         return appListViewModel.getSortedState();
     }
 
@@ -210,11 +206,12 @@ public class AppFragment extends Fragment {
                     .filter(appInfo -> appInfo.getAppName().toLowerCase().startsWith(input.toLowerCase()))
                     .collect(Collectors.toList());
             adapter.updateData(searchResults);
+            onSortFilterListener.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
             if (searchResults.isEmpty()) binding.tvNoResultsFound.setVisibility(View.VISIBLE);
             else binding.tvNoResultsFound.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             adapter.updateData(appListViewModel.getSavedAppInfoList());
+            onSortFilterListener.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
             binding.tvNoResultsFound.setVisibility(View.GONE);
         }
     }

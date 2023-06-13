@@ -14,6 +14,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.drhowdydoo.appinfo.adapter.ViewPagerAdapter;
@@ -23,16 +24,15 @@ import com.drhowdydoo.appinfo.databinding.ActivityMainBinding;
 import com.drhowdydoo.appinfo.fragment.ApkFragment;
 import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.interfaces.OnSortFilterListener;
-import com.drhowdydoo.appinfo.model.AppInfo;
+import com.drhowdydoo.appinfo.viewmodel.MainViewModel;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.elevation.SurfaceColors;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnSortFilterListener {
 
     private ActivityMainBinding binding;
+    private MainViewModel mainViewModel;
+    private boolean isPageSelected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,11 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
         pagerAdapter.addFragment(new ApkFragment());
         binding.viewPager.setAdapter(pagerAdapter);
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
+        if (mainViewModel.isSearchVisible()) {
+            binding.searchBar.setVisibility(View.VISIBLE);
+        }
 
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -58,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
 
             @Override
             public void onPageSelected(int position) {
+                isPageSelected = true;
                 binding.bottomNavigation.getMenu().getItem(position).setChecked(true);
                 onFragmentChanged(position);
                 super.onPageSelected(position);
@@ -80,8 +86,10 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
             if (item.getItemId() == R.id.search) {
                 if (binding.searchBar.isShown()) {
                     binding.searchBar.setVisibility(View.GONE);
+                    mainViewModel.setSearchVisible(false);
                 } else {
                     binding.searchBar.setVisibility(View.VISIBLE);
+                    mainViewModel.setSearchVisible(true);
                     setSearchHint();
                     binding.searchInput.requestFocus();
                     imm.showSoftInput(binding.searchInput, InputMethodManager.SHOW_IMPLICIT);
@@ -112,19 +120,33 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (!isPageSelected)
+                    return;                       // To prevent execution before the viewpager2's onPageSelected is called to avoid wrong value on device rotation
                 Fragment fragment = getCurrentFragment();
-                if (fragment instanceof AppFragment) ((AppFragment) fragment).search(s.toString());
-                else if (fragment instanceof ApkFragment) ((ApkFragment) fragment).search(s.toString());
+                if (fragment instanceof AppFragment) {
+                    mainViewModel.setAppSearchText(s.toString());
+                    ((AppFragment) fragment).search(s.toString());
+                } else if (fragment instanceof ApkFragment) {
+                    mainViewModel.setApkSearchText(s.toString());
+                    ((ApkFragment) fragment).search(s.toString());
+                }
             }
         });
     }
 
+
+    /**
+     * Changes the search bar hint with respective to the fragments.
+     */
     private void setSearchHint() {
         if (binding.viewPager.getCurrentItem() == 0) binding.searchBar.setHint("Search Apps");
         else binding.searchBar.setHint("Search Apks");
     }
 
 
+    /**
+     * To close keyboard when the user touches anywhere on the screen.
+     */
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -153,13 +175,17 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
         binding.btnFilter.setText(text);
     }
 
-    private Fragment getCurrentFragment(){
+    private Fragment getCurrentFragment() {
+        if (binding.viewPager.getAdapter() == null || binding.viewPager.getAdapter().getItemCount() == 0)
+            return null;
         int current = binding.viewPager.getCurrentItem();
         if (current == 0) return getSupportFragmentManager().findFragmentByTag("f0");
         else return getSupportFragmentManager().findFragmentByTag("f1");
     }
 
-    private void onFragmentChanged(int position){
+    private void onFragmentChanged(int position) {
         setSearchHint();
+        if (position == 0) binding.searchInput.setText(mainViewModel.getAppSearchText());
+        else if (position == 1) binding.searchInput.setText(mainViewModel.getApkSearchText());
     }
 }
