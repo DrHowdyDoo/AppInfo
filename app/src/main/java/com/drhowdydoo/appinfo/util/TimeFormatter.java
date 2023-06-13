@@ -1,10 +1,13 @@
 package com.drhowdydoo.appinfo.util;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 public class TimeFormatter {
 
     public static String format(long timeInMilliseconds, String prefix) {
+
+        if (timeInMilliseconds == Constants.LAST_UPDATED_TIME_NOT_AVAILABLE) return "N/A";
 
         long time = TimeUnit.MILLISECONDS.toSeconds(timeInMilliseconds);
 
@@ -31,5 +34,28 @@ public class TimeFormatter {
         }
     }
 
+
+    public static String formatDuration(long timeInMilliseconds) {
+        Duration duration = Duration.ofMillis(timeInMilliseconds);
+
+        long hours = duration.toHours();
+        long minutes = duration.toMinutes() % 60;
+        long seconds = duration.getSeconds() % 60;
+
+        String formattedTime;
+        if (hours > 0) {
+            formattedTime = String.format("%d hr, %d mins", hours, minutes);
+        } else if (minutes > 1) {
+            formattedTime = String.format("%d minutes", minutes);
+        } else if (minutes > 0) {
+            formattedTime = String.format("%d minute", minutes);
+        } else if (seconds > 0) {
+            formattedTime = String.format("%d seconds", seconds);
+        } else {
+            formattedTime = "Less than a second";
+        }
+
+        return formattedTime;
+    }
 
 }

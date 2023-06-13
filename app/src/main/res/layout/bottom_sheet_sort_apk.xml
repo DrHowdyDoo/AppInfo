@@ -44,74 +44,16 @@
                 android:layout_height="wrap_content"
                 android:text="Size"/>
 
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <Button
-                android:id="@+id/btnSortByLastUpdate"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Last updated"/>
-
-
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
-    <TextView
-        android:id="@+id/tvLockedTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="bottom|center_horizontal"
-        android:layout_gravity="center_horizontal"
-        android:textAppearance="?textAppearanceTitleMedium"
-        android:text="Usage access required"
-        android:drawablePadding="8dp"
-        app:drawableStartCompat="@drawable/outline_lock_24" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardLockedSortOption"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:cardCornerRadius="24dp"
-        style="?attr/materialCardViewOutlinedStyle">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/btnSortByLastUsed"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Last used"/>
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <Button
-                android:id="@+id/btnSortByMostUsed"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Most used"/>
-
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.materialswitch.MaterialSwitch
         android:id="@+id/switchReverseSort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_gravity="center_horizontal"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"

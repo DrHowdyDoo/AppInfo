@@ -1,5 +1,6 @@
 package com.drhowdydoo.appinfo.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
@@ -17,7 +18,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.AppListItemBinding;
 import com.drhowdydoo.appinfo.model.AppInfo;
-import com.drhowdydoo.appinfo.util.AppInfoComparator;
 import com.drhowdydoo.appinfo.util.AppInfoDiffCallback;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.TimeFormatter;
@@ -26,17 +26,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("FieldMayBeFinal")
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerViewAdapter.ViewHolder> {
 
     private List<AppInfo> appInfoList;
     private Context context;
     private HashSet<Integer> flagSet = new HashSet<>();
 
 
-    public RecyclerViewAdapter(Context context, List<AppInfo> appInfoList) {
+    public AppRecyclerViewAdapter(Context context, List<AppInfo> appInfoList) {
         this.appInfoList = new ArrayList<>(appInfoList);
         this.context = context;
     }
@@ -71,8 +70,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     .into(holder.imgAppIcon);
         }
 
+        holder.tvAppStats.setVisibility(View.VISIBLE);
+        holder.dotSeperator.setVisibility(View.VISIBLE);
+
         if (flagSet.contains(Constants.SHOW_LAST_USED_TIME)) {
             holder.tvAppStats.setText(TimeFormatter.format(appInfo.getLastTimeUsed(), "Used"));
+        } else if (flagSet.contains(Constants.HIDE_APP_STATS)) {
+            holder.tvAppStats.setText(TimeFormatter.formatDuration(appInfo.getTotalForegroundTime()));
         } else {
             holder.tvAppStats.setText(TimeFormatter.format(appInfo.getAppLastUpdateTime(), "Updated"));
         }
@@ -101,7 +105,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Collections.addAll(flagSet, flags);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setData(List<AppInfo> newAppInfoList) {
+        appInfoList.clear();
+        appInfoList.addAll(newAppInfoList);
+        notifyDataSetChanged();
+    }
+
+    public void updateData(List<AppInfo> newAppInfoList) {
         AppInfoDiffCallback appInfoDiffCallback = new AppInfoDiffCallback(appInfoList, newAppInfoList);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(appInfoDiffCallback);
         appInfoList.clear();
@@ -113,7 +124,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imgAppIcon, imgSplitApp;
-        public TextView tvAppName, tvAppSize, tvAppStats, tvAppVersion, tvSystemApp;
+        public TextView tvAppName, tvAppSize, tvAppStats, tvAppVersion, tvSystemApp, dotSeperator;
 
         public ViewHolder(@NonNull AppListItemBinding binding) {
             super(binding.getRoot());
@@ -124,6 +135,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             tvAppVersion = binding.tvAppVersion;
             imgSplitApp = binding.imgSplitApp;
             tvSystemApp = binding.tvSystemApp;
+            dotSeperator = binding.dotSeperator;
         }
     }
 
