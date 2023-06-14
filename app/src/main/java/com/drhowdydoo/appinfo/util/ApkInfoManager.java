@@ -75,7 +75,7 @@ public class ApkInfoManager {
     private ApkInfo getApkInfo(File apkFile) {
 
         System.out.println("Apk : " + apkFile.getAbsolutePath());
-        PackageInfo apkInfo = packageManager.getPackageArchiveInfo(apkFile.getAbsolutePath(), PackageManager.GET_PERMISSIONS | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS | PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_META_DATA);
+        PackageInfo apkInfo = packageManager.getPackageArchiveInfo(apkFile.getAbsolutePath(), PackageManager.GET_PERMISSIONS | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS | PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_META_DATA | PackageManager.GET_SIGNATURES);
         long apkSize = apkFile.length();
         String apkName = apkFile.getName();
         String apkPath = apkFile.getParent();

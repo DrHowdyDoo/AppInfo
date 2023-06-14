@@ -93,6 +93,7 @@ public class AppFragment extends Fragment {
             appInfoManager.getAllApps(this);
         });
 
+
         return rootView;
     }
 

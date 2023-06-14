@@ -2,6 +2,9 @@ package com.drhowdydoo.appinfo.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.drhowdydoo.appinfo.AppDetailsActivity;
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.AppListItemBinding;
 import com.drhowdydoo.appinfo.model.AppInfo;
@@ -121,13 +125,14 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public ImageView imgAppIcon, imgSplitApp;
         public TextView tvAppName, tvAppSize, tvAppStats, tvAppVersion, tvSystemApp, dotSeperator;
 
         public ViewHolder(@NonNull AppListItemBinding binding) {
             super(binding.getRoot());
+            binding.getRoot().setOnClickListener(this);
             imgAppIcon = binding.imgAppIcon;
             tvAppName = binding.tvAppName;
             tvAppSize = binding.tvAppSize;
@@ -136,6 +141,18 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
             imgSplitApp = binding.imgSplitApp;
             tvSystemApp = binding.tvSystemApp;
             dotSeperator = binding.dotSeperator;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(context, AppDetailsActivity.class);
+            AppInfo appInfo = appInfoList.get(getBindingAdapterPosition());
+            intent.putExtra("isApk",false);
+            intent.putExtra("appInfo",appInfo.getAppInfo());
+            intent.putExtra("appName",appInfo.getAppName());
+            intent.putExtra("appVersion",appInfo.getAppVersion());
+            intent.putExtra("appSize",appInfo.getSize());
+            context.startActivity(intent);
         }
     }
 

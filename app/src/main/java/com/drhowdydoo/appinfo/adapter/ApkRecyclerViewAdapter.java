@@ -2,8 +2,10 @@ package com.drhowdydoo.appinfo.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.drhowdydoo.appinfo.AppDetailsActivity;
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.ApkListItemBinding;
 import com.drhowdydoo.appinfo.model.ApkInfo;
@@ -98,19 +101,32 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         diffResult.dispatchUpdatesTo(this);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView imgApkIcon;
         public TextView tvApkName, tvApkSize, tvApkVersion, tvApkPath, tvApkStatus;
 
         public ViewHolder(@NonNull ApkListItemBinding binding) {
             super(binding.getRoot());
+            binding.getRoot().setOnClickListener(this);
             imgApkIcon = binding.imgApkIcon;
             tvApkName = binding.tvApkName;
             tvApkSize = binding.tvApkSize;
             tvApkVersion = binding.tvApkVersion;
             tvApkPath = binding.tvApkPath;
             tvApkStatus = binding.tvApkStatus;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(context, AppDetailsActivity.class);
+            ApkInfo apkInfo = apkInfoList.get(getBindingAdapterPosition());
+            intent.putExtra("isApk",true);
+            intent.putExtra("appName",apkInfo.getApkName());
+            intent.putExtra("appVersion",apkInfo.getApkVersion());
+            intent.putExtra("apkInfo",apkInfo.getApkInfo());
+            intent.putExtra("appSize",apkInfo.getApkSize());
+            context.startActivity(intent);
         }
     }
 
