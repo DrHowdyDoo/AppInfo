@@ -29,7 +29,8 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:expandedTitleMarginStart="110dp"
             app:expandedTitleMarginBottom="52dp"
-            app:maxLines="2"
+            app:maxLines="1"
+            app:titleTextEllipsize="end"
             app:expandedTitleTextAppearance="@style/App.TextAppearance.AppName">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -38,7 +39,7 @@
                 android:layout_height="?actionBarSize"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                tools:title="AppInfo" />
+                tools:title="AppInfo is better than My Apk haha" />
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imgIcon"
@@ -65,7 +66,7 @@
                 app:layout_collapseParallaxMultiplier="0.9"
                 android:layout_marginStart="110dp"
                 android:layout_marginEnd="16dp"
-                android:textAppearance="?textAppearanceLabelLarge"
+                android:textAppearance="?textAppearanceLabelMedium"
                 android:textColor="?colorPrimary"
                 tools:text="v 1.0.5" />
 

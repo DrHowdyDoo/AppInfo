@@ -92,6 +92,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                 binding.tvVersion.setLayoutParams(layoutParams);
             }
         });
+
     }
 
 }
