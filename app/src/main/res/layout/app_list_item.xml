@@ -15,6 +15,7 @@
         android:id="@+id/imgAppIcon"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:transitionName="transitionAppIcon"
         android:layout_gravity="center"
         android:contentDescription="@string/app_icon"/>
 

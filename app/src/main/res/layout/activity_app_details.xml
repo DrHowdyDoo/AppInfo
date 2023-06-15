@@ -25,21 +25,87 @@
             android:layout_width="match_parent"
             app:contentScrim="?android:colorBackground"
             app:titleCollapseMode="scale"
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            app:expandedTitleTextAppearance="?attr/textAppearanceDisplaySmall"
+            android:layout_height="?collapsingToolbarLayoutLargeSize"
+            app:expandedTitleTextAppearance="@style/App.TextAppearance.AppName"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/materialToolBar"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:elevation="0dp"
-                app:layout_collapseMode="pin"
-                tools:title="Apx" />
+            <ImageView
+                android:id="@+id/imageview_placeholder"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_marginTop="76dp"
+                android:layout_marginStart="16dp"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.9"/>
 
+            <FrameLayout
+                android:id="@+id/frameLayoutTitle"
+                android:layout_width="match_parent"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="110dp"
+                android:layout_height="88dp">
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|start"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvAppName"
+                        android:layout_weight="1"
+                        android:gravity="bottom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/App.TextAppearance.AppName"
+                        tools:text="AppInfo"/>
+
+                    <TextView
+                        android:id="@+id/tvVersion"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:layout_marginTop="4dp"
+                        android:textAppearance="?textAppearanceLabelLarge"
+                        android:textColor="?colorPrimary"
+                        tools:text="v 1.0.5" />
+
+                </LinearLayout>
+            </FrameLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:elevation="0dp"
+        app:layout_collapseMode="pin"
+        app:title="">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"/>
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgIcon"
+        android:layout_width="76dp"
+        android:layout_height="76dp"
+        android:transitionName="transitionAppIcon"
+        android:layout_gravity="start"
+        android:layout_marginTop="176dp"
+        android:layout_marginStart="16dp"
+        app:layout_behavior=".behavior.AppIconBehavior"
+        tools:src="@mipmap/ic_launcher"
+        app:shapeAppearanceOverlay="@style/circularImageView"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
