@@ -5,11 +5,14 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
+import com.drhowdydoo.appinfo.util.Utilities;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.color.DynamicColors;
 
 import java.util.Optional;
@@ -46,7 +49,10 @@ public class AppDetailsActivity extends AppCompatActivity {
                     });
         }
 
-        
+        binding.materialToolBar.setTitle(getIntent().getStringExtra("appName"));
+        binding.tvVersion.setText("v " + getIntent().getStringExtra("appVersion"));
+        handleToolbarContentAlignment();
+
     }
 
     private Optional<PackageInfo> getPackageInfoByAppInfo(ApplicationInfo appInfo) {
@@ -71,9 +77,21 @@ public class AppDetailsActivity extends AppCompatActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(icon -> {
-                    //binding.imgIcon.setImageDrawable(icon);
+                    binding.imgIcon.setImageDrawable(icon);
                 });
 
+    }
+
+    private void handleToolbarContentAlignment(){
+        binding.tvVersion.post(() -> {
+            if (binding.tvVersion.getLineCount() > 1) {
+                System.out.println("handleToolbarContentAlignment()");
+                binding.collapsingToolBar.setExpandedTitleMarginBottom(Utilities.dpToPx(this,58));
+                CollapsingToolbarLayout.LayoutParams layoutParams = (CollapsingToolbarLayout.LayoutParams) binding.tvVersion.getLayoutParams();
+                layoutParams.bottomMargin = Utilities.dpToPx(this,10);
+                binding.tvVersion.setLayoutParams(layoutParams);
+            }
+        });
     }
 
 }

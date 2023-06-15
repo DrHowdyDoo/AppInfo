@@ -21,13 +21,16 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolBar"
-            style="?attr/collapsingToolbarLayoutLargeStyle"
             android:layout_width="match_parent"
+            android:layout_height="160dp"
+            style="?attr/collapsingToolbarLayoutLargeStyle"
             app:contentScrim="?android:colorBackground"
             app:titleCollapseMode="scale"
-            android:layout_height="?collapsingToolbarLayoutLargeSize"
-            app:expandedTitleTextAppearance="@style/App.TextAppearance.AppName"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:expandedTitleMarginStart="110dp"
+            app:expandedTitleMarginBottom="52dp"
+            app:maxLines="2"
+            app:expandedTitleTextAppearance="@style/App.TextAppearance.AppName">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/materialToolBar"
@@ -35,8 +38,36 @@
                 android:layout_height="?actionBarSize"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                tools:title="Apx" />
+                tools:title="AppInfo" />
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgIcon"
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:layout_marginBottom="8dp"
+                android:transitionName="transitionAppIcon"
+                android:layout_gravity="start|bottom"
+                android:layout_marginStart="16dp"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.9"
+                tools:src="@mipmap/ic_launcher"
+                app:shapeAppearanceOverlay="@style/circularImageView"/>
+
+            <TextView
+                android:id="@+id/tvVersion"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:gravity="top"
+                android:ellipsize="middle"
+                android:maxLines="2"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.9"
+                android:layout_marginStart="110dp"
+                android:layout_marginEnd="16dp"
+                android:textAppearance="?textAppearanceLabelLarge"
+                android:textColor="?colorPrimary"
+                tools:text="v 1.0.5" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
