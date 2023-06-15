@@ -16,6 +16,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center"
+        android:transitionName="transitionAppIcon"
         android:contentDescription="@string/apk_icon"/>
 
     <LinearLayout

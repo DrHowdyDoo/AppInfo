@@ -169,8 +169,8 @@ public class AppDetailsManager {
 
                 CertificateFactory certFactory = CertificateFactory.getInstance("X509");
                 X509Certificate x509Cert = (X509Certificate) certFactory.generateCertificate(certStream);
-                certificates.append("Certificate serial number :").append("\t").append(x509Cert.getSerialNumber()).append("\n")
-                        .append("Signature Algorithm :").append("\t").append(x509Cert.getSigAlgName()).append("\n");
+                certificates.append("Certificate serial number : ").append(x509Cert.getSerialNumber()).append("\n")
+                        .append("Signature Algorithm : ").append(x509Cert.getSigAlgName()).append("\n");
 
                 certificates.append(transformIssuerDNString(x509Cert.getIssuerDN().getName()));
                 signatures.put("certificates",certificates.toString());
@@ -202,7 +202,7 @@ public class AppDetailsManager {
             if (keyValue.length == 2) {
                 String attribute = keyValue[0];
                 String value = keyValue[1];
-                transformedString.append(expandSignatureAbbreviation(attribute)).append(" :").append("\t").append(value).append("\n");
+                transformedString.append(expandSignatureAbbreviation(attribute)).append(" : ").append(value).append("\n");
             }
         }
 

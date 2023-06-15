@@ -32,6 +32,11 @@
         <item name="android:navigationBarColor">?attr/colorSurface</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/shared_element_transition</item>
+        <item name="android:windowSharedElementExitTransition">
+            @transition/shared_element_transition</item>
     </style>
 
     <style name="Theme.AppInfo" parent="Base.Theme.AppInfo" />

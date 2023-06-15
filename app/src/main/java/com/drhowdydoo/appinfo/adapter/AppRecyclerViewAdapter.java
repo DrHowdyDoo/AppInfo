@@ -1,6 +1,8 @@
 package com.drhowdydoo.appinfo.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -152,7 +154,10 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
             intent.putExtra("appName",appInfo.getAppName());
             intent.putExtra("appVersion",appInfo.getAppVersion());
             intent.putExtra("appSize",appInfo.getSize());
-            context.startActivity(intent);
+            final View transitionView = imgAppIcon;
+            ActivityOptions options = ActivityOptions
+                    .makeSceneTransitionAnimation((Activity) context, transitionView, "transitionAppIcon");
+            context.startActivity(intent,options.toBundle());
         }
     }
 

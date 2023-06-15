@@ -16,6 +16,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center"
+        android:transitionName="transitionAppIcon"
         android:contentDescription="@string/app_icon"/>
 
     <LinearLayout
@@ -27,14 +28,13 @@
 
         <TextView
             android:id="@+id/tvAppName"
-            android:gravity="start|center_vertical"
-            android:ellipsize="end"
-            android:maxLines="1"
-            tools:text="App Name"
-            android:textAppearance="?textAppearanceTitleSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:ellipsize="end"
+            android:gravity="start|center_vertical"
+            android:maxLines="1"
+            android:textAppearance="?textAppearanceTitleSmall"
+            tools:text="App Name" />
 
         <LinearLayout
             android:layout_width="match_parent"
