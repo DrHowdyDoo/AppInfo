@@ -50,7 +50,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         }
 
         binding.materialToolBar.setTitle(getIntent().getStringExtra("appName"));
-        binding.tvVersion.setText("v " + getIntent().getStringExtra("appVersion"));
+        binding.tvVersion.setText("v" + getIntent().getStringExtra("appVersion"));
         handleToolbarContentAlignment();
 
     }

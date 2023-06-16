@@ -14,4 +14,5 @@
     <string name="allow_access">Allow access</string>
     <string name="apk_icon">Apk Icon</string>
     <string name="no_results">No results</string>
+    <string name="app_details">App details</string>
 </resources>
