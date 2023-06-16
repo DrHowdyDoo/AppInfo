@@ -67,6 +67,7 @@ public class AppDetailsManager {
             } else {
                 installSource = context.getPackageManager().getInstallerPackageName(packageInfo.packageName);
             }
+            installSource = installSource != null ? Utilities.sourcePackageMap.getOrDefault(installSource, installSource) : "Unknown";
         } catch (PackageManager.NameNotFoundException | IllegalArgumentException exception) {
             installSource = "N/A";
         }

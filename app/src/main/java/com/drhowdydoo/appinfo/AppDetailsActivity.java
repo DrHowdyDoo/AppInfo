@@ -79,6 +79,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding.tvVersion.setText("v" + getIntent().getStringExtra("appVersion"));
         //binding.tvMinSdkValue.setText(String.valueOf(packageInfo.applicationInfo.minSdkVersion));
         //binding.tvTargetSdkValue.setText(String.valueOf(packageInfo.applicationInfo.targetSdkVersion));
+        binding.tvSourceValue.setText(appDetailsManager.getInstallSource());
 
 
         Observable.fromCallable(() -> appDetailsManager.getIcon(isApk,apkPath))
