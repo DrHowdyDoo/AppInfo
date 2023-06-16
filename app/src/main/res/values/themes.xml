@@ -38,13 +38,6 @@
         <item name="android:windowSharedElementExitTransition">
             @transition/shared_element_transition</item>
 
-        <item name="textAppearanceDisplayMedium">@style/TextAppearance.App.DisplayMedium</item>
-        <item name="textAppearanceTitleLarge">@style/TextAppearance.App.TitleLarge</item>
-        <item name="textAppearanceTitleSmall">@style/TextAppearance.App.TitleSmall</item>
-        <item name="textAppearanceLabelLarge">@style/TextAppearance.App.LabelLarge</item>
-        <item name="textAppearanceLabelMedium">@style/TextAppearance.App.LabelMedium</item>
-        <item name="textAppearanceLabelSmall">@style/TextAppearance.App.LabelSmall</item>
-        <item name="textAppearanceBodySmall">@style/TextAppearance.App.BodySmall</item>
     </style>
 
     <style name="Theme.AppInfo" parent="Base.Theme.AppInfo" />

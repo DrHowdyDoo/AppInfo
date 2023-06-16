@@ -19,45 +19,12 @@
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="TextAppearance.App.DisplayMedium" parent="TextAppearance.Material3.DisplayMedium">
-        <item name="android:fontFamily">@font/poppins</item>
-        <item name="fontFamily">@font/poppins</item>
-    </style>
 
     <style name="App.TextAppearance.AppName" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:fontFamily">@font/poppins_semibold</item>
         <item name="fontFamily">@font/poppins_semibold</item>
     </style>
 
-    <style name="TextAppearance.App.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
-        <item name="android:fontFamily">@font/poppins</item>
-        <item name="fontFamily">@font/poppins</item>
-    </style>
-
-    <style name="TextAppearance.App.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
-    </style>
-
-    <style name="TextAppearance.App.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
-    </style>
-
-    <style name="TextAppearance.App.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
-    </style>
-
-    <style name="TextAppearance.App.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="fontFamily">@font/poppins_medium</item>
-    </style>
-
-    <style name="TextAppearance.App.BodySmall" parent="TextAppearance.Material3.BodySmall">
-        <item name="android:fontFamily">@font/poppins</item>
-        <item name="fontFamily">@font/poppins</item>
-    </style>
 
     <style name="App.TextAppearance.AppDetails.Title" parent="TextAppearance.Material3.TitleMedium"/>
 
