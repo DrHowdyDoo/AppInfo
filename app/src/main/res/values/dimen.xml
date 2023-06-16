@@ -4,6 +4,7 @@
     <dimen name="margin_bottom_body">8dp</dimen>
     <dimen name="icon_padding">8dp</dimen>
     <dimen name="pill_margin_horizontal">16dp</dimen>
-    <dimen name="pill_margin_vertical">8dp</dimen>
+    <dimen name="pill_margin_vertical">16dp</dimen>
     <dimen name="round_margin">12dp</dimen>
+    <dimen name="scroll_view_top_padding">32dp</dimen>
 </resources>

@@ -26,11 +26,11 @@
     </style>
 
 
-    <style name="App.TextAppearance.AppDetails.Title" parent="TextAppearance.Material3.TitleMedium"/>
+    <style name="App.TextAppearance.AppDetails.Title" parent="TextAppearance.Material3.TitleSmall"/>
 
-    <style name="App.TextAppearance.AppDetails.Body" parent="TextAppearance.Material3.BodyMedium"/>
+    <style name="App.TextAppearance.AppDetails.Body" parent="TextAppearance.Material3.BodySmall"/>
 
-    <style name="Widget.App.CardView.Round" parent="Widget.Material3.CardView.Filled">
+    <style name="Widget.App.CardView.Round" parent="Widget.Material3.CardView.Elevated">
         <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
     </style>
 

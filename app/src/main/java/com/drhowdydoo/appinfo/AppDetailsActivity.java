@@ -25,6 +25,8 @@ public class AppDetailsActivity extends AppCompatActivity {
 
     private ActivityAppDetailsBinding binding;
     private AppDetailsManager appDetailsManager;
+    private boolean isApk = false;
+    private String apkPath = "";
 
     @SuppressLint("CheckResult")
     @Override
@@ -33,11 +35,12 @@ public class AppDetailsActivity extends AppCompatActivity {
         DynamicColors.applyToActivityIfAvailable(this);
         binding = ActivityAppDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        boolean isApk = getIntent().getBooleanExtra("isApk",false);
+        isApk = getIntent().getBooleanExtra("isApk",false);
         if (isApk) {
             PackageInfo apkInfo = getIntent().getParcelableExtra("apkInfo");
             appDetailsManager = new AppDetailsManager(this,apkInfo);
-            init();
+            apkPath = getIntent().getStringExtra("apkPath");
+            init(apkInfo);
         } else {
             ApplicationInfo appInfo = getIntent().getParcelableExtra("appInfo");
             Observable.fromCallable(() -> getPackageInfoByAppInfo(appInfo))
@@ -45,12 +48,10 @@ public class AppDetailsActivity extends AppCompatActivity {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(packageInfo -> {
                         packageInfo.ifPresent(value -> appDetailsManager = new AppDetailsManager(this,value));
-                        init();
+                        packageInfo.ifPresent(this::init);
                     });
         }
 
-        binding.materialToolBar.setTitle(getIntent().getStringExtra("appName"));
-        binding.tvVersion.setText("v" + getIntent().getStringExtra("appVersion"));
         handleToolbarContentAlignment();
 
     }
@@ -72,13 +73,25 @@ public class AppDetailsActivity extends AppCompatActivity {
     }
 
     @SuppressLint("CheckResult")
-    private void init() {
-        Observable.fromCallable(() -> appDetailsManager.getIcon())
+    private void init(PackageInfo packageInfo) {
+
+        binding.materialToolBar.setTitle(getIntent().getStringExtra("appName"));
+        binding.tvVersion.setText("v" + getIntent().getStringExtra("appVersion"));
+        //binding.tvMinSdkValue.setText(String.valueOf(packageInfo.applicationInfo.minSdkVersion));
+        //binding.tvTargetSdkValue.setText(String.valueOf(packageInfo.applicationInfo.targetSdkVersion));
+
+
+        Observable.fromCallable(() -> appDetailsManager.getIcon(isApk,apkPath))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(icon -> {
                     binding.imgIcon.setImageDrawable(icon);
                 });
+
+        Observable.fromCallable(() -> appDetailsManager.getCategory())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(category -> binding.tvCategoryValue.setText(category));
 
     }
 

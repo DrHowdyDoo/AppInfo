@@ -35,8 +35,13 @@ public class AppDetailsManager {
         this.packageInfo = packageInfo;
     }
 
-    public Drawable getIcon() {
-        return context.getPackageManager().getApplicationIcon(packageInfo.applicationInfo);
+    public Drawable getIcon(boolean isApk, String apkPath) {
+        if (!isApk) return context.getPackageManager().getApplicationIcon(packageInfo.applicationInfo);
+        else {
+            packageInfo.applicationInfo.sourceDir       = apkPath;
+            packageInfo.applicationInfo.publicSourceDir = apkPath;
+            return packageInfo.applicationInfo.loadIcon(context.getPackageManager());
+        }
     }
 
     public String getCategory() {
