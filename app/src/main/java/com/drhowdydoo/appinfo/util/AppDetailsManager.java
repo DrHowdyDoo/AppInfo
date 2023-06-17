@@ -13,6 +13,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Base64;
 
+import com.drhowdydoo.appinfo.model.StringCount;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
@@ -87,13 +89,14 @@ public class AppDetailsManager {
         return "API " + targetSdk + "\n" + androidName;
     }
 
-    public String getPermissions() {
-        if (packageInfo.requestedPermissions == null) return "N/A";
+    public StringCount getPermissions() {
+        String[] requestedPermissions = packageInfo.requestedPermissions;
+        if (requestedPermissions == null) return new StringCount("N/A",0);
         StringBuilder permissions = new StringBuilder();
-        for (String requestedPermission : packageInfo.requestedPermissions) {
+        for (String requestedPermission : requestedPermissions) {
             permissions.append(requestedPermission).append("\n");
         }
-        return permissions.toString();
+        return new StringCount(permissions.toString(), requestedPermissions.length);
     }
 
     public String getActivities() {

@@ -8,16 +8,21 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.badge.BadgeUtils;
+import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.color.DynamicColors;
 
 import java.util.Optional;
@@ -26,6 +31,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class AppDetailsActivity extends AppCompatActivity {
 
     private ActivityAppDetailsBinding binding;
@@ -86,6 +92,7 @@ public class AppDetailsActivity extends AppCompatActivity {
     }
 
     @SuppressLint({"CheckResult", "SetTextI18n"})
+    @OptIn(markerClass = ExperimentalBadgeUtils.class)
     private void init(PackageInfo packageInfo) {
 
         setUpClickListeners(packageInfo);
@@ -96,6 +103,9 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding.tvSourceValue.setText(appDetailsManager.getInstallSource());
         binding.tvInstalledDtValue.setText(appDetailsManager.getInstalledDate());
         binding.tvUpdatedDtValue.setText(appDetailsManager.getUpdatedDate());
+        binding.tvPackageNameValue.setText(packageInfo.packageName);
+        String className = packageInfo.applicationInfo.className;
+        binding.tvMainClassValue.setText(className == null ? "N/A" : className);
 
 
         Observable.fromCallable(() -> appDetailsManager.getIcon(isApk,apkAbsolutePath))
@@ -109,6 +119,15 @@ public class AppDetailsActivity extends AppCompatActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(category -> binding.tvCategoryValue.setText(category));
+
+        Observable.fromCallable(() -> appDetailsManager.getPermissions())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(permissions -> {
+                    binding.tvPermissionsTitle.setText("Permissions (" + permissions.getCount() + ")");
+                    binding.tvPermissionsValue.setText(permissions.getText());
+                    binding.tvPermissionsValue.setSelected(true);
+                });
 
     }
 
