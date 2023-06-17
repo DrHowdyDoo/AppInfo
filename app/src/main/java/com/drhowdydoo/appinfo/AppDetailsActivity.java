@@ -114,6 +114,7 @@ public class AppDetailsActivity extends AppCompatActivity {
 
     private void setUpClickListeners(PackageInfo packageInfo) {
         binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
+        binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
     }
 
     private void handleToolbarContentAlignment(){
@@ -133,6 +134,10 @@ public class AppDetailsActivity extends AppCompatActivity {
         Intent systemInfo = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         systemInfo.setData(Uri.parse("package:" + packageName));
         startActivity(systemInfo);
+    }
+
+    private void openInPlayStore(String packageName){
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
     }
 
 }
