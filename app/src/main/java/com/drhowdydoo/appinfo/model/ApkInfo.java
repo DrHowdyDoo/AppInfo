@@ -9,6 +9,7 @@ public class ApkInfo {
     private Drawable apkIcon;
     private long apkSize;
     private String apkPath;
+    private String apkAbsolutePath;
     private String apkVersion;
     private PackageInfo apkInfo;
 
@@ -18,13 +19,14 @@ public class ApkInfo {
                    Drawable apkIcon,
                    long apkSize,
                    String apkPath,
-                   String apkVersion,
+                   String apkAbsolutePath, String apkVersion,
                    PackageInfo apkInfo, boolean isInstalled) {
 
         this.apkName = apkName;
         this.apkIcon = apkIcon;
         this.apkSize = apkSize;
         this.apkPath = apkPath;
+        this.apkAbsolutePath = apkAbsolutePath;
         this.apkVersion = apkVersion;
         this.apkInfo = apkInfo;
         this.isInstalled = isInstalled;
@@ -60,6 +62,14 @@ public class ApkInfo {
 
     public void setApkPath(String apkPath) {
         this.apkPath = apkPath;
+    }
+
+    public String getApkAbsolutePath() {
+        return apkAbsolutePath;
+    }
+
+    public void setApkAbsolutePath(String apkAbsolutePath) {
+        this.apkAbsolutePath = apkAbsolutePath;
     }
 
     public String getApkVersion() {

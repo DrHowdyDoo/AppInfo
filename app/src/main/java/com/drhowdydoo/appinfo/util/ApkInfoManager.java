@@ -79,6 +79,7 @@ public class ApkInfoManager {
         long apkSize = apkFile.length();
         String apkName = apkFile.getName();
         String apkPath = apkFile.getParent();
+        String apkAbsolutePath = apkFile.getAbsolutePath();
         String apkVersion = apkInfo.versionName;
         Drawable apkIcon;
         boolean isInstalled = true;
@@ -92,7 +93,7 @@ public class ApkInfoManager {
             apkIcon = apkInfo.applicationInfo.loadIcon(packageManager);
         }
 
-        return new ApkInfo(apkName, apkIcon, apkSize, apkPath, apkVersion, apkInfo, isInstalled);
+        return new ApkInfo(apkName, apkIcon, apkSize, apkPath, apkAbsolutePath, apkVersion, apkInfo, isInstalled);
 
     }
 

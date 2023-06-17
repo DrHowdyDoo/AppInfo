@@ -1,11 +1,16 @@
 package com.drhowdydoo.appinfo;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,7 +31,9 @@ public class AppDetailsActivity extends AppCompatActivity {
     private ActivityAppDetailsBinding binding;
     private AppDetailsManager appDetailsManager;
     private boolean isApk = false;
+    private boolean isInstalled = true;
     private String apkPath = "";
+    private String apkAbsolutePath = "";
 
     @SuppressLint("CheckResult")
     @Override
@@ -35,14 +42,17 @@ public class AppDetailsActivity extends AppCompatActivity {
         DynamicColors.applyToActivityIfAvailable(this);
         binding = ActivityAppDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        isApk = getIntent().getBooleanExtra("isApk",false);
+        Intent intent = getIntent();
+        isApk = intent.getBooleanExtra("isApk",false);
         if (isApk) {
-            PackageInfo apkInfo = getIntent().getParcelableExtra("apkInfo");
+            PackageInfo apkInfo = intent.getParcelableExtra("apkInfo");
             appDetailsManager = new AppDetailsManager(this,apkInfo);
-            apkPath = getIntent().getStringExtra("apkPath");
+            apkPath = intent.getStringExtra("apkPath");
+            apkAbsolutePath = intent.getStringExtra("apkAbsolutePath");
+            isInstalled = intent.getBooleanExtra("isInstalled",true);
             init(apkInfo);
         } else {
-            ApplicationInfo appInfo = getIntent().getParcelableExtra("appInfo");
+            ApplicationInfo appInfo = intent.getParcelableExtra("appInfo");
             Observable.fromCallable(() -> getPackageInfoByAppInfo(appInfo))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -53,6 +63,9 @@ public class AppDetailsActivity extends AppCompatActivity {
         }
 
         handleToolbarContentAlignment();
+        if (!isInstalled) {
+            binding.btnInfo.setEnabled(false);
+        }
 
     }
 
@@ -72,17 +85,20 @@ public class AppDetailsActivity extends AppCompatActivity {
         return Optional.empty();
     }
 
-    @SuppressLint("CheckResult")
+    @SuppressLint({"CheckResult", "SetTextI18n"})
     private void init(PackageInfo packageInfo) {
 
+        setUpClickListeners(packageInfo);
         binding.materialToolBar.setTitle(getIntent().getStringExtra("appName"));
         binding.tvVersion.setText("v" + getIntent().getStringExtra("appVersion"));
-        //binding.tvMinSdkValue.setText(String.valueOf(packageInfo.applicationInfo.minSdkVersion));
-        //binding.tvTargetSdkValue.setText(String.valueOf(packageInfo.applicationInfo.targetSdkVersion));
+        binding.tvMinSdkValue.setText(appDetailsManager.getMinSdk());
+        binding.tvTargetSdkValue.setText(appDetailsManager.getTargetSdk());
         binding.tvSourceValue.setText(appDetailsManager.getInstallSource());
+        binding.tvInstalledDtValue.setText(appDetailsManager.getInstalledDate());
+        binding.tvUpdatedDtValue.setText(appDetailsManager.getUpdatedDate());
 
 
-        Observable.fromCallable(() -> appDetailsManager.getIcon(isApk,apkPath))
+        Observable.fromCallable(() -> appDetailsManager.getIcon(isApk,apkAbsolutePath))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(icon -> {
@@ -96,6 +112,10 @@ public class AppDetailsActivity extends AppCompatActivity {
 
     }
 
+    private void setUpClickListeners(PackageInfo packageInfo) {
+        binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
+    }
+
     private void handleToolbarContentAlignment(){
         binding.tvVersion.post(() -> {
             if (binding.tvVersion.getLineCount() > 1) {
@@ -107,6 +127,12 @@ public class AppDetailsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void openSystemInfo(String packageName){
+        Intent systemInfo = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        systemInfo.setData(Uri.parse("package:" + packageName));
+        startActivity(systemInfo);
     }
 
 }

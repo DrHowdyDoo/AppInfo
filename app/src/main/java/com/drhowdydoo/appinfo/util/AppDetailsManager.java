@@ -35,11 +35,11 @@ public class AppDetailsManager {
         this.packageInfo = packageInfo;
     }
 
-    public Drawable getIcon(boolean isApk, String apkPath) {
+    public Drawable getIcon(boolean isApk, String apkAbsolutePath) {
         if (!isApk) return context.getPackageManager().getApplicationIcon(packageInfo.applicationInfo);
         else {
-            packageInfo.applicationInfo.sourceDir       = apkPath;
-            packageInfo.applicationInfo.publicSourceDir = apkPath;
+            packageInfo.applicationInfo.sourceDir       = apkAbsolutePath;
+            packageInfo.applicationInfo.publicSourceDir = apkAbsolutePath;
             return packageInfo.applicationInfo.loadIcon(context.getPackageManager());
         }
     }
@@ -69,10 +69,22 @@ public class AppDetailsManager {
             }
             installSource = installSource != null ? Utilities.sourcePackageMap.getOrDefault(installSource, installSource) : "Unknown";
         } catch (PackageManager.NameNotFoundException | IllegalArgumentException exception) {
-            installSource = "N/A";
+            installSource = "Unknown";
         }
 
         return installSource;
+    }
+
+    public String getMinSdk() {
+        int minSdk = packageInfo.applicationInfo.minSdkVersion;
+        String androidName = Utilities.androidVersions.getOrDefault(minSdk,"Unknown");
+        return "API " + minSdk + "\n" + androidName;
+    }
+
+    public String getTargetSdk() {
+        int targetSdk = packageInfo.applicationInfo.targetSdkVersion;
+        String androidName = Utilities.androidVersions.getOrDefault(targetSdk,"Unknown");
+        return "API " + targetSdk + "\n" + androidName;
     }
 
     public String getPermissions() {

@@ -25,6 +25,11 @@
         <item name="fontFamily">@font/poppins_semibold</item>
     </style>
 
+    <style name="App.TextAppearance.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:fontFamily">@font/lexend_deca</item>
+        <item name="fontFamily">@font/lexend_deca</item>
+    </style>
+
 
     <style name="App.TextAppearance.AppDetails.Title" parent="TextAppearance.Material3.TitleSmall"/>
 
@@ -38,5 +43,7 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+    <style name="Widget.App.IconButton.Filled.Tonal" parent="Widget.Material3.Button.IconButton.Filled.Tonal"/>
 
 </resources>
