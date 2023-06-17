@@ -90,6 +90,7 @@
             android:paddingEnd="16dp"
             android:paddingTop="32dp"
             android:paddingBottom="32dp"
+            android:animateLayoutChanges="true"
             android:clipToPadding="false">
 
             <Button
@@ -596,23 +597,38 @@
                 app:cardCornerRadius="24dp"
                 style="?materialCardViewElevatedStyle">
 
-                <HorizontalScrollView
-                    android:id="@+id/hScrollViewPermissions"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbars="none"
                     android:paddingHorizontal="@dimen/pill_margin_horizontal"
                     android:paddingVertical="@dimen/pill_margin_vertical"
-                    android:clipToPadding="false">
+                    android:clipToPadding="false"
+                    android:orientation="vertical">
+
+                    <HorizontalScrollView
+                        android:id="@+id/hScrollViewPermissions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none">
+
+                        <TextView
+                            android:id="@+id/tvPermissionsValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="com.drhowdydoo.appInfo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+                            android:textAppearance="@style/TextAppearance.App.BodyMedium" />
+
+                    </HorizontalScrollView>
 
                     <TextView
-                        android:id="@+id/tvPermissionsValue"
+                        android:id="@+id/moreTextIndicator"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="com.drhowdydoo.appInfo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-                        android:textAppearance="@style/TextAppearance.App.BodyMedium" />
+                        android:textAppearance="?textAppearanceLabelLarge"
+                        android:text="• • • • •"
+                        android:layout_height="wrap_content"/>
 
-                </HorizontalScrollView>
+                </LinearLayout>
+
 
             </com.google.android.material.card.MaterialCardView>
 

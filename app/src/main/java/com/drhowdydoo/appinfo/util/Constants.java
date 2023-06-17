@@ -24,5 +24,7 @@ public class Constants {
     public static final long LAST_UPDATED_TIME_NOT_AVAILABLE = Long.MAX_VALUE;
     public static final long FOREGROUND_TIME_NOT_AVAILABLE = 0;
 
+    public static final int EXPENDABLE_TEXT_VIEW_MAX_LINES = 12;
+
 
 }

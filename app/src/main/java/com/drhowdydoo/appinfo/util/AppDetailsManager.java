@@ -96,7 +96,7 @@ public class AppDetailsManager {
         for (String requestedPermission : requestedPermissions) {
             permissions.append(requestedPermission).append("\n");
         }
-        return new StringCount(permissions.toString(), requestedPermissions.length);
+        return new StringCount(permissions.toString().trim(), requestedPermissions.length);
     }
 
     public String getActivities() {

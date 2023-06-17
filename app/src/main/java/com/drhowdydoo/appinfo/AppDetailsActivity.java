@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.method.ScrollingMovementMethod;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
+import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.badge.BadgeDrawable;
@@ -40,6 +42,7 @@ public class AppDetailsActivity extends AppCompatActivity {
     private boolean isInstalled = true;
     private String apkPath = "";
     private String apkAbsolutePath = "";
+    private boolean isExpanded = false;
 
     @SuppressLint("CheckResult")
     @Override
@@ -72,6 +75,22 @@ public class AppDetailsActivity extends AppCompatActivity {
         if (!isInstalled) {
             binding.btnInfo.setEnabled(false);
         }
+
+        binding.tvPermissionsValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
+
+        binding.tvPermissionsValue.setOnClickListener(v -> {
+            if (binding.tvPermissionsValue.getLineCount() <= Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) return;
+            if (isExpanded) {
+                binding.tvPermissionsValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
+                binding.moreTextIndicator.setVisibility(View.VISIBLE);
+                isExpanded = false;
+            } else {
+                binding.tvPermissionsValue.setMaxLines(Integer.MAX_VALUE);
+                binding.moreTextIndicator.setVisibility(View.GONE);
+                isExpanded = true;
+            }
+        });
+
 
     }
 
@@ -126,7 +145,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                 .subscribe(permissions -> {
                     binding.tvPermissionsTitle.setText("Permissions (" + permissions.getCount() + ")");
                     binding.tvPermissionsValue.setText(permissions.getText());
-                    binding.tvPermissionsValue.setSelected(true);
+                    if (permissions.getCount() <= Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) binding.moreTextIndicator.setVisibility(View.GONE);
                 });
 
     }
