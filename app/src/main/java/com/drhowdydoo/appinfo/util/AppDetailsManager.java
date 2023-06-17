@@ -99,13 +99,14 @@ public class AppDetailsManager {
         return new StringCount(permissions.toString().trim(), requestedPermissions.length);
     }
 
-    public String getActivities() {
-        if (packageInfo.activities == null) return "N/A";
-        StringBuilder activities = new StringBuilder();
-        for (ActivityInfo activity : packageInfo.activities) {
-            activities.append(activity.name).append("\n");
+    public StringCount getActivities() {
+        ActivityInfo[] activities = packageInfo.activities;
+        if (activities == null) return new StringCount("N/A",0);
+        StringBuilder activityList = new StringBuilder();
+        for (ActivityInfo activity : activities) {
+            activityList.append(activity.name).append("\n");
         }
-        return activities.toString();
+        return new StringCount(activityList.toString().trim(), activities.length);
     }
 
     public String getBroadcastReceivers() {

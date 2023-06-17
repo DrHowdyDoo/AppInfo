@@ -42,7 +42,6 @@ public class AppDetailsActivity extends AppCompatActivity {
     private boolean isInstalled = true;
     private String apkPath = "";
     private String apkAbsolutePath = "";
-    private boolean isExpanded = false;
 
     @SuppressLint("CheckResult")
     @Override
@@ -71,23 +70,41 @@ public class AppDetailsActivity extends AppCompatActivity {
                     });
         }
 
+        //Initial conditional setups
         handleToolbarContentAlignment();
         if (!isInstalled) {
             binding.btnInfo.setEnabled(false);
         }
-
         binding.tvPermissionsValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
+        binding.tvPermissionsValue.setTag(false);
+        binding.tvActivitiesValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
+        binding.tvActivitiesValue.setTag(false);
 
+
+        // Click listeners
         binding.tvPermissionsValue.setOnClickListener(v -> {
             if (binding.tvPermissionsValue.getLineCount() <= Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) return;
-            if (isExpanded) {
+            if ((boolean)binding.tvPermissionsValue.getTag()) {
                 binding.tvPermissionsValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
                 binding.moreTextIndicator.setVisibility(View.VISIBLE);
-                isExpanded = false;
+                binding.tvPermissionsValue.setTag(false);
             } else {
                 binding.tvPermissionsValue.setMaxLines(Integer.MAX_VALUE);
                 binding.moreTextIndicator.setVisibility(View.GONE);
-                isExpanded = true;
+                binding.tvPermissionsValue.setTag(true);
+            }
+        });
+
+        binding.tvActivitiesValue.setOnClickListener(v -> {
+            if (binding.tvActivitiesValue.getLineCount() <= Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) return;
+            if ((boolean)binding.tvActivitiesValue.getTag()) {
+                binding.tvActivitiesValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
+                binding.moreActivitiesIndicator.setVisibility(View.VISIBLE);
+                binding.tvActivitiesValue.setTag(false);
+            } else {
+                binding.tvActivitiesValue.setMaxLines(Integer.MAX_VALUE);
+                binding.moreActivitiesIndicator.setVisibility(View.GONE);
+                binding.tvActivitiesValue.setTag(true);
             }
         });
 
@@ -146,6 +163,15 @@ public class AppDetailsActivity extends AppCompatActivity {
                     binding.tvPermissionsTitle.setText("Permissions (" + permissions.getCount() + ")");
                     binding.tvPermissionsValue.setText(permissions.getText());
                     if (permissions.getCount() <= Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) binding.moreTextIndicator.setVisibility(View.GONE);
+                });
+
+        Observable.fromCallable(() -> appDetailsManager.getActivities())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(activities -> {
+                    binding.tvActivityTitle.setText("Activities (" + activities.getCount() + ")");
+                    binding.tvActivitiesValue.setText(activities.getText());
+                    if (activities.getCount() <= Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) binding.moreActivitiesIndicator.setVisibility(View.GONE);
                 });
 
     }

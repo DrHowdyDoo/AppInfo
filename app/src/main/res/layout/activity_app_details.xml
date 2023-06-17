@@ -632,6 +632,60 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <TextView
+                android:id="@+id/tvActivityTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Activities"
+                android:layout_marginTop="24dp"
+                android:textAppearance="?textAppearanceTitleMedium"
+                app:layout_constraintTop_toBottomOf="@+id/cardPermissions"
+                tools:layout_editor_absoluteX="16dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardActivities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tvActivityTitle"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="24dp"
+                style="?materialCardViewElevatedStyle">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="@dimen/pill_margin_horizontal"
+                    android:paddingVertical="@dimen/pill_margin_vertical"
+                    android:clipToPadding="false"
+                    android:orientation="vertical">
+
+                    <HorizontalScrollView
+                        android:id="@+id/hScrollViewActivities"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none">
+
+                        <TextView
+                            android:id="@+id/tvActivitiesValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="com.drhowdydoo.appInfo.fragment.AppFragment"
+                            android:textAppearance="@style/TextAppearance.App.BodyMedium" />
+
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:id="@+id/moreActivitiesIndicator"
+                        android:layout_width="wrap_content"
+                        android:textAppearance="?textAppearanceLabelLarge"
+                        android:text="• • • • •"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
