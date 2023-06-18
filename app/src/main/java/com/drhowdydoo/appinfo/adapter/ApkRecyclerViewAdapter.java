@@ -121,14 +121,14 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         public void onClick(View v) {
             Intent intent = new Intent(context, AppDetailsActivity.class);
             ApkInfo apkInfo = apkInfoList.get(getBindingAdapterPosition());
-            intent.putExtra("isApk",true);
-            intent.putExtra("appName",apkInfo.getApkName());
-            intent.putExtra("appVersion",apkInfo.getApkVersion());
-            intent.putExtra("apkInfo",apkInfo.getApkInfo());
-            intent.putExtra("appSize",apkInfo.getApkSize());
-            intent.putExtra("apkPath",apkInfo.getApkPath());
-            intent.putExtra("apkAbsolutePath",apkInfo.getApkAbsolutePath());
-            intent.putExtra("isInstalled",apkInfo.isInstalled());
+            intent.putExtra("isApk", true);
+            intent.putExtra("appName", apkInfo.getApkName());
+            intent.putExtra("appVersion", apkInfo.getApkVersion());
+            intent.putExtra("apkInfo", apkInfo.getApkInfo());
+            intent.putExtra("appSize", apkInfo.getApkSize());
+            intent.putExtra("apkPath", apkInfo.getApkPath());
+            intent.putExtra("apkAbsolutePath", apkInfo.getApkAbsolutePath());
+            intent.putExtra("isInstalled", apkInfo.isInstalled());
             context.startActivity(intent);
         }
     }

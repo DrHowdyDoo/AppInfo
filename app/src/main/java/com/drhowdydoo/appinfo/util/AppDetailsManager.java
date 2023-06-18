@@ -38,9 +38,10 @@ public class AppDetailsManager {
     }
 
     public Drawable getIcon(boolean isApk, String apkAbsolutePath) {
-        if (!isApk) return context.getPackageManager().getApplicationIcon(packageInfo.applicationInfo);
+        if (!isApk)
+            return context.getPackageManager().getApplicationIcon(packageInfo.applicationInfo);
         else {
-            packageInfo.applicationInfo.sourceDir       = apkAbsolutePath;
+            packageInfo.applicationInfo.sourceDir = apkAbsolutePath;
             packageInfo.applicationInfo.publicSourceDir = apkAbsolutePath;
             return packageInfo.applicationInfo.loadIcon(context.getPackageManager());
         }
@@ -79,19 +80,19 @@ public class AppDetailsManager {
 
     public String getMinSdk() {
         int minSdk = packageInfo.applicationInfo.minSdkVersion;
-        String androidName = Utilities.androidVersions.getOrDefault(minSdk,"Unknown");
+        String androidName = Utilities.androidVersions.getOrDefault(minSdk, "Unknown");
         return "API " + minSdk + "\n" + androidName;
     }
 
     public String getTargetSdk() {
         int targetSdk = packageInfo.applicationInfo.targetSdkVersion;
-        String androidName = Utilities.androidVersions.getOrDefault(targetSdk,"Unknown");
+        String androidName = Utilities.androidVersions.getOrDefault(targetSdk, "Unknown");
         return "API " + targetSdk + "\n" + androidName;
     }
 
     public StringCount getPermissions() {
         String[] requestedPermissions = packageInfo.requestedPermissions;
-        if (requestedPermissions == null) return new StringCount("N/A",0);
+        if (requestedPermissions == null) return new StringCount("N/A", 0);
         StringBuilder permissions = new StringBuilder();
         for (String requestedPermission : requestedPermissions) {
             permissions.append(requestedPermission).append("\n");
@@ -101,7 +102,7 @@ public class AppDetailsManager {
 
     public StringCount getActivities() {
         ActivityInfo[] activities = packageInfo.activities;
-        if (activities == null) return new StringCount("N/A",0);
+        if (activities == null) return new StringCount("N/A", 0);
         StringBuilder activityList = new StringBuilder();
         for (ActivityInfo activity : activities) {
             activityList.append(activity.name).append("\n");
@@ -145,8 +146,8 @@ public class AppDetailsManager {
         return features.toString();
     }
 
-    public Optional<Map<String,String>> getSignatures() {
-        Map<String,String> signatures = new HashMap<>(2);
+    public Optional<Map<String, String>> getSignatures() {
+        Map<String, String> signatures = new HashMap<>(2);
         StringBuilder certificates = new StringBuilder();
         Signature[] apkContentsSigners;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -187,7 +188,7 @@ public class AppDetailsManager {
                         .append("SHA1 :").append("\t").append(sha1Hash).append("\n")
                         .append("SHA256 :").append("\t").append(sha256Hash).append("\n");
 
-                signatures.put("signing_keys",signingKeys.toString());
+                signatures.put("signing_keys", signingKeys.toString());
 
                 CertificateFactory certFactory = CertificateFactory.getInstance("X509");
                 X509Certificate x509Cert = (X509Certificate) certFactory.generateCertificate(certStream);
@@ -195,7 +196,7 @@ public class AppDetailsManager {
                         .append("Signature Algorithm : ").append(x509Cert.getSigAlgName()).append("\n");
 
                 certificates.append(transformIssuerDNString(x509Cert.getIssuerDN().getName()));
-                signatures.put("certificates",certificates.toString());
+                signatures.put("certificates", certificates.toString());
 
             } catch (NoSuchAlgorithmException | CertificateException e) {
                 e.printStackTrace();
@@ -232,14 +233,21 @@ public class AppDetailsManager {
     }
 
     private String expandSignatureAbbreviation(String abbreviation) {
-        switch (abbreviation){
-            case "EMAILADDRESS" : return "Email Address : ";
-            case "CN" :  return "Common Name : ";
-            case "OU" : return "Organizational Unit : ";
-            case "O" : return "Organization : ";
-            case "L" : return "Locality : ";
-            case "ST" : return "State : ";
-            case "C" : return "Country : ";
+        switch (abbreviation) {
+            case "EMAILADDRESS":
+                return "Email Address : ";
+            case "CN":
+                return "Common Name : ";
+            case "OU":
+                return "Organizational Unit : ";
+            case "O":
+                return "Organization : ";
+            case "L":
+                return "Locality : ";
+            case "ST":
+                return "State : ";
+            case "C":
+                return "Country : ";
         }
         return abbreviation;
     }

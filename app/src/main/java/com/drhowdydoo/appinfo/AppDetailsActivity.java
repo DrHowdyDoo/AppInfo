@@ -8,11 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.text.method.ScrollingMovementMethod;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,11 +17,8 @@ import com.drhowdydoo.appinfo.adapter.AppDetailsListAdapter;
 import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
-import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.badge.BadgeDrawable;
-import com.google.android.material.badge.BadgeUtils;
 import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.color.DynamicColors;
 
@@ -58,13 +50,13 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding = ActivityAppDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Intent intent = getIntent();
-        isApk = intent.getBooleanExtra("isApk",false);
+        isApk = intent.getBooleanExtra("isApk", false);
         if (isApk) {
             PackageInfo apkInfo = intent.getParcelableExtra("apkInfo");
-            appDetailsManager = new AppDetailsManager(this,apkInfo);
+            appDetailsManager = new AppDetailsManager(this, apkInfo);
             apkPath = intent.getStringExtra("apkPath");
             apkAbsolutePath = intent.getStringExtra("apkAbsolutePath");
-            isInstalled = intent.getBooleanExtra("isInstalled",true);
+            isInstalled = intent.getBooleanExtra("isInstalled", true);
             init(apkInfo);
         } else {
             ApplicationInfo appInfo = intent.getParcelableExtra("appInfo");
@@ -72,7 +64,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(packageInfo -> {
-                        packageInfo.ifPresent(value -> appDetailsManager = new AppDetailsManager(this,value));
+                        packageInfo.ifPresent(value -> appDetailsManager = new AppDetailsManager(this, value));
                         packageInfo.ifPresent(this::init);
                     });
         }
@@ -124,7 +116,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding.tvMainClassValue.setText(className == null ? "N/A" : className);
 
 
-        Observable.fromCallable(() -> appDetailsManager.getIcon(isApk,apkAbsolutePath))
+        Observable.fromCallable(() -> appDetailsManager.getIcon(isApk, apkAbsolutePath))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(icon -> {
@@ -138,11 +130,11 @@ public class AppDetailsActivity extends AppCompatActivity {
 
 
         Observable.zip(Observable.just(appDetailsManager.getPermissions()),
-                Observable.just(appDetailsManager.getActivities()),
+                        Observable.just(appDetailsManager.getActivities()),
                         (permissions, activities) -> {
                             List<AppDetailItem> appDetailItems = new ArrayList<>();
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_shield_24, "Permissions", permissions));
-                            appDetailItems.add(new AppDetailItem(R.drawable.outline_touch_app_24,"Activities", activities));
+                            appDetailItems.add(new AppDetailItem(R.drawable.outline_touch_app_24, "Activities", activities));
                             return appDetailItems;
                         })
                 .subscribeOn(Schedulers.io())
@@ -161,26 +153,26 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
     }
 
-    private void handleToolbarContentAlignment(){
+    private void handleToolbarContentAlignment() {
         binding.tvVersion.post(() -> {
             if (binding.tvVersion.getLineCount() > 1) {
                 System.out.println("handleToolbarContentAlignment()");
-                binding.collapsingToolBar.setExpandedTitleMarginBottom(Utilities.dpToPx(this,58));
+                binding.collapsingToolBar.setExpandedTitleMarginBottom(Utilities.dpToPx(this, 58));
                 CollapsingToolbarLayout.LayoutParams layoutParams = (CollapsingToolbarLayout.LayoutParams) binding.tvVersion.getLayoutParams();
-                layoutParams.bottomMargin = Utilities.dpToPx(this,10);
+                layoutParams.bottomMargin = Utilities.dpToPx(this, 10);
                 binding.tvVersion.setLayoutParams(layoutParams);
             }
         });
 
     }
 
-    private void openSystemInfo(String packageName){
+    private void openSystemInfo(String packageName) {
         Intent systemInfo = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         systemInfo.setData(Uri.parse("package:" + packageName));
         startActivity(systemInfo);
     }
 
-    private void openInPlayStore(String packageName){
+    private void openInPlayStore(String packageName) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
     }
 
