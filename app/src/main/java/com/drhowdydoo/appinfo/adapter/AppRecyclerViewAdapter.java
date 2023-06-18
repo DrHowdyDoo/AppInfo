@@ -5,8 +5,6 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +33,7 @@ import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
 public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerViewAdapter.ViewHolder> {
+
 
     private List<AppInfo> appInfoList;
     private Context context;
@@ -127,7 +126,7 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView imgAppIcon, imgSplitApp;
         public TextView tvAppName, tvAppSize, tvAppStats, tvAppVersion, tvSystemApp, dotSeperator;
@@ -149,16 +148,16 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
         public void onClick(View v) {
             Intent intent = new Intent(context, AppDetailsActivity.class);
             AppInfo appInfo = appInfoList.get(getBindingAdapterPosition());
-            intent.putExtra("isApk",false);
-            intent.putExtra("appInfo",appInfo.getAppInfo());
-            intent.putExtra("appName",appInfo.getAppName());
-            intent.putExtra("appVersion",appInfo.getAppVersion());
-            intent.putExtra("appSize",appInfo.getSize());
-            intent.putExtra("isSplitApp",appInfo.isSplitApp());
+            intent.putExtra("isApk", false);
+            intent.putExtra("appInfo", appInfo.getAppInfo());
+            intent.putExtra("appName", appInfo.getAppName());
+            intent.putExtra("appVersion", appInfo.getAppVersion());
+            intent.putExtra("appSize", appInfo.getSize());
+            intent.putExtra("isSplitApp", appInfo.isSplitApp());
             final View transitionView = imgAppIcon;
             ActivityOptions options = ActivityOptions
                     .makeSceneTransitionAnimation((Activity) context, transitionView, "transitionAppIcon");
-            context.startActivity(intent,options.toBundle());
+            context.startActivity(intent, options.toBundle());
         }
     }
 

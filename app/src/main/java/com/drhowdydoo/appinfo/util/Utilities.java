@@ -11,7 +11,7 @@ public class Utilities {
             Map.entry("com.android.vending", "Google PlayStore"),
             Map.entry("com.amazon.venezia", "Amazon App Store"),
             Map.entry("com.android.chrome", "Google Chrome"),
-            Map.entry("com.google.android.packageinstaller","Package installer"),
+            Map.entry("com.google.android.packageinstaller", "Package installer"),
             Map.entry("com.whatsapp", "Whatsapp"),
             Map.entry("org.mozilla.firefox", "Firefox"),
             Map.entry("com.google.android.apps.nbu.files", "Files by Google"),

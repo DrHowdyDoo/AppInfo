@@ -86,13 +86,9 @@
             android:id="@+id/constraintLayoutInsideScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="32dp"
-            android:paddingBottom="32dp"
-            android:animateLayoutChanges="true"
+            android:paddingVertical="32dp"
+            android:paddingHorizontal="16dp"
             android:clipToPadding="false">
-
             <Button
                 android:id="@+id/btnInfo"
                 style="?materialIconButtonFilledTonalStyle"
@@ -162,7 +158,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardCategory"
-                style="@style/Widget.App.CardView.Round"
+                style="@style/Widget.App.CardView.Elevated.Round"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
 
@@ -210,7 +206,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardSource"
-                style="@style/Widget.App.CardView.Round"
+                style="@style/Widget.App.CardView.Elevated.Round"
                 android:layout_width="0dp"
                 android:layout_height="0dp">
 
@@ -259,7 +255,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardInstalledDt"
-                style="@style/Widget.App.CardView.Round"
+                style="@style/Widget.App.CardView.Elevated.Round"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
 
@@ -277,7 +273,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|start"
                         android:src="@drawable/round_calendar_today_24"
-                         />
+                        />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -308,7 +304,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardUpdatedDt"
-                style="@style/Widget.App.CardView.Round"
+                style="@style/Widget.App.CardView.Elevated.Round"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
 
@@ -357,7 +353,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardMinSdk"
-                style="@style/Widget.App.CardView.Round"
+                style="@style/Widget.App.CardView.Elevated.Round"
                 android:layout_width="0dp"
                 android:layout_height="0dp">
 
@@ -406,7 +402,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardTargetSdk"
-                style="@style/Widget.App.CardView.Round"
+                style="@style/Widget.App.CardView.Elevated.Round"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content">
 
@@ -478,7 +474,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardPackageName"
-                style="@style/Widget.App.CardView.Round"
+                style="@style/Widget.App.CardView.Elevated.Round"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@id/flowBarrier"
                 android:layout_width="match_parent"
@@ -529,7 +525,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardMainClass"
-                style="@style/Widget.App.CardView.Round"
+                style="@style/Widget.App.CardView.Elevated.Round"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@id/cardPackageName"
                 android:layout_width="match_parent"
@@ -578,113 +574,15 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/tvPermissionsTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Permissions"
-                android:layout_marginTop="24dp"
-                android:textAppearance="?textAppearanceTitleMedium"
-                app:layout_constraintTop_toBottomOf="@+id/cardMainClass"
-                tools:layout_editor_absoluteX="16dp" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardPermissions"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tvPermissionsTitle"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="24dp"
-                style="?materialCardViewElevatedStyle">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/pill_margin_horizontal"
-                    android:paddingVertical="@dimen/pill_margin_vertical"
-                    android:clipToPadding="false"
-                    android:orientation="vertical">
-
-                    <HorizontalScrollView
-                        android:id="@+id/hScrollViewPermissions"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="none">
-
-                        <TextView
-                            android:id="@+id/tvPermissionsValue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="com.drhowdydoo.appInfo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-                            android:textAppearance="@style/TextAppearance.App.BodyMedium" />
-
-                    </HorizontalScrollView>
-
-                    <TextView
-                        android:id="@+id/moreTextIndicator"
-                        android:layout_width="wrap_content"
-                        android:textAppearance="?textAppearanceLabelLarge"
-                        android:text="• • • • •"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
-
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:id="@+id/tvActivityTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Activities"
+                android:nestedScrollingEnabled="false"
                 android:layout_marginTop="24dp"
-                android:textAppearance="?textAppearanceTitleMedium"
-                app:layout_constraintTop_toBottomOf="@+id/cardPermissions"
-                tools:layout_editor_absoluteX="16dp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardActivities"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/tvActivityTitle"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="24dp"
-                style="?materialCardViewElevatedStyle">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/pill_margin_horizontal"
-                    android:paddingVertical="@dimen/pill_margin_vertical"
-                    android:clipToPadding="false"
-                    android:orientation="vertical">
-
-                    <HorizontalScrollView
-                        android:id="@+id/hScrollViewActivities"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="none">
-
-                        <TextView
-                            android:id="@+id/tvActivitiesValue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="com.drhowdydoo.appInfo.fragment.AppFragment"
-                            android:textAppearance="@style/TextAppearance.App.BodyMedium" />
-
-                    </HorizontalScrollView>
-
-                    <TextView
-                        android:id="@+id/moreActivitiesIndicator"
-                        android:layout_width="wrap_content"
-                        android:textAppearance="?textAppearanceLabelLarge"
-                        android:text="• • • • •"
-                        android:layout_height="wrap_content"/>
-
-                </LinearLayout>
-
-
-            </com.google.android.material.card.MaterialCardView>
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                app:layout_constraintTop_toBottomOf="@id/cardMainClass" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
