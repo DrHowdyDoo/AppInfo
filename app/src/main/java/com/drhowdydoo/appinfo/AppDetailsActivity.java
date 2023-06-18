@@ -1,6 +1,8 @@
 package com.drhowdydoo.appinfo;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -8,11 +10,15 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.OptIn;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.drhowdydoo.appinfo.adapter.AppDetailsListAdapter;
@@ -25,7 +31,12 @@ import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.color.DynamicColors;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -190,6 +201,87 @@ public class AppDetailsActivity extends AppCompatActivity {
     private void setUpClickListeners(PackageInfo packageInfo) {
         binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
         binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
+        binding.btnExtractApk.setOnClickListener(v -> {
+            Observable.fromAction(() -> {
+                        runOnUiThread(() -> binding.progressBar.setVisibility(View.VISIBLE));
+                        extractApk(packageInfo);
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally(() -> {
+                        binding.progressBar.setVisibility(View.GONE);
+                        Toast.makeText(this, "APK files extracted to AppInfo folder in the root directory", Toast.LENGTH_SHORT).show();
+                    })
+                    .subscribe();
+        });
+    }
+
+    private void extractApk(PackageInfo packageInfo) {
+        boolean haveStorageAccess = checkStoragePermission();
+        if (!haveStorageAccess) return;
+
+        if (!android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            //Toast.makeText(this, "Storage not accessible", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            ApplicationInfo appInfo = packageInfo.applicationInfo;
+            String sourceDir = appInfo.publicSourceDir;
+            String apkName = (String) this.getPackageManager().getApplicationLabel(appInfo);
+            File destinationRootFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "AppInfo");
+            File destinationAppFolder = new File(destinationRootFolder, apkName);
+            boolean created = destinationAppFolder.mkdirs();
+
+            // Check if the app has split APKs
+            String[] splitSourceDirs = appInfo.splitPublicSourceDirs;
+            if (splitSourceDirs != null && splitSourceDirs.length > 0) {
+                for (String splitSourceDir : splitSourceDirs) {
+                    extractApkFileAtPath(splitSourceDir,destinationAppFolder);
+                }
+            }
+
+            extractApkFileAtPath(sourceDir,destinationAppFolder);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void extractApkFileAtPath(String apkFilePath, File destinationAppFolder) {
+        try {
+            File sourceFile = new File(apkFilePath);
+            File destinationFile = new File(destinationAppFolder, sourceFile.getName());
+            Utilities.copyFile(sourceFile, destinationFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean checkStoragePermission() {
+        if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+                || Environment.isExternalStorageManager()) return true;
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            return false;
+        }
+
+        new MaterialAlertDialogBuilder(this)
+                .setIcon(R.drawable.baseline_gpp_maybe_24)
+                .setTitle("Permission required")
+                .setMessage("Manage external storage permission required to perform this action")
+                .setPositiveButton("Allow", (dialog, which) -> {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    intent.setData(Uri.parse("package:" + "com.drhowdydoo.appinfo"));
+                    startActivity(intent);
+                })
+                .setNegativeButton("Deny", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
+        return false;
     }
 
     private void handleToolbarContentAlignment() {
@@ -214,5 +306,6 @@ public class AppDetailsActivity extends AppCompatActivity {
     private void openInPlayStore(String packageName) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
     }
+
 
 }

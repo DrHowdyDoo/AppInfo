@@ -3,6 +3,10 @@ package com.drhowdydoo.appinfo.util;
 import android.content.Context;
 import android.os.Build;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Map;
 
 public class Utilities {
@@ -61,6 +65,19 @@ public class Utilities {
     public static int dpToPx(Context context, float dp) {
         float density = context.getResources().getDisplayMetrics().density;
         return (int) (dp * density + 0.5f);
+    }
+
+    public static void copyFile(File sourceFile, File destinationFile) throws IOException {
+        FileInputStream inputStream = new FileInputStream(sourceFile);
+        FileOutputStream outputStream = new FileOutputStream(destinationFile);
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, length);
+        }
+        outputStream.flush();
+        outputStream.close();
+        inputStream.close();
     }
 
 }
