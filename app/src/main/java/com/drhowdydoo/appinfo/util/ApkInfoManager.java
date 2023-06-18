@@ -33,26 +33,12 @@ public class ApkInfoManager {
         packageManager = context.getPackageManager();
     }
 
-    private List<File> findAPKFiles(File directory) {
-        File[] files = directory.listFiles();
-        List<File> apkFiles = new ArrayList<>();
-
-        if (files != null) {
-            for (File file : files) {
-                if (file.isFile() && file.getName().toLowerCase().endsWith(".apk")) {
-                    apkFiles.add(file);
-                }
-            }
-        }
-
-        return apkFiles;
-    }
-
-
     @SuppressLint("CheckResult")
     public void getAllApks(File directory, ApkFragment apkFragment) {
 
-        Observable<File> directoryObservable = Observable.fromArray(directory.listFiles())
+        File[] files = directory.listFiles();
+        if (files == null) return;
+        Observable<File> directoryObservable = Observable.fromArray(files)
                 .flatMap(file -> file.isDirectory() ? Observable.just(file) : Observable.empty());
 
         Observable<List<File>> apkFilesObservable = directoryObservable
@@ -67,10 +53,28 @@ public class ApkInfoManager {
                 .subscribe(apkInfoList -> {
                     System.out.println("Apk List : " + apkInfoList.size());
                     apkFragment.setData(apkInfoList, true);
-                }, throwable -> {
-                    throwable.printStackTrace();
-                });
+                }, Throwable::printStackTrace);
 
+    }
+
+    private List<File> findAPKFiles(File directory) {
+        List<File> apkFiles = new ArrayList<>();
+        traverseDirectory(directory, apkFiles);
+        return apkFiles;
+    }
+
+    private void traverseDirectory(File directory, List<File> apkFiles) {
+        File[] files = directory.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile() && file.getName().toLowerCase().endsWith(".apk")) {
+                    apkFiles.add(file);
+                } else if (file.isDirectory()) {
+                    traverseDirectory(file, apkFiles);
+                }
+            }
+        }
     }
 
     private ApkInfo getApkInfo(File apkFile) {
