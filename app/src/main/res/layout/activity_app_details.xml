@@ -590,6 +590,119 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardTheme"
+                style="@style/Widget.App.CardView.Elevated.Round"
+                android:layout_width="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/themeBarrier"
+                app:layout_constraintTop_toBottomOf="@id/cardMainClass">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
+                    android:layout_marginVertical="@dimen/pill_margin_vertical"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|start"
+                        android:src="@drawable/outline_palette_24" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvThemeTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Theme"
+                            android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
+
+                        <TextView
+                            android:id="@+id/tvThemeValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
+                            tools:text="Theme.AppInfo.Base" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardColor"
+                style="@style/Widget.App.CardView.Elevated.Round"
+                android:layout_width="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="4dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/guideline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardMainClass">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
+                    android:layout_marginVertical="@dimen/pill_margin_vertical"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|start"
+                        android:src="@drawable/baseline_colorize_24" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvColorTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Primary colors"
+                            android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
+
+                        <TextView
+                            android:id="@+id/tvColorValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
+                            tools:text="Theme.AppInfo.Base" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/themeBarrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="cardColor,cardTheme"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -598,7 +711,7 @@
                 android:nestedScrollingEnabled="false"
                 android:layout_marginTop="24dp"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                app:layout_constraintTop_toBottomOf="@id/cardMainClass" />
+                app:layout_constraintTop_toBottomOf="@id/themeBarrier" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

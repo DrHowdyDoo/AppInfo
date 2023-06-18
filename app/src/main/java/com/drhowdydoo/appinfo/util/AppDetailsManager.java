@@ -67,6 +67,17 @@ public class AppDetailsManager {
         return className != null ? className : "None";
     }
 
+    public String getTheme(){
+        String theme = "NOT FOUND 😅";
+        try {
+            theme =  context.getPackageManager().getResourcesForApplication(packageInfo.applicationInfo).getResourceEntryName(packageInfo.applicationInfo.theme);
+            if (theme == null || theme.isEmpty()) return "NOT FOUND 😅";
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return theme;
+    }
+
     public String getInstallSource() {
         String installSource = "";
         try {

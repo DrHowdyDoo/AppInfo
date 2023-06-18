@@ -137,9 +137,10 @@ public class AppDetailsActivity extends AppCompatActivity {
                 Observable.just(appDetailsManager.getUpdatedDate()),
                 Observable.just(packageInfo.packageName),
                 Observable.just(appDetailsManager.getMainClass()),
+                Observable.just(appDetailsManager.getTheme()),
                 (category, minSdk, targetSdk, installSource,
-                 installDt, updatedDt, packageName, mainClass) -> new AppMetadata(category, minSdk, targetSdk, installDt, updatedDt,
-                                                                                    installSource, packageName, mainClass)
+                 installDt, updatedDt, packageName, mainClass, theme) -> new AppMetadata(category, minSdk, targetSdk, installDt, updatedDt,
+                                                                                    installSource, packageName, mainClass,theme)
                 ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(appMetadata -> {
@@ -151,6 +152,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                     binding.tvUpdatedDtValue.setText(appMetadata.getUpdatedDt());
                     binding.tvPackageNameValue.setText(appMetadata.getPackageName());
                     binding.tvMainClassValue.setText(appMetadata.getMainClass());
+                    binding.tvThemeValue.setText(appMetadata.getTheme());
                 });
 
         Observable.fromCallable(() -> appDetailsManager.getIcon(isApk, apkAbsolutePath))
