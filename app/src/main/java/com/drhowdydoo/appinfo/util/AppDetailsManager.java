@@ -1,5 +1,6 @@
 package com.drhowdydoo.appinfo.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
@@ -9,6 +10,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ServiceInfo;
 import android.content.pm.Signature;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Base64;
@@ -72,10 +76,40 @@ public class AppDetailsManager {
         try {
             theme =  context.getPackageManager().getResourcesForApplication(packageInfo.applicationInfo).getResourceEntryName(packageInfo.applicationInfo.theme);
             if (theme == null || theme.isEmpty()) return "NOT FOUND 😅";
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return theme;
+    }
+
+    @SuppressLint("ResourceType")
+    public com.drhowdydoo.appinfo.model.Color getColors() {
+        try {
+            Resources resources = context.getPackageManager().getResourcesForApplication(packageInfo.applicationInfo);
+            Resources.Theme theme = resources.newTheme();
+            theme.applyStyle(packageInfo.applicationInfo.theme, true);
+            TypedArray colorPrimaryStyledAttr = theme.obtainStyledAttributes(getAttr("colorPrimary", android.R.attr.colorPrimary, resources));
+            TypedArray colorSecondaryStyledAttr = theme.obtainStyledAttributes(getAttr("colorSecondary", android.R.attr.colorSecondary, resources));
+
+            int colorPrimary = colorPrimaryStyledAttr.getColor(0, colorPrimaryStyledAttr.getColor(1, Color.WHITE));
+            int colorSecondary = colorSecondaryStyledAttr.getColor(0, colorSecondaryStyledAttr.getColor(1, Color.WHITE));
+            colorPrimaryStyledAttr.recycle();
+            colorSecondaryStyledAttr.recycle();
+            return new com.drhowdydoo.appinfo.model.Color(colorPrimary, colorSecondary);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new com.drhowdydoo.appinfo.model.Color(0, 0);
+    }
+
+    private int[] getAttr(String colorName, int colorId, Resources resources) {
+        final int[] attrs = new int[]{
+                resources.getIdentifier(colorName, "attr", packageInfo.packageName),
+                colorId
+        };
+        return attrs;
     }
 
     public String getInstallSource() {

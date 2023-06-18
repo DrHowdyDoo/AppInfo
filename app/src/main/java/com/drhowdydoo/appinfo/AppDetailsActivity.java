@@ -127,6 +127,19 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding.materialToolBar.setTitle(getIntent().getStringExtra("appName"));
         binding.tvVersion.setText("v" + getIntent().getStringExtra("appVersion"));
 
+        Observable.just(appDetailsManager.getColors())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(color -> {
+                            String primaryColor = "#" + Integer.toHexString(color.getColorPrimary());
+                            String secondaryColor = "#" + Integer.toHexString(color.getColorSecondary());
+                            if (primaryColor.equalsIgnoreCase("#ffffffff") && secondaryColor.equalsIgnoreCase("#ffffffff")) {
+                                binding.tvColorValue.setText("NOT FOUND 😅");
+                            } else {
+                                binding.tvColorValue.setText(primaryColor + "\n" + secondaryColor);
+                            }
+                        });
+
 
         Observable.zip(
                 Observable.just(appDetailsManager.getCategory()),

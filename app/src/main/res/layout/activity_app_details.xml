@@ -530,6 +530,7 @@
                             android:id="@+id/tvPackageNameValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textIsSelectable="true"
                             android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
                             tools:text="com.drhowdydoo.appinfo" />
 
@@ -688,6 +689,7 @@
                             android:id="@+id/tvColorValue"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textIsSelectable="true"
                             android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
                             tools:text="Theme.AppInfo.Base" />
 
