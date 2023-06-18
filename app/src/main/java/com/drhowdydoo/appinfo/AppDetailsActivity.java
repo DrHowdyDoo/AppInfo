@@ -6,16 +6,19 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 
 import androidx.annotation.OptIn;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.drhowdydoo.appinfo.adapter.AppDetailsListAdapter;
 import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
+import com.drhowdydoo.appinfo.model.StringCount;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -83,16 +86,21 @@ public class AppDetailsActivity extends AppCompatActivity {
 
     }
 
+
     private Optional<PackageInfo> getPackageInfoByAppInfo(ApplicationInfo appInfo) {
         try {
-            return Optional.ofNullable(getPackageManager().getPackageInfo(appInfo.packageName,
-                    PackageManager.GET_PERMISSIONS |
-                            PackageManager.GET_RECEIVERS |
-                            PackageManager.GET_PROVIDERS |
-                            PackageManager.GET_ACTIVITIES |
-                            PackageManager.GET_SERVICES |
-                            PackageManager.GET_META_DATA |
-                            PackageManager.GET_SIGNATURES));
+            int flags = PackageManager.GET_PERMISSIONS |
+                    PackageManager.GET_RECEIVERS |
+                    PackageManager.GET_PROVIDERS |
+                    PackageManager.GET_ACTIVITIES |
+                    PackageManager.GET_SERVICES |
+                    PackageManager.GET_META_DATA |
+                    PackageManager.GET_SIGNATURES;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                flags |= PackageManager.GET_SIGNING_CERTIFICATES;
+            }
+            return Optional.ofNullable(getPackageManager().getPackageInfo(appInfo.packageName, flags));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -131,10 +139,23 @@ public class AppDetailsActivity extends AppCompatActivity {
 
         Observable.zip(Observable.just(appDetailsManager.getPermissions()),
                         Observable.just(appDetailsManager.getActivities()),
-                        (permissions, activities) -> {
+                        Observable.just(appDetailsManager.getBroadcastReceivers()),
+                        Observable.just(appDetailsManager.getServices()),
+                        Observable.just(appDetailsManager.getProviders()),
+                        Observable.just(appDetailsManager.getFeatures()),
+                        Observable.just(appDetailsManager.getSignatures()),
+                        (permissions, activities,receivers, services, providers, features, signatureMap) -> {
                             List<AppDetailItem> appDetailItems = new ArrayList<>();
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_shield_24, "Permissions", permissions));
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_touch_app_24, "Activities", activities));
+                            appDetailItems.add(new AppDetailItem(R.drawable.round_cell_tower_24, "Broadcast receivers", receivers));
+                            appDetailItems.add(new AppDetailItem(R.drawable.round__services_24, "Services", services));
+                            appDetailItems.add(new AppDetailItem(R.drawable.outline_extension_24, "Providers", providers));
+                            appDetailItems.add(new AppDetailItem(R.drawable.outline_stars_24, "Features", features));
+                            signatureMap.ifPresent(signatures -> {
+                                appDetailItems.add(new AppDetailItem(R.drawable.outline_vpn_key_24, "Signature", new StringCount(signatures.get("certificates"), 0)));
+                                appDetailItems.add(new AppDetailItem(R.drawable.round_fingerprint_24, "Certificate fingerprints", new StringCount(signatures.get("signing_keys"), 0)));
+                            });
                             return appDetailItems;
                         })
                 .subscribeOn(Schedulers.io())

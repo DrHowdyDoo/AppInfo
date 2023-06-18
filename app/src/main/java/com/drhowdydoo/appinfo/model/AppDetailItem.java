@@ -24,6 +24,7 @@ public class AppDetailItem {
     }
 
     public String getTitle() {
+        if (getValue().getCount() == 0) return title;
         return title + " (" + getValue().getCount() + ")";
     }
 

@@ -110,40 +110,44 @@ public class AppDetailsManager {
         return new StringCount(activityList.toString().trim(), activities.length);
     }
 
-    public String getBroadcastReceivers() {
-        if (packageInfo.receivers == null) return "N/A";
+    public StringCount getBroadcastReceivers() {
+        ActivityInfo[] receiversList = packageInfo.receivers;
+        if (receiversList == null) return new StringCount("N/A", 0);
         StringBuilder receivers = new StringBuilder();
-        for (ActivityInfo receiver : packageInfo.receivers) {
+        for (ActivityInfo receiver : receiversList) {
             receivers.append(receiver.name).append("\n");
         }
-        return receivers.toString();
+        return new StringCount(receivers.toString().trim(), receiversList.length);
     }
 
-    public String getServices() {
-        if (packageInfo.services == null) return "N/A";
+    public StringCount getServices() {
+        ServiceInfo[] serviceInfos = packageInfo.services;
+        if (serviceInfos == null) return new StringCount("N/A", 0);
         StringBuilder services = new StringBuilder();
-        for (ServiceInfo service : packageInfo.services) {
+        for (ServiceInfo service : serviceInfos) {
             services.append(service.name).append("\n");
         }
-        return services.toString();
+        return new StringCount(services.toString().trim(), serviceInfos.length);
     }
 
-    public String getProviders() {
-        if (packageInfo.providers == null) return "N/A";
+    public StringCount getProviders() {
+        ProviderInfo[] providerInfos = packageInfo.providers;
+        if (providerInfos == null) return new StringCount("N/A", 0);
         StringBuilder providers = new StringBuilder();
-        for (ProviderInfo provider : packageInfo.providers) {
+        for (ProviderInfo provider : providerInfos) {
             providers.append(provider.name).append("\n");
         }
-        return providers.toString();
+        return new StringCount(providers.toString().trim(), providerInfos.length);
     }
 
-    public String getFeatures() {
-        if (packageInfo.reqFeatures == null) return "N/A";
+    public StringCount getFeatures() {
+        FeatureInfo[] featureInfos = packageInfo.reqFeatures;
+        if (featureInfos == null) return new StringCount("N/A", 0);
         StringBuilder features = new StringBuilder();
-        for (FeatureInfo feature : packageInfo.reqFeatures) {
+        for (FeatureInfo feature : featureInfos) {
             features.append(feature.name).append("\n");
         }
-        return features.toString();
+        return new StringCount(features.toString().trim(), featureInfos.length);
     }
 
     public Optional<Map<String, String>> getSignatures() {
@@ -183,25 +187,25 @@ public class AppDetailsManager {
                 String sha1Hash = hashToHex(sha1.digest());
                 String sha256Hash = hashToHex(sha256.digest());
 
-                signingKeys.append("Hash :").append("\t").append(hashKey).append("\n")
-                        .append("MD5 :").append("\t").append(md5Hash).append("\n")
-                        .append("SHA1 :").append("\t").append(sha1Hash).append("\n")
-                        .append("SHA256 :").append("\t").append(sha256Hash).append("\n");
-
-                signatures.put("signing_keys", signingKeys.toString());
+                signingKeys.append("Hash : ").append(hashKey).append("\n")
+                        .append("MD5 : ").append(md5Hash).append("\n")
+                        .append("SHA1 : ").append(sha1Hash).append("\n")
+                        .append("SHA256 : ").append(sha256Hash).append("\n\n");
 
                 CertificateFactory certFactory = CertificateFactory.getInstance("X509");
                 X509Certificate x509Cert = (X509Certificate) certFactory.generateCertificate(certStream);
                 certificates.append("Certificate serial number : ").append(x509Cert.getSerialNumber()).append("\n")
                         .append("Signature Algorithm : ").append(x509Cert.getSigAlgName()).append("\n");
 
-                certificates.append(transformIssuerDNString(x509Cert.getIssuerDN().getName()));
-                signatures.put("certificates", certificates.toString());
+                certificates.append(transformIssuerDNString(x509Cert.getIssuerDN().getName())).append("\n");
 
             } catch (NoSuchAlgorithmException | CertificateException e) {
                 e.printStackTrace();
             }
         }
+
+        signatures.put("signing_keys", signingKeys.toString().trim());
+        signatures.put("certificates", certificates.toString().trim());
 
         return Optional.of(signatures);
     }
@@ -217,14 +221,14 @@ public class AppDetailsManager {
     }
 
     private String transformIssuerDNString(String issuerDNString) {
-        String[] pairs = issuerDNString.split(", ");
+        String[] pairs = issuerDNString.split(",");
         StringBuilder transformedString = new StringBuilder();
 
         for (String pair : pairs) {
             String[] keyValue = pair.split("=");
             if (keyValue.length == 2) {
                 String attribute = keyValue[0];
-                String value = keyValue[1];
+                String value = keyValue[1].replace("\\", "");
                 transformedString.append(expandSignatureAbbreviation(attribute)).append(" : ").append(value).append("\n");
             }
         }
@@ -235,19 +239,19 @@ public class AppDetailsManager {
     private String expandSignatureAbbreviation(String abbreviation) {
         switch (abbreviation) {
             case "EMAILADDRESS":
-                return "Email Address : ";
+                return "Email Address";
             case "CN":
-                return "Common Name : ";
+                return "Common Name";
             case "OU":
-                return "Organizational Unit : ";
+                return "Organizational Unit";
             case "O":
-                return "Organization : ";
+                return "Organization";
             case "L":
-                return "Locality : ";
+                return "Locality";
             case "ST":
-                return "State : ";
+                return "State";
             case "C":
-                return "Country : ";
+                return "Country";
         }
         return abbreviation;
     }
