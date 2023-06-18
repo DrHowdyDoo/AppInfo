@@ -202,6 +202,12 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
         binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
         binding.btnExtractApk.setOnClickListener(v -> {
+            boolean haveStorageAccess = checkStoragePermission();
+            if (!haveStorageAccess) return;
+            if (!android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                Toast.makeText(this, "Storage not accessible", Toast.LENGTH_SHORT).show();
+                return;
+            }
             Observable.fromAction(() -> {
                         runOnUiThread(() -> binding.progressBar.setVisibility(View.VISIBLE));
                         extractApk(packageInfo);
@@ -217,13 +223,6 @@ public class AppDetailsActivity extends AppCompatActivity {
     }
 
     private void extractApk(PackageInfo packageInfo) {
-        boolean haveStorageAccess = checkStoragePermission();
-        if (!haveStorageAccess) return;
-
-        if (!android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            //Toast.makeText(this, "Storage not accessible", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         try {
             ApplicationInfo appInfo = packageInfo.applicationInfo;
@@ -270,8 +269,8 @@ public class AppDetailsActivity extends AppCompatActivity {
 
         new MaterialAlertDialogBuilder(this)
                 .setIcon(R.drawable.baseline_gpp_maybe_24)
-                .setTitle("Permission required")
-                .setMessage("Manage external storage permission required to perform this action")
+                .setTitle("Permission required   😅")
+                .setMessage("Manage external storage permission required to perform this action ^_^")
                 .setPositiveButton("Allow", (dialog, which) -> {
                     Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
                     intent.setData(Uri.parse("package:" + "com.drhowdydoo.appinfo"));
