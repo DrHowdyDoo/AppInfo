@@ -23,6 +23,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.drhowdydoo.appinfo.AppDetailsActivity;
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.AppListItemBinding;
+import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.model.AppInfo;
 import com.drhowdydoo.appinfo.util.AppInfoDiffCallback;
 import com.drhowdydoo.appinfo.util.Constants;
@@ -35,6 +36,7 @@ import java.util.List;
 
 @SuppressWarnings("FieldMayBeFinal")
 public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerViewAdapter.ViewHolder> {
+
 
     private List<AppInfo> appInfoList;
     private Context context;

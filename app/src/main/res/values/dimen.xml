@@ -2,7 +2,7 @@
 <resources>
     <dimen name="margin_bottom_title">12dp</dimen>
     <dimen name="margin_bottom_body">8dp</dimen>
-    <dimen name="icon_padding">8dp</dimen>
+    <dimen name="icon_padding">16dp</dimen>
     <dimen name="pill_margin_horizontal">16dp</dimen>
     <dimen name="pill_margin_vertical">16dp</dimen>
     <dimen name="round_margin">12dp</dimen>

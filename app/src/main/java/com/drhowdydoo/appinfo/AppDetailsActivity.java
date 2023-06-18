@@ -16,8 +16,11 @@ import android.widget.Toast;
 
 import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.drhowdydoo.appinfo.adapter.AppDetailsListAdapter;
 import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
+import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.Utilities;
@@ -27,6 +30,8 @@ import com.google.android.material.badge.BadgeUtils;
 import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.color.DynamicColors;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -42,6 +47,8 @@ public class AppDetailsActivity extends AppCompatActivity {
     private boolean isInstalled = true;
     private String apkPath = "";
     private String apkAbsolutePath = "";
+    private List<AppDetailItem> appDetailItems = new ArrayList<>();
+    private AppDetailsListAdapter adapter;
 
     @SuppressLint("CheckResult")
     @Override
@@ -72,42 +79,15 @@ public class AppDetailsActivity extends AppCompatActivity {
 
         //Initial conditional setups
         handleToolbarContentAlignment();
-        if (!isInstalled) {
-            binding.btnInfo.setEnabled(false);
-        }
-        binding.tvPermissionsValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
-        binding.tvPermissionsValue.setTag(false);
-        binding.tvActivitiesValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
-        binding.tvActivitiesValue.setTag(false);
+//        if (!isInstalled) {
+//            binding.btnInfo.setEnabled(false);
+//        }
 
-
-        // Click listeners
-        binding.tvPermissionsValue.setOnClickListener(v -> {
-            if (binding.tvPermissionsValue.getLineCount() <= Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) return;
-            if ((boolean)binding.tvPermissionsValue.getTag()) {
-                binding.tvPermissionsValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
-                binding.moreTextIndicator.setVisibility(View.VISIBLE);
-                binding.tvPermissionsValue.setTag(false);
-            } else {
-                binding.tvPermissionsValue.setMaxLines(Integer.MAX_VALUE);
-                binding.moreTextIndicator.setVisibility(View.GONE);
-                binding.tvPermissionsValue.setTag(true);
-            }
-        });
-
-        binding.tvActivitiesValue.setOnClickListener(v -> {
-            if (binding.tvActivitiesValue.getLineCount() <= Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) return;
-            if ((boolean)binding.tvActivitiesValue.getTag()) {
-                binding.tvActivitiesValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
-                binding.moreActivitiesIndicator.setVisibility(View.VISIBLE);
-                binding.tvActivitiesValue.setTag(false);
-            } else {
-                binding.tvActivitiesValue.setMaxLines(Integer.MAX_VALUE);
-                binding.moreActivitiesIndicator.setVisibility(View.GONE);
-                binding.tvActivitiesValue.setTag(true);
-            }
-        });
-
+        adapter = new AppDetailsListAdapter(appDetailItems);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setItemAnimator(null);
+        binding.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setAdapter(adapter);
 
     }
 
@@ -127,21 +107,21 @@ public class AppDetailsActivity extends AppCompatActivity {
         return Optional.empty();
     }
 
-    @SuppressLint({"CheckResult", "SetTextI18n"})
+    @SuppressLint({"CheckResult", "SetTextI18n", "NotifyDataSetChanged"})
     @OptIn(markerClass = ExperimentalBadgeUtils.class)
     private void init(PackageInfo packageInfo) {
 
         setUpClickListeners(packageInfo);
         binding.materialToolBar.setTitle(getIntent().getStringExtra("appName"));
         binding.tvVersion.setText("v" + getIntent().getStringExtra("appVersion"));
-        binding.tvMinSdkValue.setText(appDetailsManager.getMinSdk());
-        binding.tvTargetSdkValue.setText(appDetailsManager.getTargetSdk());
-        binding.tvSourceValue.setText(appDetailsManager.getInstallSource());
-        binding.tvInstalledDtValue.setText(appDetailsManager.getInstalledDate());
-        binding.tvUpdatedDtValue.setText(appDetailsManager.getUpdatedDate());
-        binding.tvPackageNameValue.setText(packageInfo.packageName);
-        String className = packageInfo.applicationInfo.className;
-        binding.tvMainClassValue.setText(className == null ? "N/A" : className);
+//        binding.tvMinSdkValue.setText(appDetailsManager.getMinSdk());
+//        binding.tvTargetSdkValue.setText(appDetailsManager.getTargetSdk());
+//        binding.tvSourceValue.setText(appDetailsManager.getInstallSource());
+//        binding.tvInstalledDtValue.setText(appDetailsManager.getInstalledDate());
+//        binding.tvUpdatedDtValue.setText(appDetailsManager.getUpdatedDate());
+//        binding.tvPackageNameValue.setText(packageInfo.packageName);
+//        String className = packageInfo.applicationInfo.className;
+//        binding.tvMainClassValue.setText(className == null ? "N/A" : className);
 
 
         Observable.fromCallable(() -> appDetailsManager.getIcon(isApk,apkAbsolutePath))
@@ -151,34 +131,39 @@ public class AppDetailsActivity extends AppCompatActivity {
                     binding.imgIcon.setImageDrawable(icon);
                 });
 
-        Observable.fromCallable(() -> appDetailsManager.getCategory())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(category -> binding.tvCategoryValue.setText(category));
+//        Observable.fromCallable(() -> appDetailsManager.getCategory())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(category -> binding.tvCategoryValue.setText(category));
 
-        Observable.fromCallable(() -> appDetailsManager.getPermissions())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(permissions -> {
-                    binding.tvPermissionsTitle.setText("Permissions (" + permissions.getCount() + ")");
-                    binding.tvPermissionsValue.setText(permissions.getText());
-                    if (permissions.getCount() <= Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) binding.moreTextIndicator.setVisibility(View.GONE);
-                });
+//        Observable.fromCallable(() -> appDetailsManager.getPermissions())
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(permissions -> {
+//                });
 
-        Observable.fromCallable(() -> appDetailsManager.getActivities())
+        Observable.zip(Observable.just(appDetailsManager.getPermissions()),
+                Observable.just(appDetailsManager.getActivities()),
+                        (permissions, activities) -> {
+                            List<AppDetailItem> appDetailItems = new ArrayList<>();
+                            appDetailItems.add(new AppDetailItem(R.drawable.outline_shield_24, "Permissions", permissions));
+                            appDetailItems.add(new AppDetailItem(R.drawable.outline_touch_app_24,"Activities", activities));
+                            return appDetailItems;
+                        })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(activities -> {
-                    binding.tvActivityTitle.setText("Activities (" + activities.getCount() + ")");
-                    binding.tvActivitiesValue.setText(activities.getText());
-                    if (activities.getCount() <= Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) binding.moreActivitiesIndicator.setVisibility(View.GONE);
+                .subscribe(appDetailItemList -> {
+                    appDetailItems.clear();
+                    appDetailItems.addAll(appDetailItemList);
+                    adapter.notifyDataSetChanged();
+                    System.out.println("Size : " + adapter.getItemCount());
                 });
 
     }
 
     private void setUpClickListeners(PackageInfo packageInfo) {
-        binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
-        binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
+//        binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
+//        binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
     }
 
     private void handleToolbarContentAlignment(){

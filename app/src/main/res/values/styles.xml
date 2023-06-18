@@ -37,7 +37,11 @@
 
     <style name="TextAppearance.App.BodyMedium" parent="TextAppearance.Material3.BodyMedium"/>
 
-    <style name="Widget.App.CardView.Round" parent="Widget.Material3.CardView.Elevated">
+    <style name="Widget.App.CardView.Elevated.Round" parent="Widget.Material3.CardView.Elevated">
+        <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
+    </style>
+
+    <style name="Widget.App.CardView.Filled.Round" parent="Widget.Material3.CardView.Filled">
         <item name="shapeAppearance">@style/ShapeAppearance.App.MediumComponent</item>
     </style>
 
