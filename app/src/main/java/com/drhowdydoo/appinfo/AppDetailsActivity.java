@@ -223,6 +223,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                 Toast.makeText(this, "Storage not accessible", Toast.LENGTH_SHORT).show();
                 return;
             }
+            binding.btnExtractApk.setEnabled(false);
             Observable.fromAction(() -> {
                         runOnUiThread(() -> binding.progressBar.setVisibility(View.VISIBLE));
                         extractApk(packageInfo);
@@ -230,6 +231,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
+                        binding.btnExtractApk.setEnabled(true);
                         binding.progressBar.setVisibility(View.GONE);
                         Toast.makeText(this, "APK files extracted to AppInfo folder in the root directory", Toast.LENGTH_SHORT).show();
                     })

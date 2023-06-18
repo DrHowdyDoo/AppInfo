@@ -273,7 +273,7 @@
                 android:id="@+id/cardInstalledDt"
                 style="@style/Widget.App.CardView.Elevated.Round"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content">
+                android:layout_height="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -711,7 +711,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
-                android:layout_marginTop="24dp"
+                android:layout_marginVertical="24dp"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                 app:layout_constraintTop_toBottomOf="@id/themeBarrier" />
 
