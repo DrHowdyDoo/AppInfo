@@ -188,9 +188,9 @@ public class AppDetailsManager {
                 String sha256Hash = hashToHex(sha256.digest());
 
                 signingKeys.append("Hash : ").append(hashKey).append("\n")
-                        .append("MD5 : ").append(md5Hash).append("\n")
-                        .append("SHA1 : ").append(sha1Hash).append("\n")
-                        .append("SHA256 : ").append(sha256Hash).append("\n\n");
+                           .append("MD5 : ").append(md5Hash).append("\n")
+                           .append("SHA1 : ").append(sha1Hash).append("\n")
+                           .append("SHA256 : ").append(sha256Hash).append("\n\n");
 
                 CertificateFactory certFactory = CertificateFactory.getInstance("X509");
                 X509Certificate x509Cert = (X509Certificate) certFactory.generateCertificate(certStream);

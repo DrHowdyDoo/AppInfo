@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 
 import com.drhowdydoo.appinfo.fragment.ApkFragment;
 import com.drhowdydoo.appinfo.model.ApkInfo;
@@ -74,8 +75,18 @@ public class ApkInfoManager {
 
     private ApkInfo getApkInfo(File apkFile) {
 
-        System.out.println("Apk : " + apkFile.getAbsolutePath());
-        PackageInfo apkInfo = packageManager.getPackageArchiveInfo(apkFile.getAbsolutePath(), PackageManager.GET_PERMISSIONS | PackageManager.GET_RECEIVERS | PackageManager.GET_PROVIDERS | PackageManager.GET_ACTIVITIES | PackageManager.GET_SERVICES | PackageManager.GET_META_DATA | PackageManager.GET_SIGNATURES);
+        int flags = PackageManager.GET_PERMISSIONS |
+                PackageManager.GET_RECEIVERS |
+                PackageManager.GET_PROVIDERS |
+                PackageManager.GET_ACTIVITIES |
+                PackageManager.GET_SERVICES |
+                PackageManager.GET_META_DATA |
+                PackageManager.GET_SIGNATURES;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            flags |= PackageManager.GET_SIGNING_CERTIFICATES;
+        }
+        PackageInfo apkInfo = packageManager.getPackageArchiveInfo(apkFile.getAbsolutePath(), flags);
         long apkSize = apkFile.length();
         String apkName = apkFile.getName();
         String apkPath = apkFile.getParent();
