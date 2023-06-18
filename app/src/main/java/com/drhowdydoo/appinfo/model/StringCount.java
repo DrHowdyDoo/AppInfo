@@ -10,7 +10,13 @@ public class StringCount {
         this.count = count;
     }
 
+    public StringCount(String text) {
+        this.text = text;
+        this.count = 0;
+    }
+
     public String getText() {
+        if (text == null || text.isEmpty()) return "NOT SPECIFIED";
         return text;
     }
 

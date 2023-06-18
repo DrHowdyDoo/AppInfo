@@ -62,6 +62,11 @@ public class AppDetailsManager {
         return lastUpdateTime > 0 ? DateFormat.getDateInstance().format(lastUpdateTime) : "Not Updated";
     }
 
+    public String getMainClass() {
+        String className = packageInfo.applicationInfo.className;
+        return className != null ? className : "None";
+    }
+
     public String getInstallSource() {
         String installSource = "";
         try {
@@ -92,7 +97,7 @@ public class AppDetailsManager {
 
     public StringCount getPermissions() {
         String[] requestedPermissions = packageInfo.requestedPermissions;
-        if (requestedPermissions == null) return new StringCount("N/A", 0);
+        if (requestedPermissions == null) return new StringCount("N/A");
         StringBuilder permissions = new StringBuilder();
         for (String requestedPermission : requestedPermissions) {
             permissions.append(requestedPermission).append("\n");
@@ -102,7 +107,7 @@ public class AppDetailsManager {
 
     public StringCount getActivities() {
         ActivityInfo[] activities = packageInfo.activities;
-        if (activities == null) return new StringCount("N/A", 0);
+        if (activities == null) return new StringCount("NONE");
         StringBuilder activityList = new StringBuilder();
         for (ActivityInfo activity : activities) {
             activityList.append(activity.name).append("\n");
@@ -112,7 +117,7 @@ public class AppDetailsManager {
 
     public StringCount getBroadcastReceivers() {
         ActivityInfo[] receiversList = packageInfo.receivers;
-        if (receiversList == null) return new StringCount("N/A", 0);
+        if (receiversList == null) return new StringCount("NONE");
         StringBuilder receivers = new StringBuilder();
         for (ActivityInfo receiver : receiversList) {
             receivers.append(receiver.name).append("\n");
@@ -122,7 +127,7 @@ public class AppDetailsManager {
 
     public StringCount getServices() {
         ServiceInfo[] serviceInfos = packageInfo.services;
-        if (serviceInfos == null) return new StringCount("N/A", 0);
+        if (serviceInfos == null) return new StringCount("NONE");
         StringBuilder services = new StringBuilder();
         for (ServiceInfo service : serviceInfos) {
             services.append(service.name).append("\n");
@@ -132,7 +137,7 @@ public class AppDetailsManager {
 
     public StringCount getProviders() {
         ProviderInfo[] providerInfos = packageInfo.providers;
-        if (providerInfos == null) return new StringCount("N/A", 0);
+        if (providerInfos == null) return new StringCount("NONE");
         StringBuilder providers = new StringBuilder();
         for (ProviderInfo provider : providerInfos) {
             providers.append(provider.name).append("\n");
@@ -142,12 +147,24 @@ public class AppDetailsManager {
 
     public StringCount getFeatures() {
         FeatureInfo[] featureInfos = packageInfo.reqFeatures;
-        if (featureInfos == null) return new StringCount("N/A", 0);
+        if (featureInfos == null) return new StringCount("NO FEATURES REQUESTED");
         StringBuilder features = new StringBuilder();
         for (FeatureInfo feature : featureInfos) {
             features.append(feature.name).append("\n");
         }
         return new StringCount(features.toString().trim(), featureInfos.length);
+    }
+
+    public String getDataDirPath() {
+        return packageInfo.applicationInfo.dataDir;
+    }
+
+    public String getSourceDirPath() {
+        return packageInfo.applicationInfo.sourceDir;
+    }
+
+    public String getNativeLibraryPath() {
+        return packageInfo.applicationInfo.nativeLibraryDir;
     }
 
     public Optional<Map<String, String>> getSignatures() {

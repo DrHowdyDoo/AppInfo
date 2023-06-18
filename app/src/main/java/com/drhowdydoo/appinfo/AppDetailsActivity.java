@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.drhowdydoo.appinfo.adapter.AppDetailsListAdapter;
 import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
+import com.drhowdydoo.appinfo.model.AppMetadata;
 import com.drhowdydoo.appinfo.model.StringCount;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.Utilities;
@@ -114,15 +115,32 @@ public class AppDetailsActivity extends AppCompatActivity {
         setUpClickListeners(packageInfo);
         binding.materialToolBar.setTitle(getIntent().getStringExtra("appName"));
         binding.tvVersion.setText("v" + getIntent().getStringExtra("appVersion"));
-        binding.tvMinSdkValue.setText(appDetailsManager.getMinSdk());
-        binding.tvTargetSdkValue.setText(appDetailsManager.getTargetSdk());
-        binding.tvSourceValue.setText(appDetailsManager.getInstallSource());
-        binding.tvInstalledDtValue.setText(appDetailsManager.getInstalledDate());
-        binding.tvUpdatedDtValue.setText(appDetailsManager.getUpdatedDate());
-        binding.tvPackageNameValue.setText(packageInfo.packageName);
-        String className = packageInfo.applicationInfo.className;
-        binding.tvMainClassValue.setText(className == null ? "N/A" : className);
 
+
+        Observable.zip(
+                Observable.just(appDetailsManager.getCategory()),
+                Observable.just(appDetailsManager.getMinSdk()),
+                Observable.just(appDetailsManager.getTargetSdk()),
+                Observable.just(appDetailsManager.getInstallSource()),
+                Observable.just(appDetailsManager.getInstalledDate()),
+                Observable.just(appDetailsManager.getUpdatedDate()),
+                Observable.just(packageInfo.packageName),
+                Observable.just(appDetailsManager.getMainClass()),
+                (category, minSdk, targetSdk, installSource,
+                 installDt, updatedDt, packageName, mainClass) -> new AppMetadata(category, minSdk, targetSdk, installDt, updatedDt,
+                                                                                    installSource, packageName, mainClass)
+                ).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(appMetadata -> {
+                    binding.tvCategoryValue.setText(appMetadata.getCategory());
+                    binding.tvMinSdkValue.setText(appMetadata.getMinSdk());
+                    binding.tvTargetSdkValue.setText(appMetadata.getTargetSdk());
+                    binding.tvSourceValue.setText(appMetadata.getSource());
+                    binding.tvInstalledDtValue.setText(appMetadata.getInstallDt());
+                    binding.tvUpdatedDtValue.setText(appMetadata.getUpdatedDt());
+                    binding.tvPackageNameValue.setText(appMetadata.getPackageName());
+                    binding.tvMainClassValue.setText(appMetadata.getMainClass());
+                });
 
         Observable.fromCallable(() -> appDetailsManager.getIcon(isApk, apkAbsolutePath))
                 .subscribeOn(Schedulers.io())
@@ -131,12 +149,6 @@ public class AppDetailsActivity extends AppCompatActivity {
                     binding.imgIcon.setImageDrawable(icon);
                 });
 
-        Observable.fromCallable(() -> appDetailsManager.getCategory())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(category -> binding.tvCategoryValue.setText(category));
-
-
         Observable.zip(Observable.just(appDetailsManager.getPermissions()),
                         Observable.just(appDetailsManager.getActivities()),
                         Observable.just(appDetailsManager.getBroadcastReceivers()),
@@ -144,6 +156,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                         Observable.just(appDetailsManager.getProviders()),
                         Observable.just(appDetailsManager.getFeatures()),
                         Observable.just(appDetailsManager.getSignatures()),
+
                         (permissions, activities,receivers, services, providers, features, signatureMap) -> {
                             List<AppDetailItem> appDetailItems = new ArrayList<>();
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_shield_24, "Permissions", permissions));
@@ -152,9 +165,14 @@ public class AppDetailsActivity extends AppCompatActivity {
                             appDetailItems.add(new AppDetailItem(R.drawable.round__services_24, "Services", services));
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_extension_24, "Providers", providers));
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_stars_24, "Features", features));
+                            appDetailItems.add(new AppDetailItem(R.drawable.outline_backup_24, "Backup agent name", packageInfo.applicationInfo.backupAgentName));
+                            appDetailItems.add(new AppDetailItem(R.drawable.outline_folder_24, "Data dir path", appDetailsManager.getDataDirPath()));
+                            appDetailItems.add(new AppDetailItem(R.drawable.outline_source_24, "Source dir path", appDetailsManager.getSourceDirPath()));
+                            appDetailItems.add(new AppDetailItem(R.drawable.outline_folder_shared_24, "Native library path", appDetailsManager.getNativeLibraryPath()));
+
                             signatureMap.ifPresent(signatures -> {
-                                appDetailItems.add(new AppDetailItem(R.drawable.outline_vpn_key_24, "Signature", new StringCount(signatures.get("certificates"), 0)));
-                                appDetailItems.add(new AppDetailItem(R.drawable.round_fingerprint_24, "Certificate fingerprints", new StringCount(signatures.get("signing_keys"), 0)));
+                                appDetailItems.add(new AppDetailItem(R.drawable.outline_vpn_key_24, "Signature", signatures.get("certificates")));
+                                appDetailItems.add(new AppDetailItem(R.drawable.round_fingerprint_24, "Certificate fingerprints", signatures.get("signing_keys")));
                             });
                             return appDetailItems;
                         })

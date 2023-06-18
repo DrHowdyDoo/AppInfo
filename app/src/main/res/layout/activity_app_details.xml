@@ -223,7 +223,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|start"
-                        android:src="@drawable/round_source_24"
+                        android:src="@drawable/ic_playstore_24"
                         />
 
                     <LinearLayout

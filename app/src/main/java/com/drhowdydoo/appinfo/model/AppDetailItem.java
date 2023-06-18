@@ -14,6 +14,13 @@ public class AppDetailItem {
         isExpanded = false;
     }
 
+    public AppDetailItem(int icon, String title, String value) {
+        this.icon = icon;
+        this.title = title;
+        this.value = new StringCount(value);
+        isExpanded = false;
+    }
+
 
     public int getIcon() {
         return icon;
