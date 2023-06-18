@@ -79,14 +79,14 @@ public class AppDetailsActivity extends AppCompatActivity {
 
         //Initial conditional setups
         handleToolbarContentAlignment();
-//        if (!isInstalled) {
-//            binding.btnInfo.setEnabled(false);
-//        }
+        if (!isInstalled) {
+            binding.btnInfo.setEnabled(false);
+        }
 
         adapter = new AppDetailsListAdapter(appDetailItems);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setItemAnimator(null);
-        binding.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setHasFixedSize(false);
         binding.recyclerView.setAdapter(adapter);
 
     }
@@ -114,14 +114,14 @@ public class AppDetailsActivity extends AppCompatActivity {
         setUpClickListeners(packageInfo);
         binding.materialToolBar.setTitle(getIntent().getStringExtra("appName"));
         binding.tvVersion.setText("v" + getIntent().getStringExtra("appVersion"));
-//        binding.tvMinSdkValue.setText(appDetailsManager.getMinSdk());
-//        binding.tvTargetSdkValue.setText(appDetailsManager.getTargetSdk());
-//        binding.tvSourceValue.setText(appDetailsManager.getInstallSource());
-//        binding.tvInstalledDtValue.setText(appDetailsManager.getInstalledDate());
-//        binding.tvUpdatedDtValue.setText(appDetailsManager.getUpdatedDate());
-//        binding.tvPackageNameValue.setText(packageInfo.packageName);
-//        String className = packageInfo.applicationInfo.className;
-//        binding.tvMainClassValue.setText(className == null ? "N/A" : className);
+        binding.tvMinSdkValue.setText(appDetailsManager.getMinSdk());
+        binding.tvTargetSdkValue.setText(appDetailsManager.getTargetSdk());
+        binding.tvSourceValue.setText(appDetailsManager.getInstallSource());
+        binding.tvInstalledDtValue.setText(appDetailsManager.getInstalledDate());
+        binding.tvUpdatedDtValue.setText(appDetailsManager.getUpdatedDate());
+        binding.tvPackageNameValue.setText(packageInfo.packageName);
+        String className = packageInfo.applicationInfo.className;
+        binding.tvMainClassValue.setText(className == null ? "N/A" : className);
 
 
         Observable.fromCallable(() -> appDetailsManager.getIcon(isApk,apkAbsolutePath))
@@ -131,16 +131,11 @@ public class AppDetailsActivity extends AppCompatActivity {
                     binding.imgIcon.setImageDrawable(icon);
                 });
 
-//        Observable.fromCallable(() -> appDetailsManager.getCategory())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(category -> binding.tvCategoryValue.setText(category));
+        Observable.fromCallable(() -> appDetailsManager.getCategory())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(category -> binding.tvCategoryValue.setText(category));
 
-//        Observable.fromCallable(() -> appDetailsManager.getPermissions())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(permissions -> {
-//                });
 
         Observable.zip(Observable.just(appDetailsManager.getPermissions()),
                 Observable.just(appDetailsManager.getActivities()),
@@ -162,8 +157,8 @@ public class AppDetailsActivity extends AppCompatActivity {
     }
 
     private void setUpClickListeners(PackageInfo packageInfo) {
-//        binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
-//        binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
+        binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
+        binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
     }
 
     private void handleToolbarContentAlignment(){
