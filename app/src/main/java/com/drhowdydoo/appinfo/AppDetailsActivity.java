@@ -124,6 +124,11 @@ public class AppDetailsActivity extends AppCompatActivity {
                     }
                 });
 
+        Observable.just(appDetailsManager.getTheme())
+                   .subscribeOn(Schedulers.io())
+                   .observeOn(AndroidSchedulers.mainThread())
+                   .subscribe(theme -> binding.tvThemeValue.setText(theme));
+
 
         Observable.zip(
                         Observable.just(appDetailsManager.getCategory()),
@@ -134,10 +139,9 @@ public class AppDetailsActivity extends AppCompatActivity {
                         Observable.just(appDetailsManager.getUpdatedDate()),
                         Observable.just(packageInfo.packageName),
                         Observable.just(appDetailsManager.getMainClass()),
-                        Observable.just(appDetailsManager.getTheme()),
                         (category, minSdk, targetSdk, installSource,
-                         installDt, updatedDt, packageName, mainClass, theme) -> new AppMetadata(category, minSdk, targetSdk, installDt, updatedDt,
-                                installSource, packageName, mainClass, theme)
+                         installDt, updatedDt, packageName, mainClass) -> new AppMetadata(category, minSdk, targetSdk, installDt, updatedDt,
+                                installSource, packageName, mainClass)
                 ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(appMetadata -> {
@@ -149,7 +153,6 @@ public class AppDetailsActivity extends AppCompatActivity {
                     binding.tvUpdatedDtValue.setText(appMetadata.getUpdatedDt());
                     binding.tvPackageNameValue.setText(appMetadata.getPackageName());
                     binding.tvMainClassValue.setText(appMetadata.getMainClass());
-                    binding.tvThemeValue.setText(appMetadata.getTheme());
                 });
 
         Observable.fromCallable(() -> appDetailsManager.getIcon(isApk, apkAbsolutePath))
@@ -166,12 +169,14 @@ public class AppDetailsActivity extends AppCompatActivity {
                         Observable.just(appDetailsManager.getProviders()),
                         Observable.just(appDetailsManager.getFeatures()),
                         Observable.just(appDetailsManager.getSignatures()),
+                        Observable.just(AppDetailsManager.findFontFiles(packageInfo.applicationInfo.publicSourceDir)),
 
-                        (permissions, activities, receivers, services, providers, features, signatureMap) -> {
+                        (permissions, activities, receivers, services, providers, features, signatureMap, fonts) -> {
                             List<AppDetailItem> appDetailItems = new ArrayList<>();
                             String backupAgent = packageInfo.applicationInfo.backupAgentName;
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_shield_24, "Permissions", permissions));
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_touch_app_24, "Activities", activities));
+                            appDetailItems.add(new AppDetailItem(R.drawable.round_fonts_24, "Fonts", fonts));
                             appDetailItems.add(new AppDetailItem(R.drawable.round_cell_tower_24, "Broadcast receivers", receivers));
                             appDetailItems.add(new AppDetailItem(R.drawable.round__services_24, "Services", services));
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_extension_24, "Providers", providers));
@@ -188,12 +193,10 @@ public class AppDetailsActivity extends AppCompatActivity {
                             return appDetailItems;
                         })
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(appDetailItemList -> {
-                    appDetailItems.clear();
+                    appDetailItems.clear();                 // Still In Background thread use runOnUiThread method for UI stuffs.
                     appDetailItems.addAll(appDetailItemList);
-                    adapter.notifyDataSetChanged();
-                    System.out.println("Size : " + adapter.getItemCount());
+                    runOnUiThread(() -> adapter.notifyDataSetChanged());
                 });
 
     }
