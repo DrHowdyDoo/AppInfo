@@ -54,6 +54,7 @@ public class AppInfoManager {
                 .flatMap(appInfo -> Observable.fromCallable(() -> getAppInfo(appInfo)).subscribeOn(Schedulers.io()))
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(appFragment::hideProgressIndicators)
                 .subscribe(appInfoList -> {
                     if (appFragment.sortedState == Constants.SORT_BY_LAST_USED) {
                         addLastUsedTimeToAppInfo(appInfoList, appFragment);

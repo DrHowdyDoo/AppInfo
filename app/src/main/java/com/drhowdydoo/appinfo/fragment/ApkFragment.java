@@ -81,6 +81,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
                 }
             }
         }
+        binding.notFound.setVisibility(View.GONE);
         mainActivity.onFilter(getFilterText());
         mainActivity.onSort(getSortText());
 
@@ -95,12 +96,12 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     }
 
     public void setData(List<ApkInfo> apkInfoList, boolean dispatch) {
+        binding.notFound.setVisibility(apkInfoList.isEmpty() ? View.VISIBLE : View.GONE);
         apkListViewModel.setApkInfoList(apkInfoList);
         if (dispatch) dispatchData();
     }
 
     private void dispatchData() {
-        binding.swipeRefreshLayout.setRefreshing(false);
         binding.progressGroup.setVisibility(View.GONE);
         List<ApkInfo> filteredList = getFilteredList(apkListViewModel.getFilterState());
         filteredList.sort(new ApkInfoComparator(apkListViewModel.getSortState()));
@@ -115,6 +116,8 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         binding.progressGroup.setVisibility(View.GONE);
     }
 
+
+
     private String getSortText() {
         if (apkListViewModel.getSortState() == Constants.SORT_BY_NAME) return "Name";
         else return "Size";
@@ -122,11 +125,13 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
 
     private String getFilterText() {
         int filter = apkListViewModel.getFilterState();
+        int count = adapter.getItemCount();
+        String suffix = count > 0 ? "(" + count + ")" : "";
         if (filter == Constants.FILTER_INSTALLED_APKS)
-            return "Installed (" + adapter.getItemCount() + ")";
+            return "Installed " + suffix;
         else if (filter == Constants.FILTER_NOT_INSTALLED_APKS)
-            return "Not Installed (" + adapter.getItemCount() + ")";
-        else return "All Apks (" + adapter.getItemCount() + ")";
+            return "Not Installed " + suffix;
+        else return "All Apks " + suffix;
     }
 
 

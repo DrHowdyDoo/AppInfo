@@ -67,6 +67,7 @@ public class AppFragment extends Fragment {
         filterState = appListViewModel.getFilterState();
 
         if (appListViewModel.getSavedAppInfoList().isEmpty()) {
+            binding.notFound.setVisibility(View.GONE);
             binding.progressGroup.setVisibility(View.VISIBLE);
             appInfoManager.getAllApps(this);
         } else {
@@ -99,6 +100,7 @@ public class AppFragment extends Fragment {
 
     @SuppressLint("DefaultLocale")
     public void setData(List<AppInfo> appInfoList, boolean dispatch) {
+        binding.notFound.setVisibility(appInfoList.isEmpty() ? View.VISIBLE : View.GONE);
         appListViewModel.setAppInfoList(appInfoList);
         if (dispatch) dispatchData();
     }
@@ -113,6 +115,11 @@ public class AppFragment extends Fragment {
         onSortFilterListener.onSort(getSortButtonText(sortedState));
         onSortFilterListener.onFilter(getFilterButtonText(filterState, filteredList.size()));
         adapter.setData(filteredList);
+    }
+
+    public void hideProgressIndicators(){
+        binding.progressGroup.setVisibility(View.GONE);
+        binding.swipeRefreshLayout.setRefreshing(false);
     }
 
     @SuppressLint("DefaultLocale")
@@ -174,11 +181,11 @@ public class AppFragment extends Fragment {
     private String getFilterButtonText(int filterState, int size) {
         switch (filterState) {
             case Constants.NO_FILTER:
-                return String.format("%s (%d) ", "All Apps", size);
+                return size > 0 ? String.format("%s (%d) ", "All Apps", size) : "All Apps";
             case Constants.FILTER_SYSTEM_APPS:
-                return String.format("%s (%d) ", "System Apps", size);
+                return size > 0 ? String.format("%s (%d) ", "System Apps", size) : "System Apps";
             case Constants.FILTER_NON_SYSTEM_APPS:
-                return String.format("%s (%d) ", "Non System Apps", size);
+                return size > 0 ? String.format("%s (%d) ", "Non System Apps", size) : "Non System Apps";
         }
 
         return "Filter";

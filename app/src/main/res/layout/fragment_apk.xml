@@ -27,7 +27,7 @@
         android:id="@+id/tvStoragePermission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="App needs Manage all files permission \n to scan for all apks"
+        android:text="App needs Manage all files permission \n to search for all apks"
         android:gravity="center"
         android:drawablePadding="8dp"
         android:textAppearance="?textAppearanceTitleMedium"
@@ -60,7 +60,7 @@
         android:id="@+id/tvProgressText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/scanning_for_apks"
+        android:text="@string/searching_for_apks"
         app:layout_constraintVertical_bias="0.28"
         android:textAppearance="?textAppearanceLabelLarge"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -104,5 +104,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_apks_found"
+        android:fontFamily="@font/poppins_semibold"
+        android:drawablePadding="8dp"
+        android:visibility="gone"
+        android:gravity="center"
+        tools:visibility="visible"
+        android:textAppearance="?textAppearanceLabelLarge"
+        app:layout_constraintVertical_bias="0.2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:drawableTopCompat="@drawable/illustration_not_found" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
