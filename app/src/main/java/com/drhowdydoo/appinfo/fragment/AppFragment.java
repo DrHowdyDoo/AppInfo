@@ -104,7 +104,6 @@ public class AppFragment extends Fragment {
     }
 
     public void dispatchData() {
-        binding.swipeRefreshLayout.setRefreshing(false);
         binding.progressGroup.setVisibility(View.GONE);
         List<AppInfo> filteredList = getFilteredList(filterState);
         AppInfoComparator appInfoComparator = new AppInfoComparator(sortedState);

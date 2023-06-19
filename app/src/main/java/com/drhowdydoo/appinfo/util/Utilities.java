@@ -7,11 +7,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Utilities {
 
-    public static Map<String, String> sourcePackageMap = Map.ofEntries(
+    public static final Map<String, String> sourcePackageMap = Map.ofEntries(
             Map.entry("com.android.vending", "Google PlayStore"),
             Map.entry("com.amazon.venezia", "Amazon App Store"),
             Map.entry("com.android.chrome", "Google Chrome"),
@@ -30,7 +33,7 @@ public class Utilities {
             Map.entry("debug", "Debug Build")
     );
 
-    public static Map<Integer, String> androidVersions = Map.ofEntries(
+    public static final Map<Integer, String> androidVersions = Map.ofEntries(
             Map.entry(Build.VERSION_CODES.BASE, "Android 1.0/1.1"),
             Map.entry(Build.VERSION_CODES.CUPCAKE, "Android 1.5 Cupcake"),
             Map.entry(Build.VERSION_CODES.DONUT, "Android 1.6 Donut"),
@@ -61,6 +64,23 @@ public class Utilities {
             Map.entry(Build.VERSION_CODES.TIRAMISU, "Android 13 TIRAMISU"),
             Map.entry(34, "Android 14 UpsideDownCake")
     );
+
+
+    public static Set<String> skipDirectoriesSet = new HashSet<>(Arrays.asList("data",
+            "Recordings",
+            "Audiobooks",
+            "Notifications",
+            "Alarms",
+            "Ringtones",
+            "Podcasts",
+            "Music",
+            "DCIM",
+            "Movies",
+            "Pictures",
+            "Subtitles",
+            "DigiLocker",
+            "LMC",
+            "Wallpapers"));
 
     public static int dpToPx(Context context, float dp) {
         float density = context.getResources().getDisplayMetrics().density;

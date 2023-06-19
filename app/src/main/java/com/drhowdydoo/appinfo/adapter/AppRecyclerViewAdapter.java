@@ -149,11 +149,11 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
             Intent intent = new Intent(context, AppDetailsActivity.class);
             AppInfo appInfo = appInfoList.get(getBindingAdapterPosition());
             intent.putExtra("isApk", false);
-            intent.putExtra("appInfo", appInfo.getAppInfo());
             intent.putExtra("appName", appInfo.getAppName());
             intent.putExtra("appVersion", appInfo.getAppVersion());
             intent.putExtra("appSize", appInfo.getSize());
             intent.putExtra("isSplitApp", appInfo.isSplitApp());
+            intent.putExtra("packageName", appInfo.getAppInfo().packageName);
             final View transitionView = imgAppIcon;
             ActivityOptions options = ActivityOptions
                     .makeSceneTransitionAnimation((Activity) context, transitionView, "transitionAppIcon");

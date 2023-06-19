@@ -16,7 +16,7 @@ public class StringCount {
     }
 
     public String getText() {
-        if (text == null || text.isEmpty()) return "NOT SPECIFIED";
+        if (text == null || text.isEmpty()) return "NONE";
         return text;
     }
 

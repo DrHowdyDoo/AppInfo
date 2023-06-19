@@ -71,10 +71,10 @@ public class AppDetailsManager {
         return className != null ? className : "None";
     }
 
-    public String getTheme(){
+    public String getTheme() {
         String theme = "NOT FOUND 😅";
         try {
-            theme =  context.getPackageManager().getResourcesForApplication(packageInfo.applicationInfo).getResourceEntryName(packageInfo.applicationInfo.theme);
+            theme = context.getPackageManager().getResourcesForApplication(packageInfo.applicationInfo).getResourceEntryName(packageInfo.applicationInfo.theme);
             if (theme == null || theme.isEmpty()) return "NOT FOUND 😅";
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,7 +142,7 @@ public class AppDetailsManager {
 
     public StringCount getPermissions() {
         String[] requestedPermissions = packageInfo.requestedPermissions;
-        if (requestedPermissions == null) return new StringCount("N/A");
+        if (requestedPermissions == null) return new StringCount("NO PERMISSIONS REQUESTED");
         StringBuilder permissions = new StringBuilder();
         for (String requestedPermission : requestedPermissions) {
             permissions.append(requestedPermission).append("\n");
@@ -201,7 +201,8 @@ public class AppDetailsManager {
     }
 
     public String getDataDirPath() {
-        return packageInfo.applicationInfo.dataDir;
+        String path = packageInfo.applicationInfo.dataDir;
+        return path != null ? path : "NOT FOUND";
     }
 
     public String getSourceDirPath() {
@@ -209,7 +210,8 @@ public class AppDetailsManager {
     }
 
     public String getNativeLibraryPath() {
-        return packageInfo.applicationInfo.nativeLibraryDir;
+        String path = packageInfo.applicationInfo.nativeLibraryDir;
+        return path != null ? path : "NOT FOUND";
     }
 
     public Optional<Map<String, String>> getSignatures() {
@@ -250,9 +252,9 @@ public class AppDetailsManager {
                 String sha256Hash = hashToHex(sha256.digest());
 
                 signingKeys.append("Hash : ").append(hashKey).append("\n")
-                           .append("MD5 : ").append(md5Hash).append("\n")
-                           .append("SHA1 : ").append(sha1Hash).append("\n")
-                           .append("SHA256 : ").append(sha256Hash).append("\n\n");
+                        .append("MD5 : ").append(md5Hash).append("\n")
+                        .append("SHA1 : ").append(sha1Hash).append("\n")
+                        .append("SHA256 : ").append(sha256Hash).append("\n\n");
 
                 CertificateFactory certFactory = CertificateFactory.getInstance("X509");
                 X509Certificate x509Cert = (X509Certificate) certFactory.generateCertificate(certStream);

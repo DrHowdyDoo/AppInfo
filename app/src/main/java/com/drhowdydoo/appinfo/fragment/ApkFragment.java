@@ -110,6 +110,11 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         mainActivity.onSort(getSortText());
     }
 
+    public void hideProgressBar() {
+        binding.swipeRefreshLayout.setRefreshing(false);
+        binding.progressGroup.setVisibility(View.GONE);
+    }
+
     private String getSortText() {
         if (apkListViewModel.getSortState() == Constants.SORT_BY_NAME) return "Name";
         else return "Size";

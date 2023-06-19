@@ -2,7 +2,6 @@ package com.drhowdydoo.appinfo;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -15,8 +14,6 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.OptIn;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,17 +22,13 @@ import com.drhowdydoo.appinfo.adapter.AppDetailsListAdapter;
 import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.model.AppMetadata;
-import com.drhowdydoo.appinfo.model.StringCount;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +38,19 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
 public class AppDetailsActivity extends AppCompatActivity {
 
+    private static int packageManagerFlags = PackageManager.GET_PERMISSIONS |
+            PackageManager.GET_RECEIVERS |
+            PackageManager.GET_PROVIDERS |
+            PackageManager.GET_ACTIVITIES |
+            PackageManager.GET_SERVICES |
+            PackageManager.GET_META_DATA |
+            PackageManager.GET_SIGNATURES;
     private ActivityAppDetailsBinding binding;
     private AppDetailsManager appDetailsManager;
     private boolean isApk = false;
-    private boolean isInstalled = true;
-    private String apkPath = "";
     private String apkAbsolutePath = "";
     private List<AppDetailItem> appDetailItems = new ArrayList<>();
     private AppDetailsListAdapter adapter;
@@ -66,23 +64,18 @@ public class AppDetailsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         Intent intent = getIntent();
         isApk = intent.getBooleanExtra("isApk", false);
-        if (isApk) {
-            PackageInfo apkInfo = intent.getParcelableExtra("apkInfo");
-            appDetailsManager = new AppDetailsManager(this, apkInfo);
-            apkPath = intent.getStringExtra("apkPath");
-            apkAbsolutePath = intent.getStringExtra("apkAbsolutePath");
-            isInstalled = intent.getBooleanExtra("isInstalled", true);
-            init(apkInfo);
-        } else {
-            ApplicationInfo appInfo = intent.getParcelableExtra("appInfo");
-            Observable.fromCallable(() -> getPackageInfoByAppInfo(appInfo))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(packageInfo -> {
-                        packageInfo.ifPresent(value -> appDetailsManager = new AppDetailsManager(this, value));
-                        packageInfo.ifPresent(this::init);
-                    });
-        }
+        apkAbsolutePath = intent.getStringExtra("apkAbsolutePath");
+        boolean isInstalled = intent.getBooleanExtra("isInstalled", true);
+        String packageName = intent.getStringExtra("packageName");
+        String identifier = isApk ? apkAbsolutePath : packageName;
+        Observable.just(getPackageInfo(identifier, isApk))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(packageInfo -> {
+                    packageInfo.ifPresent(value -> appDetailsManager = new AppDetailsManager(this, value));
+                    packageInfo.ifPresent(this::init);
+                });
+
 
         //Initial conditional setups
         handleToolbarContentAlignment();
@@ -99,28 +92,19 @@ public class AppDetailsActivity extends AppCompatActivity {
     }
 
 
-    private Optional<PackageInfo> getPackageInfoByAppInfo(ApplicationInfo appInfo) {
+    private Optional<PackageInfo> getPackageInfo(String identifier, boolean isApk) {
         try {
-            int flags = PackageManager.GET_PERMISSIONS |
-                    PackageManager.GET_RECEIVERS |
-                    PackageManager.GET_PROVIDERS |
-                    PackageManager.GET_ACTIVITIES |
-                    PackageManager.GET_SERVICES |
-                    PackageManager.GET_META_DATA |
-                    PackageManager.GET_SIGNATURES;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                flags |= PackageManager.GET_SIGNING_CERTIFICATES;
-            }
-            return Optional.ofNullable(getPackageManager().getPackageInfo(appInfo.packageName, flags));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                packageManagerFlags |= PackageManager.GET_SIGNING_CERTIFICATES;
+            if (isApk)
+                return Optional.ofNullable(getPackageManager().getPackageArchiveInfo(identifier, packageManagerFlags));
+            return Optional.ofNullable(getPackageManager().getPackageInfo(identifier, packageManagerFlags));
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
     @SuppressLint({"CheckResult", "SetTextI18n", "NotifyDataSetChanged"})
-    @OptIn(markerClass = ExperimentalBadgeUtils.class)
     private void init(PackageInfo packageInfo) {
 
         setUpClickListeners(packageInfo);
@@ -128,32 +112,32 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding.tvVersion.setText("v" + getIntent().getStringExtra("appVersion"));
 
         Observable.just(appDetailsManager.getColors())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(color -> {
-                            String primaryColor = "#" + Integer.toHexString(color.getColorPrimary());
-                            String secondaryColor = "#" + Integer.toHexString(color.getColorSecondary());
-                            if (primaryColor.equalsIgnoreCase("#ffffffff") && secondaryColor.equalsIgnoreCase("#ffffffff")) {
-                                binding.tvColorValue.setText("NOT FOUND 😅");
-                            } else {
-                                binding.tvColorValue.setText(primaryColor + "\n" + secondaryColor);
-                            }
-                        });
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(color -> {
+                    String primaryColor = "#" + Integer.toHexString(color.getColorPrimary());
+                    String secondaryColor = "#" + Integer.toHexString(color.getColorSecondary());
+                    if (primaryColor.equalsIgnoreCase("#ffffffff") && secondaryColor.equalsIgnoreCase("#ffffffff")) {
+                        binding.tvColorValue.setText("NOT FOUND 😅");
+                    } else {
+                        binding.tvColorValue.setText(primaryColor + "\n" + secondaryColor);
+                    }
+                });
 
 
         Observable.zip(
-                Observable.just(appDetailsManager.getCategory()),
-                Observable.just(appDetailsManager.getMinSdk()),
-                Observable.just(appDetailsManager.getTargetSdk()),
-                Observable.just(appDetailsManager.getInstallSource()),
-                Observable.just(appDetailsManager.getInstalledDate()),
-                Observable.just(appDetailsManager.getUpdatedDate()),
-                Observable.just(packageInfo.packageName),
-                Observable.just(appDetailsManager.getMainClass()),
-                Observable.just(appDetailsManager.getTheme()),
-                (category, minSdk, targetSdk, installSource,
-                 installDt, updatedDt, packageName, mainClass, theme) -> new AppMetadata(category, minSdk, targetSdk, installDt, updatedDt,
-                                                                                    installSource, packageName, mainClass,theme)
+                        Observable.just(appDetailsManager.getCategory()),
+                        Observable.just(appDetailsManager.getMinSdk()),
+                        Observable.just(appDetailsManager.getTargetSdk()),
+                        Observable.just(appDetailsManager.getInstallSource()),
+                        Observable.just(appDetailsManager.getInstalledDate()),
+                        Observable.just(appDetailsManager.getUpdatedDate()),
+                        Observable.just(packageInfo.packageName),
+                        Observable.just(appDetailsManager.getMainClass()),
+                        Observable.just(appDetailsManager.getTheme()),
+                        (category, minSdk, targetSdk, installSource,
+                         installDt, updatedDt, packageName, mainClass, theme) -> new AppMetadata(category, minSdk, targetSdk, installDt, updatedDt,
+                                installSource, packageName, mainClass, theme)
                 ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(appMetadata -> {
@@ -183,15 +167,16 @@ public class AppDetailsActivity extends AppCompatActivity {
                         Observable.just(appDetailsManager.getFeatures()),
                         Observable.just(appDetailsManager.getSignatures()),
 
-                        (permissions, activities,receivers, services, providers, features, signatureMap) -> {
+                        (permissions, activities, receivers, services, providers, features, signatureMap) -> {
                             List<AppDetailItem> appDetailItems = new ArrayList<>();
+                            String backupAgent = packageInfo.applicationInfo.backupAgentName;
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_shield_24, "Permissions", permissions));
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_touch_app_24, "Activities", activities));
                             appDetailItems.add(new AppDetailItem(R.drawable.round_cell_tower_24, "Broadcast receivers", receivers));
                             appDetailItems.add(new AppDetailItem(R.drawable.round__services_24, "Services", services));
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_extension_24, "Providers", providers));
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_stars_24, "Features", features));
-                            appDetailItems.add(new AppDetailItem(R.drawable.outline_backup_24, "Backup agent name", packageInfo.applicationInfo.backupAgentName));
+                            appDetailItems.add(new AppDetailItem(R.drawable.outline_backup_24, "Backup agent name", backupAgent != null ? backupAgent : "NOT SPECIFIED"));
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_folder_24, "Data dir path", appDetailsManager.getDataDirPath()));
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_source_24, "Source dir path", appDetailsManager.getSourceDirPath()));
                             appDetailItems.add(new AppDetailItem(R.drawable.outline_folder_shared_24, "Native library path", appDetailsManager.getNativeLibraryPath()));
@@ -253,11 +238,11 @@ public class AppDetailsActivity extends AppCompatActivity {
             String[] splitSourceDirs = appInfo.splitPublicSourceDirs;
             if (splitSourceDirs != null && splitSourceDirs.length > 0) {
                 for (String splitSourceDir : splitSourceDirs) {
-                    extractApkFileAtPath(splitSourceDir,destinationAppFolder);
+                    extractApkFileAtPath(splitSourceDir, destinationAppFolder);
                 }
             }
 
-            extractApkFileAtPath(sourceDir,destinationAppFolder);
+            extractApkFileAtPath(sourceDir, destinationAppFolder);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -280,7 +265,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                 || Environment.isExternalStorageManager()) return true;
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
             return false;
         }
 
