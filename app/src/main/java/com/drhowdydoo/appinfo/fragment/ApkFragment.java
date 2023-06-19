@@ -21,6 +21,7 @@ import com.drhowdydoo.appinfo.model.ApkInfo;
 import com.drhowdydoo.appinfo.util.ApkInfoComparator;
 import com.drhowdydoo.appinfo.util.ApkInfoManager;
 import com.drhowdydoo.appinfo.util.Constants;
+import com.drhowdydoo.appinfo.util.Utilities;
 import com.drhowdydoo.appinfo.viewmodel.ApkListViewModel;
 
 import java.util.List;
@@ -75,13 +76,14 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (Environment.isExternalStorageManager()) {
                 binding.groupStoragePermission.setVisibility(View.GONE);
-                if (apkListViewModel.getSavedApkInfoList().isEmpty()) {
+                if (apkListViewModel.getSavedApkInfoList().isEmpty() && Utilities.shouldSearchApks) {
+                    Utilities.shouldSearchApks = false;
                     binding.progressGroup.setVisibility(View.VISIBLE);
+                    binding.notFound.setVisibility(View.GONE);
                     apkInfoManager.getAllApks(Environment.getExternalStorageDirectory(), this);
                 }
             }
         }
-        binding.notFound.setVisibility(View.GONE);
         mainActivity.onFilter(getFilterText());
         mainActivity.onSort(getSortText());
 

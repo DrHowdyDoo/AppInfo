@@ -66,7 +66,7 @@ public class Utilities {
     );
 
 
-    public static Set<String> skipDirectoriesSet = new HashSet<>(Arrays.asList("data",
+    public final static Set<String> skipDirectoriesSet = new HashSet<>(Arrays.asList("data",
             "Recordings",
             "Audiobooks",
             "Notifications",
@@ -81,6 +81,9 @@ public class Utilities {
             "DigiLocker",
             "LMC",
             "Wallpapers"));
+
+
+    public static boolean shouldSearchApks = true;
 
     public static int dpToPx(Context context, float dp) {
         float density = context.getResources().getDisplayMetrics().density;

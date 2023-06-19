@@ -209,6 +209,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                 return;
             }
             binding.btnExtractApk.setEnabled(false);
+            Utilities.shouldSearchApks = true;
             Observable.fromAction(() -> {
                         runOnUiThread(() -> binding.progressBar.setVisibility(View.VISIBLE));
                         extractApk(packageInfo);
