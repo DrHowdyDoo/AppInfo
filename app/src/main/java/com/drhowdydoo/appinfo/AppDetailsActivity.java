@@ -253,7 +253,8 @@ public class AppDetailsActivity extends AppCompatActivity {
     private void extractApkFileAtPath(String apkFilePath, File destinationAppFolder) {
         try {
             File sourceFile = new File(apkFilePath);
-            File destinationFile = new File(destinationAppFolder, sourceFile.getName());
+            String appName = sourceFile.getName().toLowerCase().startsWith("base") ? destinationAppFolder.getName() + ".apk" : sourceFile.getName();
+            File destinationFile = new File(destinationAppFolder, appName);
             Utilities.copyFile(sourceFile, destinationFile);
         } catch (IOException e) {
             e.printStackTrace();
