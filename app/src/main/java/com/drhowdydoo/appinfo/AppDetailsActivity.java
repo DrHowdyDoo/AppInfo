@@ -36,6 +36,7 @@ import java.util.Optional;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
@@ -55,28 +56,32 @@ public class AppDetailsActivity extends AppCompatActivity {
     private List<AppDetailItem> appDetailItems = new ArrayList<>();
     private AppDetailsListAdapter adapter;
 
-    @SuppressLint("CheckResult")
+    @SuppressLint({"CheckResult", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("onCreate : " + System.currentTimeMillis());
         super.onCreate(savedInstanceState);
         DynamicColors.applyToActivityIfAvailable(this);
         binding = ActivityAppDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Intent intent = getIntent();
+        binding.materialToolBar.setTitle(intent.getStringExtra("appName"));
+        binding.tvVersion.setText("v" + intent.getStringExtra("appVersion"));
         isApk = intent.getBooleanExtra("isApk", false);
         apkAbsolutePath = intent.getStringExtra("apkAbsolutePath");
         boolean isInstalled = intent.getBooleanExtra("isInstalled", true);
         String packageName = intent.getStringExtra("packageName");
         String identifier = isApk ? apkAbsolutePath : packageName;
+        System.out.println("onObservable : " + System.currentTimeMillis());
         Observable.just(getPackageInfo(identifier, isApk))
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(packageInfo -> {
                     packageInfo.ifPresent(value -> appDetailsManager = new AppDetailsManager(this, value));
                     packageInfo.ifPresent(this::init);
+                    runOnUiThread(() -> packageInfo.ifPresent(this::setUpClickListeners));
                 });
 
-
+        System.out.println("afterObservable : " + System.currentTimeMillis());
         //Initial conditional setups
         handleToolbarContentAlignment();
         if (!isInstalled) {
@@ -89,6 +94,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding.recyclerView.setHasFixedSize(false);
         binding.recyclerView.setAdapter(adapter);
 
+        System.out.println("onCreateCompletes : " + System.currentTimeMillis());
     }
 
 
@@ -105,11 +111,15 @@ public class AppDetailsActivity extends AppCompatActivity {
     }
 
     @SuppressLint({"CheckResult", "SetTextI18n", "NotifyDataSetChanged"})
+    @SuppressWarnings("CheckResult")
     private void init(PackageInfo packageInfo) {
 
-        setUpClickListeners(packageInfo);
-        binding.materialToolBar.setTitle(getIntent().getStringExtra("appName"));
-        binding.tvVersion.setText("v" + getIntent().getStringExtra("appVersion"));
+        System.out.println("inti : " + System.currentTimeMillis());
+
+        Disposable iconDisposable = Observable.just(appDetailsManager.getIcon(isApk, apkAbsolutePath))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(icon -> binding.imgIcon.setImageDrawable(icon));
 
         Observable.just(appDetailsManager.getColors())
                 .subscribeOn(Schedulers.io())
@@ -130,15 +140,16 @@ public class AppDetailsActivity extends AppCompatActivity {
                    .subscribe(theme -> binding.tvThemeValue.setText(theme));
 
 
+        System.out.println("zip grid : " + System.currentTimeMillis());
         Observable.zip(
-                        Observable.just(appDetailsManager.getCategory()),
-                        Observable.just(appDetailsManager.getMinSdk()),
-                        Observable.just(appDetailsManager.getTargetSdk()),
-                        Observable.just(appDetailsManager.getInstallSource()),
-                        Observable.just(appDetailsManager.getInstalledDate()),
-                        Observable.just(appDetailsManager.getUpdatedDate()),
-                        Observable.just(packageInfo.packageName),
-                        Observable.just(appDetailsManager.getMainClass()),
+                        Observable.just(appDetailsManager.getCategory()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getMinSdk()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getTargetSdk()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getInstallSource()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getInstalledDate()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getUpdatedDate()).subscribeOn(Schedulers.io()),
+                        Observable.just(packageInfo.packageName).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getMainClass()).subscribeOn(Schedulers.io()),
                         (category, minSdk, targetSdk, installSource,
                          installDt, updatedDt, packageName, mainClass) -> new AppMetadata(category, minSdk, targetSdk, installDt, updatedDt,
                                 installSource, packageName, mainClass)
@@ -155,22 +166,15 @@ public class AppDetailsActivity extends AppCompatActivity {
                     binding.tvMainClassValue.setText(appMetadata.getMainClass());
                 });
 
-        Observable.fromCallable(() -> appDetailsManager.getIcon(isApk, apkAbsolutePath))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(icon -> {
-                    binding.imgIcon.setImageDrawable(icon);
-                });
-
-        Observable.zip(Observable.just(appDetailsManager.getPermissions()),
-                        Observable.just(appDetailsManager.getActivities()),
-                        Observable.just(appDetailsManager.getBroadcastReceivers()),
-                        Observable.just(appDetailsManager.getServices()),
-                        Observable.just(appDetailsManager.getProviders()),
-                        Observable.just(appDetailsManager.getFeatures()),
-                        Observable.just(appDetailsManager.getSignatures()),
-                        Observable.just(AppDetailsManager.findFontFiles(packageInfo.applicationInfo.publicSourceDir)),
-
+        System.out.println("zip list : " + System.currentTimeMillis());
+        Observable.zip(Observable.just(appDetailsManager.getPermissions()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getActivities()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getBroadcastReceivers()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getServices()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getProviders()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getFeatures()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getSignatures()).subscribeOn(Schedulers.io()),
+                        Observable.just(AppDetailsManager.findFontFiles(packageInfo.applicationInfo.publicSourceDir)).subscribeOn(Schedulers.newThread()),
                         (permissions, activities, receivers, services, providers, features, signatureMap, fonts) -> {
                             List<AppDetailItem> appDetailItems = new ArrayList<>();
                             String backupAgent = packageInfo.applicationInfo.backupAgentName;
@@ -198,6 +202,8 @@ public class AppDetailsActivity extends AppCompatActivity {
                     appDetailItems.addAll(appDetailItemList);
                     runOnUiThread(() -> adapter.notifyDataSetChanged());
                 });
+
+        System.out.println("init end : " + System.currentTimeMillis());
 
     }
 

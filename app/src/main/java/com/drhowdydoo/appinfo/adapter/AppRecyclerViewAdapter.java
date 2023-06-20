@@ -146,6 +146,7 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
 
         @Override
         public void onClick(View v) {
+            System.out.println("onClick : " + System.currentTimeMillis());
             Intent intent = new Intent(context, AppDetailsActivity.class);
             AppInfo appInfo = appInfoList.get(getBindingAdapterPosition());
             intent.putExtra("isApk", false);
