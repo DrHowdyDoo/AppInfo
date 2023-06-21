@@ -23,6 +23,7 @@ import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.model.AppMetadata;
 import com.drhowdydoo.appinfo.model.StringCount;
+import com.drhowdydoo.appinfo.util.ApkExtractor;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -56,6 +57,7 @@ public class AppDetailsActivity extends AppCompatActivity {
     private String apkAbsolutePath = "";
     private List<AppDetailItem> appDetailItems = new ArrayList<>();
     private AppDetailsListAdapter adapter;
+    private String appName;
 
     @SuppressLint({"CheckResult", "SetTextI18n"})
     @Override
@@ -66,14 +68,15 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding = ActivityAppDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Intent intent = getIntent();
-        binding.materialToolBar.setTitle(intent.getStringExtra("appName"));
+        appName = intent.getStringExtra("appName");
+        binding.materialToolBar.setTitle(appName);
         binding.tvVersion.setText("v" + intent.getStringExtra("appVersion"));
         isApk = intent.getBooleanExtra("isApk", false);
         apkAbsolutePath = intent.getStringExtra("apkAbsolutePath");
         boolean isInstalled = intent.getBooleanExtra("isInstalled", true);
         String packageName = intent.getStringExtra("packageName");
         String identifier = isApk ? apkAbsolutePath : packageName;
-        System.out.println("onObservable : " + System.currentTimeMillis());
+
         Observable.just(getPackageInfo(identifier, isApk))
                 .subscribeOn(Schedulers.io())
                 .subscribe(packageInfo -> {
@@ -82,13 +85,12 @@ public class AppDetailsActivity extends AppCompatActivity {
                     runOnUiThread(() -> packageInfo.ifPresent(this::setUpClickListeners));
                 });
 
-        System.out.println("afterObservable : " + System.currentTimeMillis());
 
         //Initial conditional setups
         handleToolbarContentAlignment();
-        if (!isInstalled) {
-            binding.btnInfo.setEnabled(false);
-        }
+        if (!isInstalled) binding.btnInfo.setEnabled(false);
+        if (isApk) binding.btnExtractApk.setEnabled(false);
+
 
         adapter = new AppDetailsListAdapter(appDetailItems);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -96,7 +98,6 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding.recyclerView.setHasFixedSize(false);
         binding.recyclerView.setAdapter(adapter);
 
-        System.out.println("onCreateCompletes : " + System.currentTimeMillis());
     }
 
 
@@ -116,7 +117,6 @@ public class AppDetailsActivity extends AppCompatActivity {
     @SuppressWarnings("CheckResult")
     private void init(PackageInfo packageInfo) {
 
-        System.out.println("init : " + System.currentTimeMillis());
 
         Disposable iconDisposable = Observable.just(appDetailsManager.getIcon(isApk, apkAbsolutePath))
                 .subscribeOn(Schedulers.io())
@@ -245,8 +245,6 @@ public class AppDetailsActivity extends AppCompatActivity {
                 .subscribeOn(Schedulers.io())
                 .subscribe(appDetailItemList -> runOnUiThread(() -> adapter.notifyItemRangeChanged(11, 2)));
 
-        System.out.println("init end : " + System.currentTimeMillis());
-
     }
 
     private void setUpClickListeners(PackageInfo packageInfo) {
@@ -263,7 +261,7 @@ public class AppDetailsActivity extends AppCompatActivity {
             Utilities.shouldSearchApks = true;
             Observable.fromAction(() -> {
                         runOnUiThread(() -> binding.progressBar.setVisibility(View.VISIBLE));
-                        extractApk(packageInfo);
+                        ApkExtractor.extractApk(appName,packageInfo);
                     })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -276,41 +274,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void extractApk(PackageInfo packageInfo) {
 
-        try {
-            ApplicationInfo appInfo = packageInfo.applicationInfo;
-            String sourceDir = appInfo.publicSourceDir;
-            String apkName = (String) this.getPackageManager().getApplicationLabel(appInfo);
-            File destinationRootFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "AppInfo");
-            File destinationAppFolder = new File(destinationRootFolder, apkName);
-            boolean created = destinationAppFolder.mkdirs();
-
-            // Check if the app has split APKs
-            String[] splitSourceDirs = appInfo.splitPublicSourceDirs;
-            if (splitSourceDirs != null && splitSourceDirs.length > 0) {
-                for (String splitSourceDir : splitSourceDirs) {
-                    extractApkFileAtPath(splitSourceDir, destinationAppFolder);
-                }
-            }
-
-            extractApkFileAtPath(sourceDir, destinationAppFolder);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void extractApkFileAtPath(String apkFilePath, File destinationAppFolder) {
-        try {
-            File sourceFile = new File(apkFilePath);
-            String appName = sourceFile.getName().toLowerCase().startsWith("base") ? destinationAppFolder.getName() + ".apk" : sourceFile.getName();
-            File destinationFile = new File(destinationAppFolder, appName);
-            Utilities.copyFile(sourceFile, destinationFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private boolean checkStoragePermission() {
         if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
