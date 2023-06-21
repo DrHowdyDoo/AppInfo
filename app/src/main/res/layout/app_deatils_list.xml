@@ -65,7 +65,8 @@
                     android:id="@+id/tvValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textIsSelectable="true"
+                    android:clickable="true"
+                    android:focusable="true"
                     tools:text="com.drhowdydoo.appInfo.fragment.AppFragment"
                     android:textAppearance="@style/TextAppearance.App.BodyMedium" />
 
