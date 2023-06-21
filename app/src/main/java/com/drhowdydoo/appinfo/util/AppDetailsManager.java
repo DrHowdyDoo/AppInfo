@@ -62,6 +62,7 @@ public class AppDetailsManager {
             e.printStackTrace();
         }
 
+        if (fontFiles.toString().isBlank()) fontFiles.append("NOT FOUND");
         return new StringCount(fontFiles.toString().trim(), count);
     }
 

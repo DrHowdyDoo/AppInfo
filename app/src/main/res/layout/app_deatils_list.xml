@@ -43,9 +43,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="4dp"
-        android:layout_marginVertical="4dp"
         app:cardCornerRadius="24dp"
         style="?materialCardViewElevatedStyle">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:indeterminate="true"
+            app:trackThickness="20dp"
+            style="@style/Widget.Material3.CircularProgressIndicator.Small"
+            tools:visibility="visible"
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"

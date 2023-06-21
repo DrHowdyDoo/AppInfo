@@ -14,6 +14,7 @@ import com.drhowdydoo.appinfo.databinding.AppDeatilsListBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.List;
 
@@ -40,10 +41,16 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
         holder.tvTitle.setText(appDetail.getTitle());
         holder.tvValue.setText(appDetail.getValue().getText());
 
-        if (position == 2) holder.btnExtractFont.setVisibility(View.VISIBLE);
-        else holder.btnExtractFont.setVisibility(View.GONE);
+        if (position == 2) {
+            if (appDetail.getValue().isValueEmpty()) {
+                holder.progressBar.setVisibility(View.VISIBLE);
+            }else {
+                holder.btnExtractFont.setVisibility(View.VISIBLE);
+                holder.progressBar.setVisibility(View.GONE);
+            }
+        } else holder.btnExtractFont.setVisibility(View.GONE);
 
-        if (appDetail.getValue().isValueEmpty()) holder.btnExtractFont.setVisibility(View.GONE);
+        if (appDetail.getValue().getText().equalsIgnoreCase("not found")) holder.btnExtractFont.setVisibility(View.GONE);
 
         int lineCount = appDetail.getValue().getCount();
         boolean isExpandable = lineCount > Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES;
@@ -85,7 +92,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
         public ImageView icon;
         public TextView tvTitle, tvValue, tvExpandIndicator;
         public MaterialCardView container;
-
+        public CircularProgressIndicator progressBar;
         public Button btnExtractFont;
 
         public ViewHolder(@NonNull AppDeatilsListBinding binding) {
@@ -96,6 +103,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
             tvExpandIndicator = binding.tvExpandIndicator;
             container = binding.listContainer;
             btnExtractFont = binding.btnExtractFont;
+            progressBar = binding.progressBar;
 
         }
     }
