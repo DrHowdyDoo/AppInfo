@@ -3,6 +3,7 @@ package com.drhowdydoo.appinfo.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,8 +40,14 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
         holder.tvTitle.setText(appDetail.getTitle());
         holder.tvValue.setText(appDetail.getValue().getText());
 
+        if (position == 2) holder.btnExtractFont.setVisibility(View.VISIBLE);
+        else holder.btnExtractFont.setVisibility(View.GONE);
+
+        if (appDetail.getValue().isValueEmpty()) holder.btnExtractFont.setVisibility(View.GONE);
+
         int lineCount = appDetail.getValue().getCount();
-        if (lineCount > Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) {
+        boolean isExpandable = lineCount > Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES;
+        if (isExpandable) {
             if (appDetail.isExpanded()) {
                 holder.tvExpandIndicator.setVisibility(View.GONE);
             } else {
@@ -50,8 +57,8 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
         }
 
         holder.tvValue.setOnClickListener(v -> {
-            System.out.println("Clicked");
             boolean isExpanded = appDetail.isExpanded();
+            if (!isExpandable) return;
             if (isExpanded) {
                 holder.tvValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
                 holder.tvExpandIndicator.setVisibility(View.VISIBLE);
@@ -63,6 +70,8 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
             }
             notifyItemChanged(position);
         });
+
+
     }
 
 
@@ -77,6 +86,8 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
         public TextView tvTitle, tvValue, tvExpandIndicator;
         public MaterialCardView container;
 
+        public Button btnExtractFont;
+
         public ViewHolder(@NonNull AppDeatilsListBinding binding) {
             super(binding.getRoot());
             icon = binding.icon;
@@ -84,6 +95,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
             tvValue = binding.tvValue;
             tvExpandIndicator = binding.tvExpandIndicator;
             container = binding.listContainer;
+            btnExtractFont = binding.btnExtractFont;
 
         }
     }

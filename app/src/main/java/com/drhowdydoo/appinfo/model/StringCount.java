@@ -16,8 +16,12 @@ public class StringCount {
     }
 
     public String getText() {
-        if (text == null || text.isEmpty()) return "NONE";
+        if (text == null) return "";
         return text;
+    }
+
+    public boolean isValueEmpty() {
+        return text == null || text.isEmpty();
     }
 
     public void setText(String text) {

@@ -221,6 +221,7 @@ public class AppDetailsManager {
         for (FeatureInfo feature : featureInfos) {
             features.append(feature.name).append("\n");
         }
+        if (features.toString().isBlank()) features.append("NO FEATURES REQUESTED");
         return new StringCount(features.toString().trim(), featureInfos.length);
     }
 

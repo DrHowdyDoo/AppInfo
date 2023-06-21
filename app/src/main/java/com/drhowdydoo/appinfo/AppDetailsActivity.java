@@ -236,6 +236,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         Observable.zip(Observable.just(appDetailsManager.getFeatures()).subscribeOn(Schedulers.io()),
                         Observable.just(appDetailsManager.getSignatures()).subscribeOn(Schedulers.io()),
                         (features, signatureMap) -> {
+                                appDetailItems.get(6).setValue(features);
                             signatureMap.ifPresent(signatures -> {
                                 appDetailItems.get(11).setValue(new StringCount(signatures.get("certificates")));
                                 appDetailItems.get(12).setValue(new StringCount(signatures.get("signing_keys")));
@@ -243,7 +244,10 @@ public class AppDetailsActivity extends AppCompatActivity {
                             return appDetailItems;
                         })
                 .subscribeOn(Schedulers.io())
-                .subscribe(appDetailItemList -> runOnUiThread(() -> adapter.notifyItemRangeChanged(11, 2)));
+                .subscribe(appDetailItemList -> runOnUiThread(() -> {
+                    adapter.notifyItemChanged(6);
+                    adapter.notifyItemRangeChanged(11, 2);
+                }));
 
     }
 

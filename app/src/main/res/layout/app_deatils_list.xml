@@ -81,6 +81,20 @@
                 tools:visibility="visible"
                 android:layout_height="wrap_content" />
 
+            <Button
+                android:id="@+id/btnExtractFont"
+                android:layout_marginTop="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:gravity="center"
+                app:iconPadding="8dp"
+                app:icon="@drawable/round_extract_24"
+                style="?materialIconButtonFilledTonalStyle"
+                android:text="Extract"/>
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
