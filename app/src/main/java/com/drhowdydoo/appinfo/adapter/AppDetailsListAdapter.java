@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.drhowdydoo.appinfo.databinding.AppDeatilsListBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.util.Constants;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
@@ -39,16 +40,17 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
         holder.tvValue.setText(appDetail.getValue().getText());
 
         int lineCount = appDetail.getValue().getCount();
-        if (lineCount <= Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) {
-            holder.tvExpandIndicator.setVisibility(View.GONE);
-        }
-
-        if (!appDetail.isExpanded() && lineCount > Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) {
-            holder.tvValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
+        if (lineCount > Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES) {
+            if (appDetail.isExpanded()) {
+                holder.tvExpandIndicator.setVisibility(View.GONE);
+            } else {
+                holder.tvExpandIndicator.setVisibility(View.VISIBLE);
+                holder.tvValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
+            }
         }
 
         holder.tvValue.setOnClickListener(v -> {
-            System.out.println("Here");
+            System.out.println("Clicked");
             boolean isExpanded = appDetail.isExpanded();
             if (isExpanded) {
                 holder.tvValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
@@ -61,8 +63,8 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
             }
             notifyItemChanged(position);
         });
-
     }
+
 
     @Override
     public int getItemCount() {
@@ -73,6 +75,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
 
         public ImageView icon;
         public TextView tvTitle, tvValue, tvExpandIndicator;
+        public MaterialCardView container;
 
         public ViewHolder(@NonNull AppDeatilsListBinding binding) {
             super(binding.getRoot());
@@ -80,6 +83,8 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
             tvTitle = binding.tvTitle;
             tvValue = binding.tvValue;
             tvExpandIndicator = binding.tvExpandIndicator;
+            container = binding.listContainer;
+
         }
     }
 

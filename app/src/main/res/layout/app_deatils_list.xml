@@ -76,6 +76,8 @@
                 android:layout_width="wrap_content"
                 android:textAppearance="?textAppearanceLabelLarge"
                 android:text="• • • • •"
+                android:visibility="gone"
+                tools:visibility="visible"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>

@@ -29,9 +29,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.zip.ZipEntry;
@@ -45,6 +43,26 @@ public class AppDetailsManager {
     public AppDetailsManager(Context context, PackageInfo packageInfo) {
         this.context = context;
         this.packageInfo = packageInfo;
+    }
+
+    public static StringCount findFontFiles(String apkFilePath) {
+        StringBuilder fontFiles = new StringBuilder();
+        int count = 0;
+        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(apkFilePath))) {
+            ZipEntry entry;
+            while ((entry = zipInputStream.getNextEntry()) != null) {
+                String entryName = entry.getName();
+                if (entryName.toLowerCase().endsWith(".ttf") || entryName.toLowerCase().endsWith(".otf")) {
+                    fontFiles.append(entry).append("\n");
+                    count++;
+                }
+                zipInputStream.closeEntry();
+            }
+        } catch (IOException | NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        return new StringCount(fontFiles.toString().trim(), count);
     }
 
     public Drawable getIcon(boolean isApk, String apkAbsolutePath) {
@@ -108,26 +126,6 @@ public class AppDetailsManager {
         }
 
         return new com.drhowdydoo.appinfo.model.Color(0, 0);
-    }
-
-    public static StringCount findFontFiles(String apkFilePath) {
-        StringBuilder fontFiles = new StringBuilder();
-        int count = 0;
-        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(apkFilePath))) {
-            ZipEntry entry;
-            while ((entry = zipInputStream.getNextEntry()) != null) {
-                String entryName = entry.getName();
-                if (entryName.toLowerCase().endsWith(".ttf") || entryName.toLowerCase().endsWith(".otf")) {
-                    fontFiles.append(entry).append("\n");
-                    count++;
-                }
-                zipInputStream.closeEntry();
-            }
-        } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
-        }
-
-        return new StringCount(fontFiles.toString().trim(), count);
     }
 
     private int[] getAttr(String colorName, int colorId, Resources resources) {

@@ -117,7 +117,7 @@ public class AppFragment extends Fragment {
         adapter.setData(filteredList);
     }
 
-    public void hideProgressIndicators(){
+    public void hideProgressIndicators() {
         binding.progressGroup.setVisibility(View.GONE);
         binding.swipeRefreshLayout.setRefreshing(false);
     }

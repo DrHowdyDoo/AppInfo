@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 
 import androidx.appcompat.content.res.AppCompatResources;
 
@@ -104,7 +103,7 @@ public class ApkInfoManager {
         String apkName = apkFile.getName();
         String apkPath = apkFile.getParent();
         String apkAbsolutePath = apkFile.getAbsolutePath();
-        Drawable apkIcon = AppCompatResources.getDrawable(context,R.drawable.round_android_24);
+        Drawable apkIcon = AppCompatResources.getDrawable(context, R.drawable.round_android_24);
         String apkVersion = "";
         boolean isInstalled = true;
         PackageInfo apkInfo = null;

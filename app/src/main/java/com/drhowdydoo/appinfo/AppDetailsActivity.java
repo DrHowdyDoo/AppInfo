@@ -22,6 +22,7 @@ import com.drhowdydoo.appinfo.adapter.AppDetailsListAdapter;
 import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.model.AppMetadata;
+import com.drhowdydoo.appinfo.model.StringCount;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -82,6 +83,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                 });
 
         System.out.println("afterObservable : " + System.currentTimeMillis());
+
         //Initial conditional setups
         handleToolbarContentAlignment();
         if (!isInstalled) {
@@ -114,7 +116,7 @@ public class AppDetailsActivity extends AppCompatActivity {
     @SuppressWarnings("CheckResult")
     private void init(PackageInfo packageInfo) {
 
-        System.out.println("inti : " + System.currentTimeMillis());
+        System.out.println("init : " + System.currentTimeMillis());
 
         Disposable iconDisposable = Observable.just(appDetailsManager.getIcon(isApk, apkAbsolutePath))
                 .subscribeOn(Schedulers.io())
@@ -135,12 +137,11 @@ public class AppDetailsActivity extends AppCompatActivity {
                 });
 
         Observable.just(appDetailsManager.getTheme())
-                   .subscribeOn(Schedulers.io())
-                   .observeOn(AndroidSchedulers.mainThread())
-                   .subscribe(theme -> binding.tvThemeValue.setText(theme));
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(theme -> binding.tvThemeValue.setText(theme));
 
 
-        System.out.println("zip grid : " + System.currentTimeMillis());
         Observable.zip(
                         Observable.just(appDetailsManager.getCategory()).subscribeOn(Schedulers.io()),
                         Observable.just(appDetailsManager.getMinSdk()).subscribeOn(Schedulers.io()),
@@ -166,42 +167,83 @@ public class AppDetailsActivity extends AppCompatActivity {
                     binding.tvMainClassValue.setText(appMetadata.getMainClass());
                 });
 
-        System.out.println("zip list : " + System.currentTimeMillis());
-        Observable.zip(Observable.just(appDetailsManager.getPermissions()).subscribeOn(Schedulers.io()),
-                        Observable.just(appDetailsManager.getActivities()).subscribeOn(Schedulers.io()),
-                        Observable.just(appDetailsManager.getBroadcastReceivers()).subscribeOn(Schedulers.io()),
-                        Observable.just(appDetailsManager.getServices()).subscribeOn(Schedulers.io()),
-                        Observable.just(appDetailsManager.getProviders()).subscribeOn(Schedulers.io()),
-                        Observable.just(appDetailsManager.getFeatures()).subscribeOn(Schedulers.io()),
-                        Observable.just(appDetailsManager.getSignatures()).subscribeOn(Schedulers.io()),
-                        Observable.just(AppDetailsManager.findFontFiles(packageInfo.applicationInfo.publicSourceDir)).subscribeOn(Schedulers.newThread()),
-                        (permissions, activities, receivers, services, providers, features, signatureMap, fonts) -> {
-                            List<AppDetailItem> appDetailItems = new ArrayList<>();
-                            String backupAgent = packageInfo.applicationInfo.backupAgentName;
-                            appDetailItems.add(new AppDetailItem(R.drawable.outline_shield_24, "Permissions", permissions));
-                            appDetailItems.add(new AppDetailItem(R.drawable.outline_touch_app_24, "Activities", activities));
-                            appDetailItems.add(new AppDetailItem(R.drawable.round_fonts_24, "Fonts", fonts));
-                            appDetailItems.add(new AppDetailItem(R.drawable.round_cell_tower_24, "Broadcast receivers", receivers));
-                            appDetailItems.add(new AppDetailItem(R.drawable.round__services_24, "Services", services));
-                            appDetailItems.add(new AppDetailItem(R.drawable.outline_extension_24, "Providers", providers));
-                            appDetailItems.add(new AppDetailItem(R.drawable.outline_stars_24, "Features", features));
-                            appDetailItems.add(new AppDetailItem(R.drawable.outline_backup_24, "Backup agent name", backupAgent != null ? backupAgent : "NOT SPECIFIED"));
-                            appDetailItems.add(new AppDetailItem(R.drawable.outline_folder_24, "Data dir path", appDetailsManager.getDataDirPath()));
-                            appDetailItems.add(new AppDetailItem(R.drawable.outline_source_24, "Source dir path", appDetailsManager.getSourceDirPath()));
-                            appDetailItems.add(new AppDetailItem(R.drawable.outline_folder_shared_24, "Native library path", appDetailsManager.getNativeLibraryPath()));
+        String backupAgent = packageInfo.applicationInfo.backupAgentName;
+        appDetailItems.add(new AppDetailItem(R.drawable.outline_shield_24, "Permissions", ""));
+        appDetailItems.add(new AppDetailItem(R.drawable.outline_touch_app_24, "Activities", ""));
+        appDetailItems.add(new AppDetailItem(R.drawable.round_fonts_24, "Fonts", ""));
+        appDetailItems.add(new AppDetailItem(R.drawable.round_cell_tower_24, "Broadcast receivers", ""));
+        appDetailItems.add(new AppDetailItem(R.drawable.round__services_24, "Services", ""));
+        appDetailItems.add(new AppDetailItem(R.drawable.outline_extension_24, "Providers", ""));
+        appDetailItems.add(new AppDetailItem(R.drawable.outline_stars_24, "Features", ""));
+        appDetailItems.add(new AppDetailItem(R.drawable.outline_backup_24, "Backup agent name", backupAgent != null ? backupAgent : "NOT SPECIFIED"));
+        appDetailItems.add(new AppDetailItem(R.drawable.outline_folder_24, "Data dir path", appDetailsManager.getDataDirPath()));
+        appDetailItems.add(new AppDetailItem(R.drawable.outline_source_24, "Source dir path", appDetailsManager.getSourceDirPath()));
+        appDetailItems.add(new AppDetailItem(R.drawable.outline_folder_shared_24, "Native library path", appDetailsManager.getNativeLibraryPath()));
+        appDetailItems.add(new AppDetailItem(R.drawable.outline_vpn_key_24, "Signature", ""));
+        appDetailItems.add(new AppDetailItem(R.drawable.round_fingerprint_24, "Certificate fingerprints", ""));
+        runOnUiThread(() -> adapter.notifyDataSetChanged());
 
+
+        Observable.just(appDetailsManager.getPermissions())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(permissions -> {
+                    appDetailItems.get(0).setValue(permissions);
+                    adapter.notifyItemChanged(0);
+                });
+
+        Observable.just(appDetailsManager.getActivities())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(activities -> {
+                    appDetailItems.get(1).setValue(activities);
+                    adapter.notifyItemChanged(1);
+                });
+
+        Observable.just(AppDetailsManager.findFontFiles(packageInfo.applicationInfo.publicSourceDir))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(font -> {
+                    appDetailItems.get(2).setValue(font);
+                    adapter.notifyItemChanged(2);
+                });
+
+        Observable.just(appDetailsManager.getBroadcastReceivers())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(receivers -> {
+                    appDetailItems.get(3).setValue(receivers);
+                    adapter.notifyItemChanged(3);
+                });
+
+        Observable.just(appDetailsManager.getServices())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(services -> {
+                    appDetailItems.get(4).setValue(services);
+                    adapter.notifyItemChanged(4);
+                });
+
+        Observable.just(appDetailsManager.getProviders())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(providers -> {
+                    appDetailItems.get(5).setValue(providers);
+                    adapter.notifyItemChanged(5);
+                });
+
+
+        Observable.zip(Observable.just(appDetailsManager.getFeatures()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getSignatures()).subscribeOn(Schedulers.io()),
+                        (features, signatureMap) -> {
                             signatureMap.ifPresent(signatures -> {
-                                appDetailItems.add(new AppDetailItem(R.drawable.outline_vpn_key_24, "Signature", signatures.get("certificates")));
-                                appDetailItems.add(new AppDetailItem(R.drawable.round_fingerprint_24, "Certificate fingerprints", signatures.get("signing_keys")));
+                                appDetailItems.get(11).setValue(new StringCount(signatures.get("certificates")));
+                                appDetailItems.get(12).setValue(new StringCount(signatures.get("signing_keys")));
                             });
                             return appDetailItems;
                         })
                 .subscribeOn(Schedulers.io())
-                .subscribe(appDetailItemList -> {
-                    appDetailItems.clear();                 // Still In Background thread use runOnUiThread method for UI stuffs.
-                    appDetailItems.addAll(appDetailItemList);
-                    runOnUiThread(() -> adapter.notifyDataSetChanged());
-                });
+                .subscribe(appDetailItemList -> runOnUiThread(() -> adapter.notifyItemRangeChanged(11, 2)));
 
         System.out.println("init end : " + System.currentTimeMillis());
 
@@ -289,9 +331,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                     intent.setData(Uri.parse("package:" + "com.drhowdydoo.appinfo"));
                     startActivity(intent);
                 })
-                .setNegativeButton("Deny", (dialog, which) -> {
-                    dialog.dismiss();
-                })
+                .setNegativeButton("Deny", (dialog, which) -> dialog.dismiss())
                 .show();
         return false;
     }

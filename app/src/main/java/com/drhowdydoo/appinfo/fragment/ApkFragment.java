@@ -119,7 +119,6 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
     private String getSortText() {
         if (apkListViewModel.getSortState() == Constants.SORT_BY_NAME) return "Name";
         else return "Size";
