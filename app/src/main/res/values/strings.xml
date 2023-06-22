@@ -17,4 +17,7 @@
     <string name="app_details">App details</string>
     <string name="no_apks_found">No apks found</string>
     <string name="no_apps_found">No apps found</string>
+    <string name="share_playstore_link">Share playstore link</string>
+    <string name="share">Share</string>
+    <string name="share_apk">Share Apk</string>
 </resources>

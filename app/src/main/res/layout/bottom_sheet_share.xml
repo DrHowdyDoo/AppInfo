@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="24dp">
+
+    <Button
+        android:id="@+id/btnShareLink"
+        style="?materialIconButtonFilledTonalStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="26dp"
+        app:iconSize="32dp"
+        app:icon="@drawable/round_link_24"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvShareLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?textAppearanceLabelLarge"
+        android:layout_marginTop="8dp"
+        android:text="@string/share_playstore_link"
+        app:layout_constraintEnd_toEndOf="@+id/btnShareLink"
+        app:layout_constraintStart_toStartOf="@+id/btnShareLink"
+        app:layout_constraintTop_toBottomOf="@+id/btnShareLink" />
+
+    <Button
+        android:id="@+id/btnShareApk"
+        style="?materialIconButtonFilledTonalStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="32dp"
+        app:iconSize="26dp"
+        app:icon="@drawable/apk_file"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvShareApk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?textAppearanceLabelLarge"
+        android:layout_marginTop="8dp"
+        android:text="@string/share_apk"
+        app:layout_constraintEnd_toEndOf="@+id/btnShareApk"
+        app:layout_constraintStart_toStartOf="@+id/btnShareApk"
+        app:layout_constraintTop_toBottomOf="@+id/btnShareApk" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

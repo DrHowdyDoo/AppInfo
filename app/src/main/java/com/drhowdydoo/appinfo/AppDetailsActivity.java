@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.drhowdydoo.appinfo.adapter.AppDetailsListAdapter;
+import com.drhowdydoo.appinfo.bottomsheet.ShareBottomSheet;
 import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.model.AppMetadata;
@@ -254,6 +255,10 @@ public class AppDetailsActivity extends AppCompatActivity {
     private void setUpClickListeners(PackageInfo packageInfo) {
         binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
         binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
+        binding.btnShare.setOnClickListener(v -> {
+            ShareBottomSheet shareBottomSheet = new ShareBottomSheet();
+            shareBottomSheet.show(getSupportFragmentManager(), "shareBottomSheet");
+        });
         binding.btnExtractApk.setOnClickListener(v -> {
             boolean haveStorageAccess = checkStoragePermission();
             if (!haveStorageAccess) return;
