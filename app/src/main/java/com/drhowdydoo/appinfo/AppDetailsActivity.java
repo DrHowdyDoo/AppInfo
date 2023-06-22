@@ -80,9 +80,17 @@ public class AppDetailsActivity extends AppCompatActivity {
         Observable.just(getPackageInfo(identifier, isApk))
                 .subscribeOn(Schedulers.io())
                 .subscribe(packageInfo -> {
-                    runOnUiThread(() -> packageInfo.ifPresent(this::setUpClickListeners));
-                    packageInfo.ifPresent(value -> appDetailsManager = new AppDetailsManager(this, value));
-                    packageInfo.ifPresent(this::init);
+                    packageInfo.ifPresent(value -> {
+                        runOnUiThread(() -> setUpClickListeners(value));
+                        appDetailsManager = new AppDetailsManager(this, value);
+                        init(value);
+                    });
+                    if (!packageInfo.isPresent()) {
+                        binding.tvPackageNotFound.setVisibility(View.VISIBLE);
+                        binding.nestedScrollview.setVisibility(View.GONE);
+                        binding.appBar.setVisibility(View.GONE);
+                    }
+
                 });
 
 

@@ -105,6 +105,8 @@
             android:paddingVertical="32dp"
             android:paddingHorizontal="16dp"
             android:clipToPadding="false">
+
+
             <Button
                 android:id="@+id/btnInfo"
                 style="?materialIconButtonFilledTonalStyle"
@@ -718,5 +720,19 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/tvPackageNotFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="Package not found \nMaybe app is uninstalled"
+        android:textAppearance="?textAppearanceTitleMedium"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:drawableTint="?colorError"
+        app:drawableTopCompat="@drawable/twotone_error_48" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
