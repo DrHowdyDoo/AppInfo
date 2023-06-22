@@ -3,7 +3,6 @@ package com.drhowdydoo.appinfo;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -31,8 +31,6 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +43,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal"})
 public class AppDetailsActivity extends AppCompatActivity {
 
+    private static String TAG = "AppDetailsActivity";
     private static int packageManagerFlags = PackageManager.GET_PERMISSIONS |
             PackageManager.GET_RECEIVERS |
             PackageManager.GET_PROVIDERS |
@@ -81,9 +80,9 @@ public class AppDetailsActivity extends AppCompatActivity {
         Observable.just(getPackageInfo(identifier, isApk))
                 .subscribeOn(Schedulers.io())
                 .subscribe(packageInfo -> {
+                    runOnUiThread(() -> packageInfo.ifPresent(this::setUpClickListeners));
                     packageInfo.ifPresent(value -> appDetailsManager = new AppDetailsManager(this, value));
                     packageInfo.ifPresent(this::init);
-                    runOnUiThread(() -> packageInfo.ifPresent(this::setUpClickListeners));
                 });
 
 
@@ -106,8 +105,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                 packageManagerFlags |= PackageManager.GET_SIGNING_CERTIFICATES;
-            if (isApk)
-                return Optional.ofNullable(getPackageManager().getPackageArchiveInfo(identifier, packageManagerFlags));
+            if (isApk) return Optional.ofNullable(getPackageManager().getPackageArchiveInfo(identifier, packageManagerFlags));
             return Optional.ofNullable(getPackageManager().getPackageInfo(identifier, packageManagerFlags));
         } catch (PackageManager.NameNotFoundException e) {
             return Optional.empty();
@@ -253,10 +251,11 @@ public class AppDetailsActivity extends AppCompatActivity {
     }
 
     private void setUpClickListeners(PackageInfo packageInfo) {
+        Log.d(TAG, "setUpClickListeners()");
         binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
         binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
         binding.btnShare.setOnClickListener(v -> {
-            ShareBottomSheet shareBottomSheet = new ShareBottomSheet();
+            ShareBottomSheet shareBottomSheet = new ShareBottomSheet(packageInfo.packageName, appName);
             shareBottomSheet.show(getSupportFragmentManager(), "shareBottomSheet");
         });
         binding.btnExtractApk.setOnClickListener(v -> {
