@@ -2,7 +2,6 @@ package com.drhowdydoo.appinfo.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.drhowdydoo.appinfo.AppDetailsActivity;
 import com.drhowdydoo.appinfo.databinding.AppDeatilsListBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.Constants;
+import com.drhowdydoo.appinfo.util.PermissionManager;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
@@ -32,7 +33,6 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
 
     private List<AppDetailItem> appDetails;
     private final Context context;
-
     private String appName;
     private String apkFilePath;
 
@@ -97,6 +97,8 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
 
     @SuppressLint("CheckResult")
     private void extractFont(View view){
+        boolean haveStorageAccess = ((AppDetailsActivity)context).checkStoragePermission();
+        if (!haveStorageAccess) return;
         view.setEnabled(false);
         Observable.fromCallable(() -> AppDetailsManager.extractFonts(apkFilePath, appName)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -106,6 +108,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
                     else Toast.makeText(context, "Fonts extracted to " + path, Toast.LENGTH_SHORT).show();
                 });
     }
+
 
     public void addApkDetails(String appName, String apkFilePath) {
         this.appName = appName;

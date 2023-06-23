@@ -2,9 +2,6 @@ package com.drhowdydoo.appinfo.contentprovider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;

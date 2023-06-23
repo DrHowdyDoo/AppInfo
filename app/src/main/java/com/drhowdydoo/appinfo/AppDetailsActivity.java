@@ -298,7 +298,7 @@ public class AppDetailsActivity extends AppCompatActivity {
 
 
 
-    private boolean checkStoragePermission() {
+    public boolean checkStoragePermission() {
         if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
                 || Environment.isExternalStorageManager()) return true;
@@ -321,6 +321,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                 .show();
         return false;
     }
+
 
     private void handleToolbarContentAlignment() {
         binding.tvVersion.post(() -> {
