@@ -263,7 +263,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
         binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
         binding.btnShare.setOnClickListener(v -> {
-            ShareBottomSheet shareBottomSheet = new ShareBottomSheet(packageInfo.packageName, appName);
+            ShareBottomSheet shareBottomSheet = new ShareBottomSheet(packageInfo.packageName, appName, packageInfo.applicationInfo.publicSourceDir);
             shareBottomSheet.show(getSupportFragmentManager(), "shareBottomSheet");
         });
         binding.btnExtractApk.setOnClickListener(v -> {
