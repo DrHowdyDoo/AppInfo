@@ -85,6 +85,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                     packageInfo.ifPresent(value -> {
                         runOnUiThread(() -> setUpClickListeners(value));
                         appDetailsManager = new AppDetailsManager(this, value);
+                        adapter.addApkDetails(appName, value.applicationInfo.publicSourceDir);
                         init(value);
                     });
                     if (!packageInfo.isPresent()) {
@@ -102,7 +103,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         if (isApk) binding.btnExtractApk.setEnabled(false);
 
 
-        adapter = new AppDetailsListAdapter(appDetailItems);
+        adapter = new AppDetailsListAdapter(appDetailItems, this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setItemAnimator(null);
         binding.recyclerView.setHasFixedSize(false);
@@ -209,7 +210,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                     adapter.notifyItemChanged(1);
                 });
 
-        Observable.just(AppDetailsManager.findFontFiles(packageInfo.applicationInfo.publicSourceDir))
+        Observable.just(appDetailsManager.findFontFiles(packageInfo.applicationInfo.publicSourceDir))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(font -> {

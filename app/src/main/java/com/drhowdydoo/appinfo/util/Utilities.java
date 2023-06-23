@@ -3,6 +3,7 @@ package com.drhowdydoo.appinfo.util;
 import android.content.Context;
 import android.os.Build;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipInputStream;
 
 public class Utilities {
 
@@ -101,6 +103,16 @@ public class Utilities {
         outputStream.flush();
         outputStream.close();
         inputStream.close();
+    }
+
+    public static void extractFile(ZipInputStream zipIn, String destinationPath) throws IOException {
+        try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(destinationPath))) {
+            byte[] bytesIn = new byte[4096];
+            int read;
+            while ((read = zipIn.read(bytesIn)) != -1) {
+                bos.write(bytesIn, 0, read);
+            }
+        }
     }
 
 }

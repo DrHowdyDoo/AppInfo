@@ -15,11 +15,13 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Base64;
 
 import com.drhowdydoo.appinfo.model.StringCount;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,7 +47,7 @@ public class AppDetailsManager {
         this.packageInfo = packageInfo;
     }
 
-    public static StringCount findFontFiles(String apkFilePath) {
+    public StringCount findFontFiles(String apkFilePath) {
         StringBuilder fontFiles = new StringBuilder();
         int count = 0;
         try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(apkFilePath))) {
@@ -64,6 +66,27 @@ public class AppDetailsManager {
 
         if (fontFiles.toString().isBlank()) fontFiles.append("NOT FOUND");
         return new StringCount(fontFiles.toString().trim(), count);
+    }
+
+    public static String extractFonts(String apkFilePath, String appName) {
+        File destinationRootFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "AppInfo");
+        File destinationAppFolder = new File(destinationRootFolder, appName + "/fonts");
+        boolean created = destinationAppFolder.mkdirs();
+        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(apkFilePath))) {
+            ZipEntry entry;
+            while ((entry = zipInputStream.getNextEntry()) != null) {
+                String entryName = entry.getName();
+                if (entryName.toLowerCase().endsWith(".ttf") || entryName.toLowerCase().endsWith(".otf")) {
+                    String fontName = entryName.substring(entryName.lastIndexOf("/") + 1);
+                    Utilities.extractFile(zipInputStream,destinationAppFolder.getPath() + File.separator + fontName);
+                }
+                zipInputStream.closeEntry();
+            }
+        } catch (IOException | NullPointerException e) {
+            e.printStackTrace();
+            return "";
+        }
+        return destinationAppFolder.getPath();
     }
 
     public Drawable getIcon(boolean isApk, String apkAbsolutePath) {

@@ -1,30 +1,44 @@
 package com.drhowdydoo.appinfo.adapter;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.drhowdydoo.appinfo.databinding.AppDeatilsListBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
+import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 @SuppressWarnings("FieldMayBeFinal")
 public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAdapter.ViewHolder> {
 
     private List<AppDetailItem> appDetails;
+    private final Context context;
 
-    public AppDetailsListAdapter(List<AppDetailItem> appDetails) {
+    private String appName;
+    private String apkFilePath;
+
+    public AppDetailsListAdapter(List<AppDetailItem> appDetails, Context context) {
         this.appDetails = appDetails;
+        this.context = context;
     }
 
     @NonNull
@@ -47,6 +61,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
             }else {
                 holder.btnExtractFont.setVisibility(View.VISIBLE);
                 holder.progressBar.setVisibility(View.GONE);
+                holder.btnExtractFont.setOnClickListener(v -> extractFont(holder.btnExtractFont));
             }
         } else holder.btnExtractFont.setVisibility(View.GONE);
 
@@ -78,9 +93,24 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<AppDetailsListAd
             notifyItemChanged(position);
         });
 
-
     }
 
+    @SuppressLint("CheckResult")
+    private void extractFont(View view){
+        view.setEnabled(false);
+        Observable.fromCallable(() -> AppDetailsManager.extractFonts(apkFilePath, appName)).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(path -> {
+                    view.setEnabled(true);
+                    if (path.isBlank()) Toast.makeText(context, "Something went wrong !", Toast.LENGTH_SHORT).show();
+                    else Toast.makeText(context, "Fonts extracted to " + path, Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    public void addApkDetails(String appName, String apkFilePath) {
+        this.appName = appName;
+        this.apkFilePath = apkFilePath;
+    }
 
     @Override
     public int getItemCount() {
