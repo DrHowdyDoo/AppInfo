@@ -21,14 +21,15 @@
         app:layout_constraintTop_toTopOf="@+id/btnShareLink" />
 
     <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/materialDivider"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
-        app:layout_constraintVertical_bias="0.6"
         app:layout_constraintBottom_toBottomOf="@+id/tvDividerText"
         app:layout_constraintEnd_toStartOf="@+id/tvDividerText"
         app:layout_constraintStart_toEndOf="@+id/btnShareLink"
-        app:layout_constraintTop_toTopOf="@+id/tvDividerText" />
+        app:layout_constraintTop_toTopOf="@+id/tvDividerText"
+        app:layout_constraintVertical_bias="0.6" />
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="0dp"
@@ -58,13 +59,15 @@
         android:id="@+id/tvShareLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?textAppearanceLabelLarge"
-        android:fontFamily="@font/lexend_deca"
         android:layout_marginTop="8dp"
+        app:layout_constrainedWidth="true"
+        android:layout_marginHorizontal="12dp"
+        android:fontFamily="@font/lexend_deca"
         android:gravity="center"
         android:text="@string/share_playstore_link"
-        app:layout_constraintEnd_toEndOf="@+id/btnShareLink"
-        app:layout_constraintStart_toStartOf="@+id/btnShareLink"
+        android:textAppearance="?textAppearanceLabelLarge"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnShareLink" />
 
     <Button
@@ -85,13 +88,28 @@
         android:id="@+id/tvShareApk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/lexend_deca"
-        android:textAppearance="?textAppearanceLabelLarge"
         android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="12dp"
+        app:layout_constrainedWidth="true"
+        android:fontFamily="@font/lexend_deca"
+        android:gravity="center"
         android:text="@string/share_apk"
-        app:layout_constraintEnd_toEndOf="@+id/btnShareApk"
-        app:layout_constraintStart_toStartOf="@+id/btnShareApk"
+        android:textAppearance="?textAppearanceLabelLarge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/btnShareApk" />
+
+    <Button
+        android:id="@+id/btnWhy"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:text="@string/why"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/tvShareApk" />
 
 
     <androidx.constraintlayout.widget.Guideline

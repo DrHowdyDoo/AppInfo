@@ -1,5 +1,7 @@
 package com.drhowdydoo.appinfo.bottomsheet;
 
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,35 +11,44 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.BottomSheetShareBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.button.MaterialButton;
-
-import java.io.File;
-import java.util.ArrayList;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ShareBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener{
 
     private final String packageName;
     private final String appName;
     private final String apkPath;
+    private final boolean isSplitApp;
     private BottomSheetShareBinding binding;
 
-    public ShareBottomSheet(String packageName, String appName, String apkPath) {
+    public ShareBottomSheet(String packageName, String appName, String apkPath, boolean isSplitApp) {
         this.packageName = packageName;
         this.appName = appName;
         this.apkPath = apkPath;
+        this.isSplitApp = isSplitApp;
     }
 
+    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = BottomSheetShareBinding.inflate(inflater, container, false);
         binding.btnShareApk.setOnClickListener(this);
         binding.btnShareLink.setOnClickListener(this);
+        if (isSplitApp) {
+            binding.btnWhy.setVisibility(View.VISIBLE);
+            binding.btnWhy.setOnClickListener(this);
+            binding.btnShareApk.setEnabled(false);
+            String shareLinkText = (String) binding.tvShareLink.getText();
+            String shareApkText = (String) binding.tvShareApk.getText();
+            binding.tvShareLink.setText(shareLinkText + "\n(Preferred)");
+            binding.tvShareApk.setText(shareApkText + "\n(Disabled for split apks)");
+            binding.tvShareApk.setEnabled(false);
+        }
         return binding.getRoot();
     }
 
@@ -61,7 +72,16 @@ public class ShareBottomSheet extends BottomSheetDialogFragment implements View.
                 exception.printStackTrace();
                 //Show error
             }
+        }
 
+        if (id == R.id.btnWhy) {
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Why ? 🤔")
+                    .setMessage("When trying to share a split APK from your device, please note that it won't work on other devices. " +
+                            "Split APKs are tailored to specific device configurations. " +
+                            "To ensure compatibility, it's best to obtain the APK specifically meant for the recipient's device from trusted sources.")
+                    .setPositiveButton("Ok", (dialog, which) -> dismiss())
+                    .show();
         }
     }
 

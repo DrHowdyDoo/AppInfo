@@ -57,6 +57,7 @@ public class AppDetailsActivity extends AppCompatActivity {
     private String apkAbsolutePath = "";
     private List<AppDetailItem> appDetailItems = new ArrayList<>();
     private AppDetailsListAdapter adapter;
+    private boolean isSplitApp;
     private String appName;
 
     @SuppressLint({"CheckResult", "SetTextI18n"})
@@ -71,6 +72,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         appName = intent.getStringExtra("appName");
         binding.materialToolBar.setTitle(appName);
         binding.tvVersion.setText("v" + intent.getStringExtra("appVersion"));
+        isSplitApp = intent.getBooleanExtra("isSplitApp",false);
         isApk = intent.getBooleanExtra("isApk", false);
         apkAbsolutePath = intent.getStringExtra("apkAbsolutePath");
         boolean isInstalled = intent.getBooleanExtra("isInstalled", true);
@@ -263,7 +265,10 @@ public class AppDetailsActivity extends AppCompatActivity {
         binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
         binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
         binding.btnShare.setOnClickListener(v -> {
-            ShareBottomSheet shareBottomSheet = new ShareBottomSheet(packageInfo.packageName, appName, packageInfo.applicationInfo.publicSourceDir);
+            ShareBottomSheet shareBottomSheet = new ShareBottomSheet(packageInfo.packageName,
+                    appName,
+                    packageInfo.applicationInfo.publicSourceDir,
+                    isSplitApp);
             shareBottomSheet.show(getSupportFragmentManager(), "shareBottomSheet");
         });
         binding.btnExtractApk.setOnClickListener(v -> {
