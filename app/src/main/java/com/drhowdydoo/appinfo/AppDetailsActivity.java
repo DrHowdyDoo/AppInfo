@@ -63,7 +63,7 @@ public class AppDetailsActivity extends AppCompatActivity {
     @SuppressLint({"CheckResult", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("onCreate : " + System.currentTimeMillis());
+        System.out.println("Activity start : " + System.currentTimeMillis());
         super.onCreate(savedInstanceState);
         DynamicColors.applyToActivityIfAvailable(this);
         binding = ActivityAppDetailsBinding.inflate(getLayoutInflater());
@@ -79,6 +79,16 @@ public class AppDetailsActivity extends AppCompatActivity {
         String packageName = intent.getStringExtra("packageName");
         String identifier = isApk ? apkAbsolutePath : packageName;
 
+        //Initial conditional setups
+        handleToolbarContentAlignment();
+        if (!isInstalled) binding.btnInfo.setEnabled(false);
+        if (isApk) binding.btnExtractApk.setEnabled(false);
+
+        adapter = new AppDetailsListAdapter(appDetailItems, this);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setItemAnimator(null);
+        binding.recyclerView.setHasFixedSize(false);
+        binding.recyclerView.setAdapter(adapter);
         Observable.just(getPackageInfo(identifier, isApk))
                 .subscribeOn(Schedulers.io())
                 .subscribe(packageInfo -> {
@@ -95,20 +105,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                     }
 
                 });
-
-
-        //Initial conditional setups
-        handleToolbarContentAlignment();
-        if (!isInstalled) binding.btnInfo.setEnabled(false);
-        if (isApk) binding.btnExtractApk.setEnabled(false);
-
-
-        adapter = new AppDetailsListAdapter(appDetailItems, this);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.setItemAnimator(null);
-        binding.recyclerView.setHasFixedSize(false);
-        binding.recyclerView.setAdapter(adapter);
-
+        System.out.println("Activity created : " + System.currentTimeMillis());
     }
 
 

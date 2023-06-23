@@ -14,7 +14,6 @@
         android:id="@+id/iconContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         style="@style/Widget.App.CardView.Filled.Round">
 
         <ImageView
