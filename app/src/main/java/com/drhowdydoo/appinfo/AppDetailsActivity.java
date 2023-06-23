@@ -55,15 +55,16 @@ public class AppDetailsActivity extends AppCompatActivity {
     private AppDetailsManager appDetailsManager;
     private boolean isApk = false;
     private String apkAbsolutePath = "";
-    private List<AppDetailItem> appDetailItems = new ArrayList<>();
+    private List<Object> appDetails = new ArrayList<>();
     private AppDetailsListAdapter adapter;
     private boolean isSplitApp;
     private String appName;
+    private boolean isInstalled;
 
     @SuppressLint({"CheckResult", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("Activity start : " + System.currentTimeMillis());
+        long startTime =  System.currentTimeMillis();
         super.onCreate(savedInstanceState);
         DynamicColors.applyToActivityIfAvailable(this);
         binding = ActivityAppDetailsBinding.inflate(getLayoutInflater());
@@ -75,45 +76,44 @@ public class AppDetailsActivity extends AppCompatActivity {
         isSplitApp = intent.getBooleanExtra("isSplitApp",false);
         isApk = intent.getBooleanExtra("isApk", false);
         apkAbsolutePath = intent.getStringExtra("apkAbsolutePath");
-        boolean isInstalled = intent.getBooleanExtra("isInstalled", true);
+        isInstalled = intent.getBooleanExtra("isInstalled", true);
         String packageName = intent.getStringExtra("packageName");
-        String identifier = isApk ? apkAbsolutePath : packageName;
+        String identifier = (isApk && !isInstalled) ? apkAbsolutePath : packageName;
 
         //Initial conditional setups
         handleToolbarContentAlignment();
-        if (!isInstalled) binding.btnInfo.setEnabled(false);
-        if (isApk) binding.btnExtractApk.setEnabled(false);
 
-        adapter = new AppDetailsListAdapter(appDetailItems, this);
+        adapter = new AppDetailsListAdapter(appDetails, this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setItemAnimator(null);
-        binding.recyclerView.setHasFixedSize(false);
+        binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setAdapter(adapter);
-        Observable.just(getPackageInfo(identifier, isApk))
+        System.out.println("Before Observable : " + (System.currentTimeMillis() - startTime) + "ms");
+        Observable.just(getPackageInfo(identifier))
                 .subscribeOn(Schedulers.io())
                 .subscribe(packageInfo -> {
                     packageInfo.ifPresent(value -> {
-                        runOnUiThread(() -> setUpClickListeners(value));
                         appDetailsManager = new AppDetailsManager(this, value);
-                        adapter.addApkDetails(appName, value.applicationInfo.publicSourceDir);
+                        adapter.addApkDetails(appName, value.applicationInfo.publicSourceDir,isInstalled, isApk, isSplitApp);
+                        adapter.setPackageInfo(value);
                         init(value);
                     });
                     if (!packageInfo.isPresent()) {
+                        binding.recyclerView.setVisibility(View.GONE);
                         binding.tvPackageNotFound.setVisibility(View.VISIBLE);
-                        binding.nestedScrollview.setVisibility(View.GONE);
                         binding.appBar.setVisibility(View.GONE);
                     }
 
                 });
-        System.out.println("Activity created : " + System.currentTimeMillis());
+        System.out.println("Activity startup : " + (System.currentTimeMillis() - startTime) + "ms");
     }
 
 
-    private Optional<PackageInfo> getPackageInfo(String identifier, boolean isApk) {
+    private Optional<PackageInfo> getPackageInfo(String identifier) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                 packageManagerFlags |= PackageManager.GET_SIGNING_CERTIFICATES;
-            if (isApk) return Optional.ofNullable(getPackageManager().getPackageArchiveInfo(identifier, packageManagerFlags));
+            if (isApk && !isInstalled) return Optional.ofNullable(getPackageManager().getPackageArchiveInfo(identifier, packageManagerFlags));
             return Optional.ofNullable(getPackageManager().getPackageInfo(identifier, packageManagerFlags));
         } catch (PackageManager.NameNotFoundException e) {
             return Optional.empty();
@@ -130,64 +130,53 @@ public class AppDetailsActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(icon -> binding.imgIcon.setImageDrawable(icon));
 
-        Observable.just(appDetailsManager.getColors())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(color -> {
-                    String primaryColor = "#" + Integer.toHexString(color.getColorPrimary());
-                    String secondaryColor = "#" + Integer.toHexString(color.getColorSecondary());
-                    if (primaryColor.equalsIgnoreCase("#ffffffff") && secondaryColor.equalsIgnoreCase("#ffffffff")) {
-                        binding.tvColorValue.setText("NOT FOUND 😅");
-                    } else {
-                        binding.tvColorValue.setText(primaryColor + "\n" + secondaryColor);
-                    }
-                });
+        appDetails.add(new AppMetadata());
 
-        Observable.just(appDetailsManager.getTheme())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(theme -> binding.tvThemeValue.setText(theme));
-
-
-        Observable.zip(
-                        Observable.just(appDetailsManager.getCategory()).subscribeOn(Schedulers.io()),
+        Observable.zip( Observable.just(appDetailsManager.getCategory()).subscribeOn(Schedulers.io()),
                         Observable.just(appDetailsManager.getMinSdk()).subscribeOn(Schedulers.io()),
                         Observable.just(appDetailsManager.getTargetSdk()).subscribeOn(Schedulers.io()),
                         Observable.just(appDetailsManager.getInstallSource()).subscribeOn(Schedulers.io()),
                         Observable.just(appDetailsManager.getInstalledDate()).subscribeOn(Schedulers.io()),
                         Observable.just(appDetailsManager.getUpdatedDate()).subscribeOn(Schedulers.io()),
-                        Observable.just(packageInfo.packageName).subscribeOn(Schedulers.io()),
                         Observable.just(appDetailsManager.getMainClass()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getTheme()).subscribeOn(Schedulers.io()),
+                        Observable.just(appDetailsManager.getColors()).subscribeOn(Schedulers.io()),
                         (category, minSdk, targetSdk, installSource,
-                         installDt, updatedDt, packageName, mainClass) -> new AppMetadata(category, minSdk, targetSdk, installDt, updatedDt,
-                                installSource, packageName, mainClass)
+                         installDt, updatedDt, mainClass, theme, color) -> {
+
+                            String primaryColor = "#" + Integer.toHexString(color.getColorPrimary());
+                            String secondaryColor = "#" + Integer.toHexString(color.getColorSecondary());
+                            String colors = "NOT FOUND 😅";
+                            if (primaryColor.equalsIgnoreCase("#ffffffff") && secondaryColor.equalsIgnoreCase("#ffffffff")) {
+                                colors = "NOT FOUND 😅";
+                            } else {
+                                colors = primaryColor + "\n" + secondaryColor;
+                            }
+                            return new AppMetadata(category, minSdk, targetSdk, installDt, updatedDt,
+                                    installSource, packageInfo.packageName, mainClass, theme, colors);
+                        }
                 ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(appMetadata -> {
-                    binding.tvCategoryValue.setText(appMetadata.getCategory());
-                    binding.tvMinSdkValue.setText(appMetadata.getMinSdk());
-                    binding.tvTargetSdkValue.setText(appMetadata.getTargetSdk());
-                    binding.tvSourceValue.setText(appMetadata.getSource());
-                    binding.tvInstalledDtValue.setText(appMetadata.getInstallDt());
-                    binding.tvUpdatedDtValue.setText(appMetadata.getUpdatedDt());
-                    binding.tvPackageNameValue.setText(appMetadata.getPackageName());
-                    binding.tvMainClassValue.setText(appMetadata.getMainClass());
+                    //Grid Data Set
+                    appDetails.set(0,appMetadata);
+                    adapter.notifyItemChanged(0);
                 });
 
         String backupAgent = packageInfo.applicationInfo.backupAgentName;
-        appDetailItems.add(new AppDetailItem(R.drawable.outline_shield_24, "Permissions", ""));
-        appDetailItems.add(new AppDetailItem(R.drawable.outline_touch_app_24, "Activities", ""));
-        appDetailItems.add(new AppDetailItem(R.drawable.round_fonts_24, "Fonts", ""));
-        appDetailItems.add(new AppDetailItem(R.drawable.round_cell_tower_24, "Broadcast receivers", ""));
-        appDetailItems.add(new AppDetailItem(R.drawable.round__services_24, "Services", ""));
-        appDetailItems.add(new AppDetailItem(R.drawable.outline_extension_24, "Providers", ""));
-        appDetailItems.add(new AppDetailItem(R.drawable.outline_stars_24, "Features", ""));
-        appDetailItems.add(new AppDetailItem(R.drawable.outline_backup_24, "Backup agent name", backupAgent != null ? backupAgent : "NOT SPECIFIED"));
-        appDetailItems.add(new AppDetailItem(R.drawable.outline_folder_24, "Data dir path", appDetailsManager.getDataDirPath()));
-        appDetailItems.add(new AppDetailItem(R.drawable.outline_source_24, "Source dir path", appDetailsManager.getSourceDirPath()));
-        appDetailItems.add(new AppDetailItem(R.drawable.outline_folder_shared_24, "Native library path", appDetailsManager.getNativeLibraryPath()));
-        appDetailItems.add(new AppDetailItem(R.drawable.outline_vpn_key_24, "Signature", ""));
-        appDetailItems.add(new AppDetailItem(R.drawable.round_fingerprint_24, "Certificate fingerprints", ""));
+        appDetails.add(new AppDetailItem(R.drawable.outline_shield_24, "Permissions", ""));
+        appDetails.add(new AppDetailItem(R.drawable.outline_touch_app_24, "Activities", ""));
+        appDetails.add(new AppDetailItem(R.drawable.round_fonts_24, "Fonts", ""));
+        appDetails.add(new AppDetailItem(R.drawable.round_cell_tower_24, "Broadcast receivers", ""));
+        appDetails.add(new AppDetailItem(R.drawable.round__services_24, "Services", ""));
+        appDetails.add(new AppDetailItem(R.drawable.outline_extension_24, "Providers", ""));
+        appDetails.add(new AppDetailItem(R.drawable.outline_stars_24, "Features", ""));
+        appDetails.add(new AppDetailItem(R.drawable.outline_backup_24, "Backup agent name", backupAgent != null ? backupAgent : "NOT SPECIFIED"));
+        appDetails.add(new AppDetailItem(R.drawable.outline_folder_24, "Data dir path", appDetailsManager.getDataDirPath()));
+        appDetails.add(new AppDetailItem(R.drawable.outline_source_24, "Source dir path", appDetailsManager.getSourceDirPath()));
+        appDetails.add(new AppDetailItem(R.drawable.outline_folder_shared_24, "Native library path", appDetailsManager.getNativeLibraryPath()));
+        appDetails.add(new AppDetailItem(R.drawable.outline_vpn_key_24, "Signature", ""));
+        appDetails.add(new AppDetailItem(R.drawable.round_fingerprint_24, "Certificate fingerprints", ""));
         runOnUiThread(() -> adapter.notifyDataSetChanged());
 
 
@@ -195,102 +184,68 @@ public class AppDetailsActivity extends AppCompatActivity {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(permissions -> {
-                    appDetailItems.get(0).setValue(permissions);
-                    adapter.notifyItemChanged(0);
+                    getAppDetail(appDetails.get(1)).setValue(permissions);
+                    adapter.notifyItemChanged(1);
                 });
 
         Observable.just(appDetailsManager.getActivities())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(activities -> {
-                    appDetailItems.get(1).setValue(activities);
-                    adapter.notifyItemChanged(1);
+                    getAppDetail(appDetails.get(2)).setValue(activities);
+                    adapter.notifyItemChanged(2);
                 });
 
         Observable.just(appDetailsManager.findFontFiles(packageInfo.applicationInfo.publicSourceDir))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(font -> {
-                    appDetailItems.get(2).setValue(font);
-                    adapter.notifyItemChanged(2);
+                    getAppDetail(appDetails.get(3)).setValue(font);
+                    adapter.notifyItemChanged(3);
                 });
 
         Observable.just(appDetailsManager.getBroadcastReceivers())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(receivers -> {
-                    appDetailItems.get(3).setValue(receivers);
-                    adapter.notifyItemChanged(3);
+                    getAppDetail(appDetails.get(4)).setValue(receivers);
+                    adapter.notifyItemChanged(4);
                 });
 
         Observable.just(appDetailsManager.getServices())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(services -> {
-                    appDetailItems.get(4).setValue(services);
-                    adapter.notifyItemChanged(4);
+                    getAppDetail(appDetails.get(5)).setValue(services);
+                    adapter.notifyItemChanged(5);
                 });
 
         Observable.just(appDetailsManager.getProviders())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(providers -> {
-                    appDetailItems.get(5).setValue(providers);
-                    adapter.notifyItemChanged(5);
+                    getAppDetail(appDetails.get(6)).setValue(providers);
+                    adapter.notifyItemChanged(6);
                 });
 
 
         Observable.zip(Observable.just(appDetailsManager.getFeatures()).subscribeOn(Schedulers.io()),
                         Observable.just(appDetailsManager.getSignatures()).subscribeOn(Schedulers.io()),
                         (features, signatureMap) -> {
-                                appDetailItems.get(6).setValue(features);
+                            getAppDetail(appDetails.get(7)).setValue(features);
                             signatureMap.ifPresent(signatures -> {
-                                appDetailItems.get(11).setValue(new StringCount(signatures.get("certificates")));
-                                appDetailItems.get(12).setValue(new StringCount(signatures.get("signing_keys")));
+                                getAppDetail(appDetails.get(12)).setValue(new StringCount(signatures.get("certificates")));
+                                getAppDetail(appDetails.get(13)).setValue(new StringCount(signatures.get("signing_keys")));
                             });
-                            return appDetailItems;
+                            return appDetails;
                         })
                 .subscribeOn(Schedulers.io())
-                .subscribe(appDetailItemList -> runOnUiThread(() -> {
-                    adapter.notifyItemChanged(6);
-                    adapter.notifyItemRangeChanged(11, 2);
-                }));
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(appDetailItemList -> {
+                    adapter.notifyItemChanged(7);
+                    adapter.notifyItemRangeChanged(12, 2);
+                });
 
-    }
-
-    private void setUpClickListeners(PackageInfo packageInfo) {
-        Log.d(TAG, "setUpClickListeners()");
-        binding.btnInfo.setOnClickListener(v -> openSystemInfo(packageInfo.packageName));
-        binding.btnPlayStore.setOnClickListener(v -> openInPlayStore(packageInfo.packageName));
-        binding.btnShare.setOnClickListener(v -> {
-            ShareBottomSheet shareBottomSheet = new ShareBottomSheet(packageInfo.packageName,
-                    appName,
-                    packageInfo.applicationInfo.publicSourceDir,
-                    isSplitApp);
-            shareBottomSheet.show(getSupportFragmentManager(), "shareBottomSheet");
-        });
-        binding.btnExtractApk.setOnClickListener(v -> {
-            boolean haveStorageAccess = checkStoragePermission();
-            if (!haveStorageAccess) return;
-            if (!android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                Toast.makeText(this, "Storage not accessible", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            binding.btnExtractApk.setEnabled(false);
-            Utilities.shouldSearchApks = true;
-            Observable.fromAction(() -> {
-                        runOnUiThread(() -> binding.progressBar.setVisibility(View.VISIBLE));
-                        ApkExtractor.extractApk(appName,packageInfo);
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doFinally(() -> {
-                        binding.btnExtractApk.setEnabled(true);
-                        binding.progressBar.setVisibility(View.GONE);
-                        Toast.makeText(this, "APK files extracted to AppInfo folder in the root directory", Toast.LENGTH_SHORT).show();
-                    })
-                    .subscribe();
-        });
     }
 
 
@@ -333,15 +288,22 @@ public class AppDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void openSystemInfo(String packageName) {
+    public void openSystemInfo(String packageName) {
         Intent systemInfo = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         systemInfo.setData(Uri.parse("package:" + packageName));
         startActivity(systemInfo);
     }
 
-    private void openInPlayStore(String packageName) {
+    public void openInPlayStore(String packageName) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
     }
 
+    private AppDetailItem getAppDetail(Object obj) {
+        return (AppDetailItem) obj;
+    }
+
+    public void hideProgressBar(boolean hide) {
+        binding.progressBar.setVisibility(hide ? View.GONE : View.VISIBLE);
+    }
 
 }

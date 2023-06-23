@@ -2,7 +2,7 @@ package com.drhowdydoo.appinfo.model;
 
 public class AppMetadata {
 
-    private String category, minSdk, targetSdk, installDt, updatedDt, source, packageName, mainClass;
+    private String category, minSdk, targetSdk, installDt, updatedDt, source, packageName, mainClass, theme, colors;
 
     public AppMetadata(String category,
                        String minSdk,
@@ -11,7 +11,7 @@ public class AppMetadata {
                        String updatedDt,
                        String source,
                        String packageName,
-                       String mainClass) {
+                       String mainClass, String theme, String colors) {
 
         this.category = category;
         this.minSdk = minSdk;
@@ -21,6 +21,21 @@ public class AppMetadata {
         this.source = source;
         this.packageName = packageName;
         this.mainClass = mainClass;
+        this.theme = theme;
+        this.colors = colors;
+    }
+
+    public AppMetadata() {
+        this.category = "";
+        this.minSdk = "";
+        this.targetSdk = "";
+        this.installDt = "";
+        this.updatedDt = "";
+        this.source = "";
+        this.packageName = "";
+        this.mainClass = "";
+        this.theme = "";
+        this.colors = "";
     }
 
 
@@ -89,5 +104,21 @@ public class AppMetadata {
 
     public void setMainClass(String mainClass) {
         this.mainClass = mainClass;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+
+    public String getColors() {
+        return colors;
+    }
+
+    public void setColors(String colors) {
+        this.colors = colors;
     }
 }

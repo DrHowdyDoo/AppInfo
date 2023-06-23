@@ -128,6 +128,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
             intent.putExtra("appSize", apkInfo.getApkSize());
             intent.putExtra("apkAbsolutePath", apkInfo.getApkAbsolutePath());
             intent.putExtra("isInstalled", apkInfo.isInstalled());
+            intent.putExtra("packageName", apkInfo.getApkInfo().packageName);
             context.startActivity(intent);
         }
     }
