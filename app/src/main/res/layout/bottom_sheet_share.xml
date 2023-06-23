@@ -1,18 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="16dp"
     android:paddingTop="16dp"
     android:paddingBottom="24dp">
 
+    <TextView
+        android:id="@+id/tvDividerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/or"
+        android:fontFamily="@font/lexend_deca"
+        android:textAppearance="?textAppearanceLabelLarge"
+        app:layout_constraintBottom_toBottomOf="@+id/btnShareLink"
+        app:layout_constraintEnd_toStartOf="@+id/btnShareApk"
+        app:layout_constraintStart_toEndOf="@+id/btnShareLink"
+        app:layout_constraintTop_toTopOf="@+id/btnShareLink" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintBottom_toBottomOf="@+id/tvDividerText"
+        app:layout_constraintEnd_toStartOf="@+id/tvDividerText"
+        app:layout_constraintStart_toEndOf="@+id/btnShareLink"
+        app:layout_constraintTop_toTopOf="@+id/tvDividerText" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        app:layout_constraintVertical_bias="0.6"
+        app:layout_constraintBottom_toBottomOf="@+id/tvDividerText"
+        app:layout_constraintStart_toEndOf="@+id/tvDividerText"
+        app:layout_constraintEnd_toStartOf="@+id/btnShareApk"
+        app:layout_constraintTop_toTopOf="@+id/tvDividerText" />
+
     <Button
         android:id="@+id/btnShareLink"
         style="?materialIconButtonFilledTonalStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="26dp"
+        android:padding="24dp"
         android:contentDescription="@string/share_playstore_link"
         app:iconSize="32dp"
         app:icon="@drawable/round_link_24"
@@ -26,7 +59,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?textAppearanceLabelLarge"
+        android:fontFamily="@font/lexend_deca"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         android:text="@string/share_playstore_link"
         app:layout_constraintEnd_toEndOf="@+id/btnShareLink"
         app:layout_constraintStart_toStartOf="@+id/btnShareLink"
@@ -38,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="32dp"
+        android:padding="28dp"
         android:contentDescription="@string/share_apk"
         app:iconSize="26dp"
         app:icon="@drawable/apk_file"
@@ -50,6 +85,7 @@
         android:id="@+id/tvShareApk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/lexend_deca"
         android:textAppearance="?textAppearanceLabelLarge"
         android:layout_marginTop="8dp"
         android:text="@string/share_apk"
