@@ -41,11 +41,8 @@
         <provider
             android:name=".contentprovider.ApkFileProvider"
             android:authorities="com.drhowdydoo.appinfo.provider"
-            android:exported="true"
+            android:exported="false"
             android:grantUriPermissions="true">
-            <intent-filter>
-                <action android:name="android.content.action.PROVIDER_CHANGED" />
-            </intent-filter>
         </provider>
     </application>
 

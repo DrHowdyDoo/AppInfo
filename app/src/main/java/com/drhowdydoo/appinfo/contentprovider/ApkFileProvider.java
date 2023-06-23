@@ -32,7 +32,6 @@ public class ApkFileProvider extends ContentProvider {
     @Override
     public ParcelFileDescriptor openFile(@NonNull Uri uri, @NonNull String mode) throws FileNotFoundException {
 
-        System.out.println("ApkFileProvider : " + uri.getPath() + "\n" + "lastSegment : " + uri.getLastPathSegment());
             File apkFile = new File(uri.getPath());
             if (!apkFile.exists()) {
                 throw new FileNotFoundException();
