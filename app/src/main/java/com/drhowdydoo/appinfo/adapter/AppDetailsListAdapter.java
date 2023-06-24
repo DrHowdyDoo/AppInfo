@@ -84,12 +84,16 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     itemViewHolder.progressBar.setVisibility(View.GONE);
                     itemViewHolder.btnExtractFont.setOnClickListener(v -> extractFont(itemViewHolder.btnExtractFont));
                 }
-            } else itemViewHolder.btnExtractFont.setVisibility(View.GONE);
+            } else {
+                itemViewHolder.btnExtractFont.setVisibility(View.GONE);
+                itemViewHolder.progressBar.setVisibility(View.GONE);
+            }
 
             if (appDetail.getValue().getText().equalsIgnoreCase("not found")) itemViewHolder.btnExtractFont.setVisibility(View.GONE);
 
             int lineCount = appDetail.getValue().getCount();
             boolean isExpandable = lineCount > Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES;
+            System.out.println("position : " + position + "\nlineCount : " + lineCount + "\nisExpandable : " + isExpandable);
             if (isExpandable) {
                 if (appDetail.isExpanded()) {
                     itemViewHolder.tvExpandIndicator.setVisibility(View.GONE);
@@ -97,6 +101,8 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     itemViewHolder.tvExpandIndicator.setVisibility(View.VISIBLE);
                     itemViewHolder.tvValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
                 }
+            } else {
+                itemViewHolder.tvExpandIndicator.setVisibility(View.GONE);
             }
 
             itemViewHolder.tvValue.setOnClickListener(v -> {
