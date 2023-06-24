@@ -31,10 +31,14 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
         this.fragment = fragment;
     }
 
+    public SortBottomSheet() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        if (fragment == null) dismiss();
         if (fragment instanceof AppFragment) {
             AppFragment appFragment = (AppFragment) fragment;
             appBinding = BottomSheetSortBinding.inflate(inflater, container, false);

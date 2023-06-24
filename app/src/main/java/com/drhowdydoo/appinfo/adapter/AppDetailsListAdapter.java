@@ -3,6 +3,7 @@ package com.drhowdydoo.appinfo.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
+import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -144,7 +145,13 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         holder.gridBinding.btnInfo.setOnClickListener(v -> activity.openSystemInfo(packageInfo.packageName));
         holder.gridBinding.btnPlayStore.setOnClickListener(v -> activity.openInPlayStore(packageInfo.packageName));
         holder.gridBinding.btnShare.setOnClickListener(v -> {
-            ShareBottomSheet shareBottomSheet = new ShareBottomSheet(packageInfo.packageName, appName, packageInfo.applicationInfo.publicSourceDir, isSplitApp);
+            ShareBottomSheet shareBottomSheet = new ShareBottomSheet();
+            Bundle args = new Bundle();
+            args.putString("packageName", packageInfo.packageName);
+            args.putString("appName",appName);
+            args.putString("apkPath",packageInfo.applicationInfo.publicSourceDir);
+            args.putBoolean("isSplitApp",isSplitApp);
+            shareBottomSheet.setArguments(args);
             shareBottomSheet.show(activity.getSupportFragmentManager(), "shareBottomSheet");
         });
         holder.gridBinding.btnExtractApk.setOnClickListener(v -> {

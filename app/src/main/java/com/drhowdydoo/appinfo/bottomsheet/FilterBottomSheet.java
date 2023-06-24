@@ -26,11 +26,14 @@ public class FilterBottomSheet extends BottomSheetDialogFragment implements View
         this.fragment = fragment;
     }
 
+    public FilterBottomSheet() {
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        if (fragment == null) dismiss();
         if (fragment instanceof AppFragment) {
             BottomSheetFilterBinding binding = BottomSheetFilterBinding.inflate(inflater, container, false);
 

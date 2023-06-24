@@ -18,23 +18,28 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ShareBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener{
 
-    private final String packageName;
-    private final String appName;
-    private final String apkPath;
-    private final boolean isSplitApp;
+    private String packageName;
+    private String appName;
+    private String apkPath;
+    private boolean isSplitApp;
     private BottomSheetShareBinding binding;
 
-    public ShareBottomSheet(String packageName, String appName, String apkPath, boolean isSplitApp) {
-        this.packageName = packageName;
-        this.appName = appName;
-        this.apkPath = apkPath;
-        this.isSplitApp = isSplitApp;
+    public ShareBottomSheet() {
     }
 
     @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Bundle args = getArguments();
+        if (args != null) {
+            packageName = args.getString("packageName");
+            appName = args.getString("appName");
+            apkPath = args.getString("apkPath");
+            isSplitApp = args.getBoolean("isSplitApp");
+        } else {
+            dismiss();
+        }
         binding = BottomSheetShareBinding.inflate(inflater, container, false);
         binding.btnShareApk.setOnClickListener(this);
         binding.btnShareLink.setOnClickListener(this);
