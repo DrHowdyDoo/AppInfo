@@ -217,7 +217,7 @@ public class AppFragment extends Fragment {
             if (searchResults.isEmpty()) binding.tvNoResultsFound.setVisibility(View.VISIBLE);
             else binding.tvNoResultsFound.setVisibility(View.GONE);
         } else {
-            adapter.updateData(appListViewModel.getSavedAppInfoList());
+            adapter.setData(appListViewModel.getSavedAppInfoList());
             onSortFilterListener.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
             binding.tvNoResultsFound.setVisibility(View.GONE);
         }
