@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="24dp"
+    android:paddingBottom="8dp"
+    android:clipToPadding="false"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="hardCodedText,contentDescription"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -327,29 +329,29 @@
         android:id="@+id/cardTargetSdk"
         style="@style/Widget.App.CardView.Elevated.Round"
         android:layout_width="0dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/cardUpdatedDt">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
             android:layout_marginVertical="@dimen/pill_margin_vertical"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:src="@drawable/round_android_24"
-                />
+                android:src="@drawable/round_android_24" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -383,7 +385,7 @@
         app:flow_horizontalGap="8dp"
         app:flow_maxElementsWrap="2"
         app:flow_verticalGap="8dp"
-        app:flow_wrapMode="aligned"
+        app:flow_wrapMode="chain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvMetadataTitle" />
