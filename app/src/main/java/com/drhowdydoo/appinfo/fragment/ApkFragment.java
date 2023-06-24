@@ -109,6 +109,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         filteredList.sort(new ApkInfoComparator(apkListViewModel.getSortState()));
         apkListViewModel.setSavedApkInfoList(filteredList);
         adapter.setData(filteredList);
+        binding.recyclerView.scrollToPosition(0);
         mainActivity.onFilter(getFilterText());
         mainActivity.onSort(getSortText());
     }
@@ -178,7 +179,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
             if (searchResults.isEmpty()) binding.tvNoResultsFound.setVisibility(View.VISIBLE);
             else binding.tvNoResultsFound.setVisibility(View.GONE);
         } else {
-            adapter.updateData(apkListViewModel.getSavedApkInfoList());
+            adapter.setData(apkListViewModel.getSavedApkInfoList());
             mainActivity.onFilter(getFilterText());
             binding.tvNoResultsFound.setVisibility(View.GONE);
         }

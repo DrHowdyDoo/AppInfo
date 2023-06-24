@@ -76,7 +76,10 @@ public class AppFragment extends Fragment {
         }
 
 
-        binding.fabScrollBack.setOnClickListener(v -> binding.recyclerView.smoothScrollToPosition(0));
+        binding.fabScrollBack.setOnClickListener(v -> {
+            binding.recyclerView.scrollToPosition(0);
+            binding.fabScrollBack.hide();
+        });
 
         binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -84,7 +87,8 @@ public class AppFragment extends Fragment {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
                     binding.fabScrollBack.show();
-                } else if (dy < 0) {
+                }
+                if (!recyclerView.canScrollVertically(-1)) {
                     binding.fabScrollBack.hide();
                 }
             }
@@ -115,6 +119,7 @@ public class AppFragment extends Fragment {
         onSortFilterListener.onSort(getSortButtonText(sortedState));
         onSortFilterListener.onFilter(getFilterButtonText(filterState, filteredList.size()));
         adapter.setData(filteredList);
+        binding.recyclerView.scrollToPosition(0);
     }
 
     public void hideProgressIndicators() {

@@ -101,7 +101,8 @@
         android:layout_marginBottom="92dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/double_arrow_up" />
+        app:srcCompat="@drawable/double_arrow_up"
+        android:contentDescription="@string/scroll_to_top" />
 
     <TextView
         android:id="@+id/notFound"
