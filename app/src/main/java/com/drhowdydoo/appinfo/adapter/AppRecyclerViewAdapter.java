@@ -86,7 +86,9 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
             holder.tvAppStats.setText(TimeFormatter.format(appInfo.getAppLastUpdateTime(), "Updated"));
         }
 
-        holder.tvAppVersion.setText("v" + appInfo.getAppVersion());
+        String version = appInfo.getAppVersion();
+        version = Character.isDigit(version.charAt(0)) ? "v" + version : version;
+        holder.tvAppVersion.setText(version);
 
         if (appInfo.isSplitApp()) {
             holder.imgSplitApp.setVisibility(View.VISIBLE);

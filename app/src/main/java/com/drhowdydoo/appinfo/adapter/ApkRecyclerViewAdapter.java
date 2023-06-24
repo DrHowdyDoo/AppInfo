@@ -3,6 +3,7 @@ package com.drhowdydoo.appinfo.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +58,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         holder.tvApkSize.setText(Formatter.formatShortFileSize(context, apkInfo.getApkSize()));
         holder.tvApkVersion.setText("v" + apkInfo.getApkVersion());
         holder.tvApkPath.setText(apkInfo.getApkPath());
+        holder.tvApkPath.setSelected(true);
         String apkStatus = apkInfo.isInstalled() ? "installed" : "not installed";
         holder.tvApkStatus.setText(apkStatus);
 
