@@ -36,6 +36,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     private ApkListViewModel apkListViewModel;
     private ApkInfoManager apkInfoManager;
     private MainActivity mainActivity;
+    private boolean isPaused = false;
 
     public ApkFragment() {
     }
@@ -73,6 +74,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        isPaused = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (Environment.isExternalStorageManager()) {
                 binding.groupStoragePermission.setVisibility(View.GONE);
@@ -110,8 +112,10 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         apkListViewModel.setSavedApkInfoList(filteredList);
         adapter.setData(filteredList);
         binding.recyclerView.scrollToPosition(0);
-        mainActivity.onFilter(getFilterText());
-        mainActivity.onSort(getSortText());
+        if (!isPaused) {
+            mainActivity.onFilter(getFilterText());
+            mainActivity.onSort(getSortText());
+        }
     }
 
     public void hideProgressBar() {
@@ -183,5 +187,11 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
             mainActivity.onFilter(getFilterText());
             binding.tvNoResultsFound.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isPaused = true;
     }
 }

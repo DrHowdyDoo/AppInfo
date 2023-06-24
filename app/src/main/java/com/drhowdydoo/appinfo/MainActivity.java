@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
         getWindow().setNavigationBarColor(SurfaceColors.SURFACE_2.getColor(this));
 
         binding.viewPager.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         pagerAdapter.addFragment(new AppFragment());
         pagerAdapter.addFragment(new ApkFragment());

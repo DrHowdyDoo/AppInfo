@@ -22,11 +22,9 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:layout_gravity="center"
-            android:src="@drawable/outline_touch_app_24"
-            />
+            android:src="@drawable/outline_touch_app_24" />
 
     </com.google.android.material.card.MaterialCardView>
-
 
     <TextView
         android:id="@+id/tvTitle"
@@ -78,8 +76,9 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:focusable="true"
-                    tools:text="com.drhowdydoo.appInfo.fragment.AppFragment"
-                    android:textAppearance="@style/TextAppearance.App.BodyMedium" />
+                    android:textAppearance="@style/TextAppearance.App.BodyMedium"
+                    tools:ignore="TouchTargetSizeCheck"
+                    tools:text="com.drhowdydoo.appInfo.fragment.AppFragment" />
 
             </HorizontalScrollView>
 
@@ -92,19 +91,50 @@
                 tools:visibility="visible"
                 android:layout_height="wrap_content" />
 
-            <Button
-                android:id="@+id/btnExtractFont"
-                android:layout_marginTop="12dp"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:visibility="gone"
-                tools:visibility="visible"
-                android:gravity="center"
-                app:iconPadding="8dp"
-                app:icon="@drawable/round_extract_24"
-                style="?materialIconButtonFilledTonalStyle"
-                android:text="Extract"/>
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnExtractFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:gravity="center"
+                    app:iconPadding="8dp"
+                    app:icon="@drawable/round_extract_24"
+                    style="?materialIconButtonFilledTonalStyle"
+                    android:text="Extract"/>
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/pbFontExtraction"
+                    android:layout_width="100dp"
+                    style="@style/Widget.Material3.LinearProgressIndicator"
+                    android:paddingHorizontal="12dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:indeterminate="true"
+                    app:trackCornerRadius="16dp"
+                    app:indeterminateAnimationType="disjoint"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:id="@+id/imgFontFile"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:src="@drawable/twotone_create_new_folder_24"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:elevation="0dp"
+                    app:tint="?colorPrimary" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

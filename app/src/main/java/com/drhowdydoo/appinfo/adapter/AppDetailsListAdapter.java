@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.drhowdydoo.appinfo.AppDetailsActivity;
+import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.bottomsheet.ShareBottomSheet;
 import com.drhowdydoo.appinfo.databinding.AppDeatilsListBinding;
 import com.drhowdydoo.appinfo.databinding.AppDetailsGridLayoutBinding;
@@ -28,6 +29,7 @@ import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.List;
 
@@ -82,7 +84,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }else {
                     itemViewHolder.btnExtractFont.setVisibility(View.VISIBLE);
                     itemViewHolder.progressBar.setVisibility(View.GONE);
-                    itemViewHolder.btnExtractFont.setOnClickListener(v -> extractFont(itemViewHolder.btnExtractFont));
+                    itemViewHolder.btnExtractFont.setOnClickListener(v -> extractFont(itemViewHolder));
                 }
             } else {
                 itemViewHolder.btnExtractFont.setVisibility(View.GONE);
@@ -182,14 +184,18 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     @SuppressLint("CheckResult")
-    private void extractFont(View view){
+    private void extractFont(ItemViewHolder holder){
         boolean haveStorageAccess = ((AppDetailsActivity)context).checkStoragePermission();
         if (!haveStorageAccess) return;
-        view.setEnabled(false);
+        holder.btnExtractFont.setEnabled(false);
+        holder.fontExtractionIndicator.setVisibility(View.VISIBLE);
+        holder.fileIcon.setVisibility(View.VISIBLE);
         Observable.fromCallable(() -> AppDetailsManager.extractFonts(apkFilePath, appName)).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(path -> {
-                    view.setEnabled(true);
+                    holder.btnExtractFont.setEnabled(true);
+                    holder.fontExtractionIndicator.setVisibility(View.GONE);
+                    holder.fileIcon.setVisibility(View.GONE);
                     if (path.isBlank()) Toast.makeText(context, "Something went wrong !", Toast.LENGTH_SHORT).show();
                     else Toast.makeText(context, "Fonts extracted to " + path, Toast.LENGTH_SHORT).show();
                 });
@@ -211,10 +217,11 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView icon;
+        public ImageView icon, fileIcon;
         public TextView tvTitle, tvValue, tvExpandIndicator;
         public MaterialCardView container;
         public CircularProgressIndicator progressBar;
+        public LinearProgressIndicator fontExtractionIndicator;
         public Button btnExtractFont;
 
         public ItemViewHolder(@NonNull AppDeatilsListBinding binding) {
@@ -226,6 +233,8 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             container = binding.listContainer;
             btnExtractFont = binding.btnExtractFont;
             progressBar = binding.progressBar;
+            fontExtractionIndicator = binding.pbFontExtraction;
+            fileIcon = binding.imgFontFile;
 
         }
     }

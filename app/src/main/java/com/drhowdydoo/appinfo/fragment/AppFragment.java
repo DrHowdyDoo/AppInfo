@@ -38,6 +38,7 @@ public class AppFragment extends Fragment {
     private AppListViewModel appListViewModel;
     private MainActivity mainActivity;
 
+    private boolean isPaused = false;
     public AppFragment() {
     }
 
@@ -116,8 +117,10 @@ public class AppFragment extends Fragment {
         if (appListViewModel.isReverseSort()) filteredList.sort(appInfoComparator.reversed());
         else filteredList.sort(appInfoComparator);
         appListViewModel.setSavedAppInfoList(filteredList);
-        onSortFilterListener.onSort(getSortButtonText(sortedState));
-        onSortFilterListener.onFilter(getFilterButtonText(filterState, filteredList.size()));
+        if (!isPaused) {
+            onSortFilterListener.onSort(getSortButtonText(sortedState));
+            onSortFilterListener.onFilter(getFilterButtonText(filterState, filteredList.size()));
+        }
         adapter.setData(filteredList);
         binding.recyclerView.scrollToPosition(0);
     }
@@ -207,6 +210,7 @@ public class AppFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        isPaused = false;
         mainActivity.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
         mainActivity.onSort(getSortButtonText(sortedState));
     }
@@ -226,5 +230,11 @@ public class AppFragment extends Fragment {
             onSortFilterListener.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
             binding.tvNoResultsFound.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isPaused = true;
     }
 }
