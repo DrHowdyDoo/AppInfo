@@ -164,19 +164,19 @@ public class AppDetailsActivity extends AppCompatActivity {
                 });
 
         String backupAgent = packageInfo.applicationInfo.backupAgentName;
-        appDetails.add(new AppDetailItem(R.drawable.outline_shield_24, "Permissions", ""));
-        appDetails.add(new AppDetailItem(R.drawable.outline_touch_app_24, "Activities", ""));
+        appDetails.add(new AppDetailItem(R.drawable.outline_shield_24, "Permissions", "loading • • • • •"));
+        appDetails.add(new AppDetailItem(R.drawable.outline_touch_app_24, "Activities", "loading • • • • •"));
         appDetails.add(new AppDetailItem(R.drawable.round_fonts_24, "Fonts", ""));
-        appDetails.add(new AppDetailItem(R.drawable.round_cell_tower_24, "Broadcast receivers", ""));
-        appDetails.add(new AppDetailItem(R.drawable.round__services_24, "Services", ""));
-        appDetails.add(new AppDetailItem(R.drawable.outline_extension_24, "Providers", ""));
-        appDetails.add(new AppDetailItem(R.drawable.outline_stars_24, "Features", ""));
+        appDetails.add(new AppDetailItem(R.drawable.round_cell_tower_24, "Broadcast receivers", "loading • • • • •"));
+        appDetails.add(new AppDetailItem(R.drawable.round__services_24, "Services", "loading • • • • •"));
+        appDetails.add(new AppDetailItem(R.drawable.outline_extension_24, "Providers", "loading • • • • •"));
+        appDetails.add(new AppDetailItem(R.drawable.outline_stars_24, "Features", "loading • • • • •"));
         appDetails.add(new AppDetailItem(R.drawable.outline_backup_24, "Backup agent name", backupAgent != null ? backupAgent : "NOT SPECIFIED"));
         appDetails.add(new AppDetailItem(R.drawable.outline_folder_24, "Data dir path", appDetailsManager.getDataDirPath()));
         appDetails.add(new AppDetailItem(R.drawable.outline_source_24, "Source dir path", appDetailsManager.getSourceDirPath()));
         appDetails.add(new AppDetailItem(R.drawable.outline_folder_shared_24, "Native library path", appDetailsManager.getNativeLibraryPath()));
-        appDetails.add(new AppDetailItem(R.drawable.outline_vpn_key_24, "Signature", ""));
-        appDetails.add(new AppDetailItem(R.drawable.round_fingerprint_24, "Certificate fingerprints", ""));
+        appDetails.add(new AppDetailItem(R.drawable.outline_vpn_key_24, "Signature", "loading • • • • •"));
+        appDetails.add(new AppDetailItem(R.drawable.round_fingerprint_24, "Certificate fingerprints", "loading • • • • •"));
         runOnUiThread(() -> adapter.notifyDataSetChanged());
 
 

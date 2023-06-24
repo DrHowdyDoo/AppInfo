@@ -93,7 +93,6 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             int lineCount = appDetail.getValue().getCount();
             boolean isExpandable = lineCount > Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES;
-            System.out.println("position : " + position + "\nlineCount : " + lineCount + "\nisExpandable : " + isExpandable);
             if (isExpandable) {
                 if (appDetail.isExpanded()) {
                     itemViewHolder.tvExpandIndicator.setVisibility(View.GONE);
