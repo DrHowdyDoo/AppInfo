@@ -73,15 +73,8 @@ public class ApkInfoManager {
         List<File> apkFiles = new ArrayList<>();
         Files.walkFileTree(path, new SimpleFileVisitor<>() {
             @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
-                if (dir.getFileName().toString().toLowerCase().contains("wallpaper"))
-                    return FileVisitResult.SKIP_SUBTREE;
-                else return FileVisitResult.CONTINUE;
-            }
-
-            @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-                if (file.getFileName().toString().endsWith(".apk") && !file.getFileName().toString().startsWith("split_config")) {
+                if (file.getFileName().toString().endsWith(".apk")) {
                     apkFiles.add(file.toFile());
                 }
                 return FileVisitResult.CONTINUE;
@@ -104,6 +97,7 @@ public class ApkInfoManager {
         String apkPath = apkFile.getParent();
         String apkAbsolutePath = apkFile.getAbsolutePath();
         Drawable apkIcon = AppCompatResources.getDrawable(context, R.drawable.empty_icon_placeholder);
+        if (apkName.toLowerCase().startsWith("split")) apkIcon = AppCompatResources.getDrawable(context, R.drawable.ic_split_config_apk);
         String apkVersion = "";
         boolean isInstalled = true;
         PackageInfo apkInfo = null;

@@ -72,7 +72,8 @@ public class AppDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         appName = intent.getStringExtra("appName");
         binding.materialToolBar.setTitle(appName);
-        binding.tvVersion.setText("v" + intent.getStringExtra("appVersion"));
+        String appVersion = intent.getStringExtra("appVersion");
+        if (appVersion != null && !appVersion.isBlank()) binding.tvVersion.setText("v" + appVersion);
         isSplitApp = intent.getBooleanExtra("isSplitApp",false);
         isApk = intent.getBooleanExtra("isApk", false);
         apkAbsolutePath = intent.getStringExtra("apkAbsolutePath");
@@ -102,6 +103,11 @@ public class AppDetailsActivity extends AppCompatActivity {
                         binding.recyclerView.setVisibility(View.GONE);
                         binding.tvPackageNotFound.setVisibility(View.VISIBLE);
                         binding.appBar.setVisibility(View.GONE);
+                        if (appName.toLowerCase().startsWith("split")) {
+                            binding.tvPackageNotFound.setText("Split Config APK\nContains device-specific resources/configs\nNot a complete APK");
+                            binding.tvPackageNotFound.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_split_config_apk,0,0);
+                            binding.tvPackageNotFound.setCompoundDrawableTintList(null);
+                        }
                     }
 
                 });
