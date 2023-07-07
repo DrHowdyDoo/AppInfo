@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,11 +83,17 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 if (appDetail.getValue().isValueEmpty()) {
                     itemViewHolder.progressBar.setVisibility(View.VISIBLE);
                 }else {
-                    itemViewHolder.btnExtractFont.setVisibility(View.VISIBLE);
+                    if (appDetail.getValue().getText().equalsIgnoreCase("not found")) {
+                        itemViewHolder.fontBtnContainer.setVisibility(View.GONE);
+                    } else {
+                        itemViewHolder.fontBtnContainer.setVisibility(View.VISIBLE);
+                        itemViewHolder.btnExtractFont.setVisibility(View.VISIBLE);
+                        itemViewHolder.btnExtractFont.setOnClickListener(v -> extractFont(itemViewHolder));
+                    }
                     itemViewHolder.progressBar.setVisibility(View.GONE);
-                    itemViewHolder.btnExtractFont.setOnClickListener(v -> extractFont(itemViewHolder));
                 }
             } else {
+                itemViewHolder.fontBtnContainer.setVisibility(View.GONE);
                 itemViewHolder.btnExtractFont.setVisibility(View.GONE);
                 itemViewHolder.progressBar.setVisibility(View.GONE);
             }
@@ -223,6 +230,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public CircularProgressIndicator progressBar;
         public LinearProgressIndicator fontExtractionIndicator;
         public Button btnExtractFont;
+        public LinearLayout fontBtnContainer;
 
         public ItemViewHolder(@NonNull AppDeatilsListBinding binding) {
             super(binding.getRoot());
@@ -235,7 +243,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             progressBar = binding.progressBar;
             fontExtractionIndicator = binding.pbFontExtraction;
             fileIcon = binding.imgFontFile;
-
+            fontBtnContainer = binding.fontBtnContainer;
         }
     }
 

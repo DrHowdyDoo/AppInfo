@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="24dp"
-    android:paddingBottom="8dp"
     android:clipToPadding="false"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="hardCodedText,contentDescription"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:paddingBottom="8dp"
+    tools:ignore="hardCodedText,contentDescription">
 
     <Button
         android:id="@+id/btnInfo"
         style="?materialIconButtonFilledTonalStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="Open this app's system info"
         android:padding="12dp"
         app:icon="@drawable/round_info_24"
-        android:contentDescription="Open this app's system info"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,9 +25,9 @@
         style="?materialIconButtonFilledTonalStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="Share app playStore link"
         android:padding="12dp"
         app:icon="@drawable/round_share_24"
-        android:contentDescription="Share app playStore link"
         app:layout_constraintStart_toEndOf="@+id/btnInfo"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,27 +36,29 @@
         style="?materialIconButtonFilledTonalStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="Open this app on playStore"
         android:padding="12dp"
         app:icon="@drawable/ic_playstore_24"
-        android:contentDescription="Open this app on playStore"
         app:layout_constraintStart_toEndOf="@+id/btnShare"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnExtractApk"
         style="@style/Widget.Material3.Button.IconButton.Filled"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingVertical="12dp"
-        android:gravity="center"
-        android:layout_marginStart="16dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="1"
         android:contentDescription="Extract this app's apk file"
+        android:gravity="center"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="12dp"
+        app:iconPadding="8dp"
         android:text="Extract Apk"
         app:icon="@drawable/round_extract_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -70,16 +72,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="btnExtractApk,btnInfo"/>
+        app:constraint_referenced_ids="btnExtractApk,btnInfo" />
 
     <TextView
         android:id="@+id/tvMetadataTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?textAppearanceTitleMedium"
         android:layout_marginTop="42dp"
-        app:layout_constraintTop_toBottomOf="@id/barrier"
-        android:text="App metadata"/>
+        android:text="App metadata"
+        android:textAppearance="?textAppearanceTitleMedium"
+        app:layout_constraintTop_toBottomOf="@id/barrier" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardCategory"
@@ -90,10 +92,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
             android:layout_marginVertical="@dimen/pill_margin_vertical"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
@@ -105,8 +107,8 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -138,24 +140,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
             android:layout_marginVertical="@dimen/pill_margin_vertical"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:src="@drawable/ic_playstore_24"
-                />
+                android:src="@drawable/ic_playstore_24" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -187,24 +188,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
             android:layout_marginVertical="@dimen/pill_margin_vertical"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:src="@drawable/round_calendar_today_24"
-                />
+                android:src="@drawable/round_calendar_today_24" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -236,24 +236,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
             android:layout_marginVertical="@dimen/pill_margin_vertical"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:src="@drawable/round_update_24"
-                />
+                android:src="@drawable/round_update_24" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -285,24 +284,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
             android:layout_marginVertical="@dimen/pill_margin_vertical"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:src="@drawable/round_android_24"
-                />
+                android:src="@drawable/round_android_24" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -395,37 +393,36 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="cardTargetSdk,cardMinSdk"/>
+        app:constraint_referenced_ids="cardTargetSdk,cardMinSdk" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardPackageName"
         style="@style/Widget.App.CardView.Elevated.Round"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/flowBarrier"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/flowBarrier">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
             android:layout_marginVertical="@dimen/pill_margin_vertical"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:src="@drawable/round_folder_zip_24"
-                />
+                android:src="@drawable/round_folder_zip_24" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -439,8 +436,8 @@
                     android:id="@+id/tvPackageNameValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textIsSelectable="true"
                     android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
+                    android:textIsSelectable="true"
                     tools:text="com.drhowdydoo.appinfo" />
 
             </LinearLayout>
@@ -452,32 +449,31 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardMainClass"
         style="@style/Widget.App.CardView.Elevated.Round"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/cardPackageName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/cardPackageName">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
             android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
             android:layout_marginVertical="@dimen/pill_margin_vertical"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:src="@drawable/round_insert_drive_file_24"
-                />
+                android:src="@drawable/round_insert_drive_file_24" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -500,119 +496,118 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardTheme"
-        style="@style/Widget.App.CardView.Elevated.Round"
-        android:layout_width="0dp"
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="1"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="4dp"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/themeBarrier"
         app:layout_constraintTop_toBottomOf="@id/cardMainClass">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardTheme"
+            style="@style/Widget.App.CardView.Elevated.Round"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
-            android:layout_marginVertical="@dimen/pill_margin_vertical"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:src="@drawable/outline_palette_24" />
+            android:layout_marginEnd="4dp">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
+                android:layout_marginVertical="@dimen/pill_margin_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tvThemeTitle"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Theme"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
+                    android:layout_gravity="center_vertical|start"
+                    android:src="@drawable/outline_palette_24" />
 
-                <TextView
-                    android:id="@+id/tvThemeValue"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
-                    tools:text="Theme.AppInfo.Base" />
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvThemeTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Theme"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
+
+                    <TextView
+                        android:id="@+id/tvThemeValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
+                        tools:text="Theme.youtube.Dynamic" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardColor"
-        style="@style/Widget.App.CardView.Elevated.Round"
-        android:layout_width="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="4dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cardMainClass">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardColor"
+            style="@style/Widget.App.CardView.Elevated.Round"
+            android:layout_width="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
-            android:layout_marginVertical="@dimen/pill_margin_vertical"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:src="@drawable/baseline_colorize_24" />
+            android:layout_marginStart="4dp">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
+                android:layout_marginVertical="@dimen/pill_margin_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tvColorTitle"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Primary colors"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
+                    android:layout_gravity="center_vertical|start"
+                    android:src="@drawable/baseline_colorize_24" />
 
-                <TextView
-                    android:id="@+id/tvColorValue"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textIsSelectable="true"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
-                    tools:text="Theme.AppInfo.Base" />
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvColorTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Primary colors"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
+
+                    <TextView
+                        android:id="@+id/tvColorValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
+                        android:textIsSelectable="true"
+                        tools:text="Theme.AppInfo.Base" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-    </com.google.android.material.card.MaterialCardView>
+    </GridLayout>
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/themeBarrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="cardColor,cardTheme"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

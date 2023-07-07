@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -25,6 +26,7 @@ import com.drhowdydoo.appinfo.fragment.ApkFragment;
 import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.interfaces.OnSortFilterListener;
 import com.drhowdydoo.appinfo.viewmodel.MainViewModel;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.elevation.SurfaceColors;
 
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
     private ActivityMainBinding binding;
     private MainViewModel mainViewModel;
     private boolean isPageSelected = false;
+
+    private int appBarState = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
             onFragmentChanged(position);
             return true;
         });
+
 
         binding.materialToolBar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.search) {

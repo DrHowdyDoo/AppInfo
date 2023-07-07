@@ -92,16 +92,19 @@
                 android:layout_height="wrap_content" />
 
             <LinearLayout
+                android:id="@+id/fontBtnContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:visibility="gone"
+                tools:visibility="visible"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btnExtractFont"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start"
+                    android:layout_gravity="start|bottom"
                     android:visibility="gone"
                     tools:visibility="visible"
                     android:gravity="center"

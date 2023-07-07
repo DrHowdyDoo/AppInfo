@@ -32,6 +32,7 @@
             app:expandedTitleMarginBottom="52dp"
             app:maxLines="1"
             app:titleTextEllipsize="end"
+            app:collapsedTitleTextAppearance="?textAppearanceTitleMedium"
             app:expandedTitleTextAppearance="@style/App.TextAppearance.AppName">
 
             <com.google.android.material.appbar.MaterialToolbar
