@@ -91,19 +91,37 @@
         app:constraint_referenced_ids="tvProgressText,progressBar"/>
 
     <TextView
+        android:id="@+id/tvNoResultsFoundTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?textAppearanceDisplayLarge"
+        android:text="(≥o≤)"
+        android:textColor="?colorPrimary"
+        app:layout_constraintVertical_bias="0.28"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/tvNoResultsFoundBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/no_results"
+        android:layout_marginTop="18dp"
+        android:textAppearance="?textAppearanceTitleMedium"
+        app:layout_constraintEnd_toEndOf="@+id/tvNoResultsFoundTitle"
+        app:layout_constraintStart_toStartOf="@+id/tvNoResultsFoundTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvNoResultsFoundTitle" />
+
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/tvNoResultsFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:drawablePadding="8dp"
-        android:textAppearance="?textAppearanceTitleMedium"
-        android:text="@string/no_results"
-        app:layout_constraintVertical_bias="0.28"
-        app:drawableTopCompat="@drawable/twotone_interests_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:constraint_referenced_ids="tvNoResultsFoundTitle,tvNoResultsFoundBody"/>
 
     <TextView
         android:id="@+id/notFound"
