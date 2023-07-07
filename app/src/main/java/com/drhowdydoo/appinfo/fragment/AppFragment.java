@@ -219,7 +219,7 @@ public class AppFragment extends Fragment {
         if (!input.isEmpty()) {
             List<AppInfo> searchResults = appListViewModel.getSavedAppInfoList()
                     .stream()
-                    .filter(appInfo -> appInfo.getAppName().toLowerCase().startsWith(input.toLowerCase()))
+                    .filter(appInfo -> appInfo.getAppName().toLowerCase().startsWith(input.toLowerCase()) || appInfo.getPackageName().toLowerCase().startsWith(input.toLowerCase()))
                     .collect(Collectors.toList());
             adapter.updateData(searchResults);
             onSortFilterListener.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));

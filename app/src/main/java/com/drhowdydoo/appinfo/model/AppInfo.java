@@ -17,13 +17,16 @@ public class AppInfo {
     private String appVersion;
     private boolean isSystemApp;
     private long totalForegroundTime;
+    private String packageName;
 
     public AppInfo(String appName,
                    Drawable appIcon,
                    long appLastUpdateTime,
                    ApplicationInfo appInfo,
                    boolean isSplitApp,
-                   String appVersion, boolean isSystemApp) {
+                   String appVersion,
+                   boolean isSystemApp,
+                   String packageName) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.appLastUpdateTime = appLastUpdateTime;
@@ -31,6 +34,17 @@ public class AppInfo {
         this.isSplitApp = isSplitApp;
         this.appVersion = appVersion;
         this.isSystemApp = isSystemApp;
+        this.packageName = packageName;
+    }
+
+
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     public String getAppName() {

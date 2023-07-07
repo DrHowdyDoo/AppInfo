@@ -93,7 +93,8 @@ public class AppInfoManager {
                 applicationInfo,
                 isSplit,
                 appVersion,
-                isSystemApp);
+                isSystemApp,
+                applicationInfo.packageName);
 
         if (PermissionManager.hasUsageStatsPermission(context)) {
             long totalAppSize = 0;

@@ -56,7 +56,12 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         ApkInfo apkInfo = apkInfoList.get(position);
         holder.tvApkName.setText(apkInfo.getApkName());
         holder.tvApkSize.setText(Formatter.formatShortFileSize(context, apkInfo.getApkSize()));
-        holder.tvApkVersion.setText("v" + apkInfo.getApkVersion());
+        String apkVersion = apkInfo.getApkVersion();
+        if (apkVersion.isBlank()) {
+            holder.tvApkVersion.setText("");
+        } else {
+            holder.tvApkVersion.setText("v" + apkVersion);
+        }
         holder.tvApkPath.setText(apkInfo.getApkPath());
         holder.tvApkPath.setSelected(true);
         String apkStatus = apkInfo.isInstalled() ? "installed" : "not installed";
