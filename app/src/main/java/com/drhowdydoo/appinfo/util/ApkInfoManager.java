@@ -2,6 +2,7 @@ package com.drhowdydoo.appinfo.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -33,6 +34,10 @@ public class ApkInfoManager {
 
     private PackageManager packageManager;
 
+    private SharedPreferences preferences;
+
+    private boolean scanHiddenFolders;
+
     public ApkInfoManager() {
 
     }
@@ -40,10 +45,13 @@ public class ApkInfoManager {
     public ApkInfoManager(Context context) {
         this.context = context;
         packageManager = context.getPackageManager();
+        preferences = context.getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
     }
 
     @SuppressLint("CheckResult")
     public void getAllApks(File directory, ApkFragment apkFragment) {
+
+        scanHiddenFolders = preferences.getBoolean("com.drhowdydoo.appinfo.scan-hidden-folders",true);
 
         File[] files = directory.listFiles();
         if (files == null) return;
@@ -72,6 +80,14 @@ public class ApkInfoManager {
         Path path = directory.toPath();
         List<File> apkFiles = new ArrayList<>();
         Files.walkFileTree(path, new SimpleFileVisitor<>() {
+
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                boolean isHidden = Files.isHidden(dir);
+                if (!scanHiddenFolders && isHidden) return FileVisitResult.SKIP_SUBTREE;
+                return FileVisitResult.CONTINUE;
+            }
+
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                 if (file.getFileName().toString().endsWith(".apk")) {

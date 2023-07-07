@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.CompoundButton;
 
 import com.drhowdydoo.appinfo.databinding.ActivitySettingsBinding;
 import com.drhowdydoo.appinfo.util.Constants;
@@ -30,8 +31,15 @@ public class SettingsActivity extends AppCompatActivity {
         init();
         handleTheme();
         handleIconShape();
+        handleScan();
 
 
+    }
+
+    private void handleScan() {
+        binding.switchScanHiddenFiles.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            editor.putBoolean("com.drhowdydoo.appinfo.scan-hidden-folders",isChecked).apply();
+        });
     }
 
     private void handleIconShape() {
@@ -84,6 +92,9 @@ public class SettingsActivity extends AppCompatActivity {
         int iconShape = preferences.getInt("com.drhowdydoo.appinfo.icon-shape",0);
         if (iconShape == Constants.SHOW_ROUND_APP_ICON) binding.btnRoundIcon.setChecked(true);
         else binding.btnSquircleIcon.setChecked(true);
+
+        boolean scanHiddenFolders = preferences.getBoolean("com.drhowdydoo.appinfo.scan-hidden-folders",true);
+        binding.switchScanHiddenFiles.setChecked(scanHiddenFolders);
     }
 
     /**
