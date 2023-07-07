@@ -10,5 +10,10 @@
         android:contentDescription="@string/search"
         app:showAsAction="ifRoom" />
 
+    <item android:id="@+id/settings"
+        android:title="@string/settings"
+        android:contentDescription="@string/settings"
+        app:showAsAction="never" />
+
 
 </menu>
