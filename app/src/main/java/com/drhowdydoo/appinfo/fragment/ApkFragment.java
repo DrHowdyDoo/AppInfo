@@ -1,6 +1,8 @@
 package com.drhowdydoo.appinfo.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -54,7 +56,9 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         checkStoragePermission();
         binding.btnStorageAccess.setOnClickListener(this);
         apkListViewModel = new ViewModelProvider(this).get(ApkListViewModel.class);
+        SharedPreferences preferences = requireContext().getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
         adapter = new ApkRecyclerViewAdapter(requireActivity(), apkListViewModel.getSavedApkInfoList());
+        adapter.setFlags(preferences.getInt("com.drhowdydoo.appinfo.icon-shape",Constants.SHOW_ROUND_APP_ICON));
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.setItemAnimator(null);

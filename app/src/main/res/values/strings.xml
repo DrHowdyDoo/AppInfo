@@ -28,5 +28,8 @@
     <string name="theme">Theme</string>
     <string name="dark">Dark</string>
     <string name="light">Light</string>
+    <string name="icon_shape">Icon shape</string>
+    <string name="squircle">Squircle</string>
+    <string name="round">Round</string>
 
 </resources>

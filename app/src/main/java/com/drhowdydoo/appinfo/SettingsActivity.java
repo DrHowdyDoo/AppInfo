@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.drhowdydoo.appinfo.databinding.ActivitySettingsBinding;
+import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.ThemeUtils;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
@@ -28,8 +29,22 @@ public class SettingsActivity extends AppCompatActivity {
 
         init();
         handleTheme();
+        handleIconShape();
 
 
+    }
+
+    private void handleIconShape() {
+        binding.btnRoundIcon.setOnClickListener(v -> {
+            binding.btnRoundIcon.setChecked(true);
+            binding.btnSquircleIcon.setChecked(false);
+            editor.putInt("com.drhowdydoo.appinfo.icon-shape", Constants.SHOW_ROUND_APP_ICON).apply();
+        });
+        binding.btnSquircleIcon.setOnClickListener(v -> {
+            binding.btnSquircleIcon.setChecked(true);
+            binding.btnRoundIcon.setChecked(false);
+            editor.putInt("com.drhowdydoo.appinfo.icon-shape",Constants.SHOW_SQUARE_APP_ICON).apply();
+        });
     }
 
     private void handleTheme() {
@@ -65,6 +80,10 @@ public class SettingsActivity extends AppCompatActivity {
         } else {
             binding.btnLightTheme.setChecked(true);
         }
+
+        int iconShape = preferences.getInt("com.drhowdydoo.appinfo.icon-shape",0);
+        if (iconShape == Constants.SHOW_ROUND_APP_ICON) binding.btnRoundIcon.setChecked(true);
+        else binding.btnSquircleIcon.setChecked(true);
     }
 
     /**

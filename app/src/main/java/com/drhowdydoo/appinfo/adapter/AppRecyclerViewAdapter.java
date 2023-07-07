@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.drhowdydoo.appinfo.AppDetailsActivity;
 import com.drhowdydoo.appinfo.R;
@@ -61,15 +63,13 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
 
         if (flagSet.contains(Constants.SHOW_SQUARE_APP_ICON)) {
             Glide.with(context)
-                    .load(appInfo
-                            .getAppIcon())
-                    .transform(new RoundedCorners(32))
+                    .load(appInfo.getAppIcon())
+                    .transform(new FitCenter(), new RoundedCorners(32))
                     .error(R.drawable.round_pest_24)
                     .into(holder.imgAppIcon);
         } else {
             Glide.with(context)
-                    .load(appInfo
-                            .getAppIcon())
+                    .load(appInfo.getAppIcon())
                     .circleCrop()
                     .error(R.drawable.round_pest_24)
                     .into(holder.imgAppIcon);

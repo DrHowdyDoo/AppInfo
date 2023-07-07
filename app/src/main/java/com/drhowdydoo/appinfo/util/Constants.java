@@ -6,6 +6,7 @@ public class Constants {
     public static final int SHOW_LAST_UPDATED_TIME = 1;
     public static final int HIDE_APP_STATS = 2;
     public static final int SHOW_SQUARE_APP_ICON = 3;
+    public static final int SHOW_ROUND_APP_ICON = -3;
     public static final int FILTER_SYSTEM_APPS = 4;
     public static final int FILTER_NON_SYSTEM_APPS = 5;
     public static final int NO_FILTER = 6;

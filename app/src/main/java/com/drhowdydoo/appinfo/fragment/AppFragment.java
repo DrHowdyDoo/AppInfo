@@ -1,6 +1,8 @@
 package com.drhowdydoo.appinfo.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +56,9 @@ public class AppFragment extends Fragment {
         View rootView = binding.getRoot();
 
         appListViewModel = new ViewModelProvider(this).get(AppListViewModel.class);
+        SharedPreferences preferences = requireContext().getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
         adapter = new AppRecyclerViewAdapter(requireActivity(), appListViewModel.getSavedAppInfoList());
+        adapter.setFlags(preferences.getInt("com.drhowdydoo.appinfo.icon-shape",Constants.SHOW_ROUND_APP_ICON));
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.setItemAnimator(null);
