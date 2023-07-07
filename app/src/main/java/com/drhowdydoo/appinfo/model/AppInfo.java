@@ -38,7 +38,6 @@ public class AppInfo {
     }
 
 
-
     public String getPackageName() {
         return packageName;
     }

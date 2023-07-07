@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.drhowdydoo.appinfo.AppDetailsActivity;
-import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.bottomsheet.ShareBottomSheet;
 import com.drhowdydoo.appinfo.databinding.AppDeatilsListBinding;
 import com.drhowdydoo.appinfo.databinding.AppDetailsGridLayoutBinding;
@@ -41,8 +40,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 @SuppressWarnings("FieldMayBeFinal")
 public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Object> appDetails;
     private final Context context;
+    private List<Object> appDetails;
     private String appName;
     private String apkFilePath;
     private boolean isInstalled, isApk, isSplitApp;
@@ -56,8 +55,10 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == 0) return new HeaderViewHolder(AppDetailsGridLayoutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-        else return new ItemViewHolder(AppDeatilsListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        if (viewType == 0)
+            return new HeaderViewHolder(AppDetailsGridLayoutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        else
+            return new ItemViewHolder(AppDeatilsListBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -82,7 +83,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             if (position == 3) {
                 if (appDetail.getValue().isValueEmpty()) {
                     itemViewHolder.progressBar.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     if (appDetail.getValue().getText().equalsIgnoreCase("not found")) {
                         itemViewHolder.fontBtnContainer.setVisibility(View.GONE);
                     } else {
@@ -98,7 +99,8 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 itemViewHolder.progressBar.setVisibility(View.GONE);
             }
 
-            if (appDetail.getValue().getText().equalsIgnoreCase("not found")) itemViewHolder.btnExtractFont.setVisibility(View.GONE);
+            if (appDetail.getValue().getText().equalsIgnoreCase("not found"))
+                itemViewHolder.btnExtractFont.setVisibility(View.GONE);
 
             int lineCount = appDetail.getValue().getCount();
             boolean isExpandable = lineCount > Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES;
@@ -162,9 +164,9 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ShareBottomSheet shareBottomSheet = new ShareBottomSheet();
             Bundle args = new Bundle();
             args.putString("packageName", packageInfo.packageName);
-            args.putString("appName",appName);
-            args.putString("apkPath",packageInfo.applicationInfo.publicSourceDir);
-            args.putBoolean("isSplitApp",isSplitApp);
+            args.putString("appName", appName);
+            args.putString("apkPath", packageInfo.applicationInfo.publicSourceDir);
+            args.putBoolean("isSplitApp", isSplitApp);
             shareBottomSheet.setArguments(args);
             shareBottomSheet.show(activity.getSupportFragmentManager(), "shareBottomSheet");
         });
@@ -178,7 +180,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             holder.gridBinding.btnExtractApk.setEnabled(false);
             Utilities.shouldSearchApks = true;
             activity.hideProgressBar(false);
-            Observable.fromAction(() -> ApkExtractor.extractApk(appName,packageInfo))
+            Observable.fromAction(() -> ApkExtractor.extractApk(appName, packageInfo))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
@@ -191,8 +193,8 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     @SuppressLint("CheckResult")
-    private void extractFont(ItemViewHolder holder){
-        boolean haveStorageAccess = ((AppDetailsActivity)context).checkStoragePermission();
+    private void extractFont(ItemViewHolder holder) {
+        boolean haveStorageAccess = ((AppDetailsActivity) context).checkStoragePermission();
         if (!haveStorageAccess) return;
         holder.btnExtractFont.setEnabled(false);
         holder.fontExtractionIndicator.setVisibility(View.VISIBLE);
@@ -203,8 +205,10 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     holder.btnExtractFont.setEnabled(true);
                     holder.fontExtractionIndicator.setVisibility(View.GONE);
                     holder.fileIcon.setVisibility(View.GONE);
-                    if (path.isBlank()) Toast.makeText(context, "Something went wrong !", Toast.LENGTH_SHORT).show();
-                    else Toast.makeText(context, "Fonts extracted to " + path, Toast.LENGTH_SHORT).show();
+                    if (path.isBlank())
+                        Toast.makeText(context, "Something went wrong !", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(context, "Fonts extracted to " + path, Toast.LENGTH_SHORT).show();
                 });
     }
 

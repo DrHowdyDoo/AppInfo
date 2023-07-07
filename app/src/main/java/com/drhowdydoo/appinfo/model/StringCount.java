@@ -20,12 +20,12 @@ public class StringCount {
         return text;
     }
 
-    public boolean isValueEmpty() {
-        return text == null || text.isEmpty();
-    }
-
     public void setText(String text) {
         this.text = text;
+    }
+
+    public boolean isValueEmpty() {
+        return text == null || text.isEmpty();
     }
 
     public int getCount() {

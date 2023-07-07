@@ -52,8 +52,8 @@ public class ApkInfoManager {
     @SuppressLint("CheckResult")
     public void getAllApks(File directory, ApkFragment apkFragment) {
 
-        scanHiddenFolders = preferences.getBoolean("com.drhowdydoo.appinfo.scan-hidden-folders",true);
-        showSplitApks = preferences.getBoolean("com.drhowdydoo.appinfo.show-split-apks",true);
+        scanHiddenFolders = preferences.getBoolean("com.drhowdydoo.appinfo.scan-hidden-folders", true);
+        showSplitApks = preferences.getBoolean("com.drhowdydoo.appinfo.show-split-apks", true);
 
         File[] files = directory.listFiles();
         if (files == null) return;
@@ -92,7 +92,8 @@ public class ApkInfoManager {
 
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-                if (file.getFileName().toString().toLowerCase().startsWith("split") && !showSplitApks) return FileVisitResult.SKIP_SUBTREE;
+                if (file.getFileName().toString().toLowerCase().startsWith("split") && !showSplitApks)
+                    return FileVisitResult.SKIP_SUBTREE;
                 if (file.getFileName().toString().endsWith(".apk")) {
                     apkFiles.add(file.toFile());
                 }
@@ -116,7 +117,8 @@ public class ApkInfoManager {
         String apkPath = apkFile.getParent();
         String apkAbsolutePath = apkFile.getAbsolutePath();
         Drawable apkIcon = AppCompatResources.getDrawable(context, R.drawable.empty_icon_placeholder);
-        if (apkName.toLowerCase().startsWith("split")) apkIcon = AppCompatResources.getDrawable(context, R.drawable.ic_split_config_apk);
+        if (apkName.toLowerCase().startsWith("split"))
+            apkIcon = AppCompatResources.getDrawable(context, R.drawable.ic_split_config_apk);
         String apkVersion = "";
         boolean isInstalled = true;
         PackageInfo apkInfo = null;

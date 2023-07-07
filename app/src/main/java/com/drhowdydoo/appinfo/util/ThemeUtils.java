@@ -2,7 +2,6 @@ package com.drhowdydoo.appinfo.util;
 
 import android.app.UiModeManager;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Build;
 
 import androidx.appcompat.app.AppCompatDelegate;

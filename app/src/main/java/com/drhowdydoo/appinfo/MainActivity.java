@@ -8,7 +8,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,7 +29,6 @@ import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.interfaces.OnSortFilterListener;
 import com.drhowdydoo.appinfo.util.ThemeUtils;
 import com.drhowdydoo.appinfo.viewmodel.MainViewModel;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.elevation.SurfaceColors;
 
@@ -49,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
         super.onCreate(savedInstanceState);
         SharedPreferences preferences = getSharedPreferences("com.drhowdydoo.appinfo.preferences", MODE_PRIVATE);
         int themeMode = preferences.getInt("com.drhowdydoo.appinfo.theme", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        ThemeUtils.applyTheme(this,themeMode);
+        ThemeUtils.applyTheme(this, themeMode);
         DynamicColors.applyToActivityIfAvailable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -109,9 +106,8 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
                     imm.showSoftInput(binding.searchInput, InputMethodManager.SHOW_IMPLICIT);
                 }
                 return true;
-            }
-            else if (item.getItemId() == R.id.settings) {
-                startActivity(new Intent(MainActivity.this,SettingsActivity.class));
+            } else if (item.getItemId() == R.id.settings) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
             return false;
         });

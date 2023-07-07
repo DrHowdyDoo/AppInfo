@@ -47,6 +47,27 @@ public class AppDetailsManager {
         this.packageInfo = packageInfo;
     }
 
+    public static String extractFonts(String apkFilePath, String appName) {
+        File destinationRootFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "AppInfo");
+        File destinationAppFolder = new File(destinationRootFolder, appName + "/fonts");
+        boolean created = destinationAppFolder.mkdirs();
+        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(apkFilePath))) {
+            ZipEntry entry;
+            while ((entry = zipInputStream.getNextEntry()) != null) {
+                String entryName = entry.getName();
+                if (entryName.toLowerCase().endsWith(".ttf") || entryName.toLowerCase().endsWith(".otf")) {
+                    String fontName = entryName.substring(entryName.lastIndexOf("/") + 1);
+                    Utilities.extractFile(zipInputStream, destinationAppFolder.getPath() + File.separator + fontName);
+                }
+                zipInputStream.closeEntry();
+            }
+        } catch (IOException | NullPointerException e) {
+            e.printStackTrace();
+            return "";
+        }
+        return destinationAppFolder.getPath();
+    }
+
     public StringCount findFontFiles(String apkFilePath) {
         StringBuilder fontFiles = new StringBuilder();
         int count = 0;
@@ -66,27 +87,6 @@ public class AppDetailsManager {
 
         if (fontFiles.toString().isBlank()) fontFiles.append("NOT FOUND");
         return new StringCount(fontFiles.toString().trim(), count);
-    }
-
-    public static String extractFonts(String apkFilePath, String appName) {
-        File destinationRootFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "AppInfo");
-        File destinationAppFolder = new File(destinationRootFolder, appName + "/fonts");
-        boolean created = destinationAppFolder.mkdirs();
-        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(apkFilePath))) {
-            ZipEntry entry;
-            while ((entry = zipInputStream.getNextEntry()) != null) {
-                String entryName = entry.getName();
-                if (entryName.toLowerCase().endsWith(".ttf") || entryName.toLowerCase().endsWith(".otf")) {
-                    String fontName = entryName.substring(entryName.lastIndexOf("/") + 1);
-                    Utilities.extractFile(zipInputStream,destinationAppFolder.getPath() + File.separator + fontName);
-                }
-                zipInputStream.closeEntry();
-            }
-        } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
-            return "";
-        }
-        return destinationAppFolder.getPath();
     }
 
     public Drawable getIcon(boolean isApk, String apkAbsolutePath) {

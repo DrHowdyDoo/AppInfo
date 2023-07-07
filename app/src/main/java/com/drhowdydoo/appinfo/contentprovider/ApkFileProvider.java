@@ -29,10 +29,10 @@ public class ApkFileProvider extends ContentProvider {
     @Override
     public ParcelFileDescriptor openFile(@NonNull Uri uri, @NonNull String mode) throws FileNotFoundException {
 
-            File apkFile = new File(uri.getPath());
-            if (!apkFile.exists()) {
-                throw new FileNotFoundException();
-            }
+        File apkFile = new File(uri.getPath());
+        if (!apkFile.exists()) {
+            throw new FileNotFoundException();
+        }
 
         return ParcelFileDescriptor.open(apkFile, ParcelFileDescriptor.MODE_READ_ONLY);
     }

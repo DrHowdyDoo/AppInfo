@@ -58,7 +58,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         apkListViewModel = new ViewModelProvider(this).get(ApkListViewModel.class);
         SharedPreferences preferences = requireContext().getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
         adapter = new ApkRecyclerViewAdapter(requireActivity(), apkListViewModel.getSavedApkInfoList());
-        adapter.setFlags(preferences.getInt("com.drhowdydoo.appinfo.icon-shape",Constants.SHOW_ROUND_APP_ICON));
+        adapter.setFlags(preferences.getInt("com.drhowdydoo.appinfo.icon-shape", Constants.SHOW_ROUND_APP_ICON));
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.setItemAnimator(null);

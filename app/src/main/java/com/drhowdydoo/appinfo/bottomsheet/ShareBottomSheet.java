@@ -16,7 +16,7 @@ import com.drhowdydoo.appinfo.databinding.BottomSheetShareBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class ShareBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener{
+public class ShareBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener {
 
     private String packageName;
     private String appName;

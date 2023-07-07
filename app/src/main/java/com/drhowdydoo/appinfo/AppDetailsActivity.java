@@ -10,21 +10,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.drhowdydoo.appinfo.adapter.AppDetailsListAdapter;
-import com.drhowdydoo.appinfo.bottomsheet.ShareBottomSheet;
 import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.model.AppMetadata;
 import com.drhowdydoo.appinfo.model.StringCount;
-import com.drhowdydoo.appinfo.util.ApkExtractor;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -64,7 +60,7 @@ public class AppDetailsActivity extends AppCompatActivity {
     @SuppressLint({"CheckResult", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        long startTime =  System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         super.onCreate(savedInstanceState);
         DynamicColors.applyToActivityIfAvailable(this);
         binding = ActivityAppDetailsBinding.inflate(getLayoutInflater());
@@ -73,8 +69,9 @@ public class AppDetailsActivity extends AppCompatActivity {
         appName = intent.getStringExtra("appName");
         binding.materialToolBar.setTitle(appName);
         String appVersion = intent.getStringExtra("appVersion");
-        if (appVersion != null && !appVersion.isBlank()) binding.tvVersion.setText("v" + appVersion);
-        isSplitApp = intent.getBooleanExtra("isSplitApp",false);
+        if (appVersion != null && !appVersion.isBlank())
+            binding.tvVersion.setText("v" + appVersion);
+        isSplitApp = intent.getBooleanExtra("isSplitApp", false);
         binding.imgSplitIndicator.setVisibility(isSplitApp ? View.VISIBLE : View.GONE);
         isApk = intent.getBooleanExtra("isApk", false);
         apkAbsolutePath = intent.getStringExtra("apkAbsolutePath");
@@ -96,7 +93,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                 .subscribe(packageInfo -> {
                     packageInfo.ifPresent(value -> {
                         appDetailsManager = new AppDetailsManager(this, value);
-                        adapter.addApkDetails(appName, value.applicationInfo.publicSourceDir,isInstalled, isApk, isSplitApp);
+                        adapter.addApkDetails(appName, value.applicationInfo.publicSourceDir, isInstalled, isApk, isSplitApp);
                         adapter.setPackageInfo(value);
                         init(value);
                     });
@@ -106,7 +103,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                         binding.appBar.setVisibility(View.GONE);
                         if (appName.toLowerCase().startsWith("split")) {
                             binding.tvPackageNotFound.setText("Split Config APK\nContains device-specific resources/configs\nNot a complete APK");
-                            binding.tvPackageNotFound.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_split_config_apk,0,0);
+                            binding.tvPackageNotFound.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_split_config_apk, 0, 0);
                             binding.tvPackageNotFound.setCompoundDrawableTintList(null);
                         }
                     }
@@ -120,7 +117,8 @@ public class AppDetailsActivity extends AppCompatActivity {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                 packageManagerFlags |= PackageManager.GET_SIGNING_CERTIFICATES;
-            if (isApk && !isInstalled) return Optional.ofNullable(getPackageManager().getPackageArchiveInfo(identifier, packageManagerFlags));
+            if (isApk && !isInstalled)
+                return Optional.ofNullable(getPackageManager().getPackageArchiveInfo(identifier, packageManagerFlags));
             return Optional.ofNullable(getPackageManager().getPackageInfo(identifier, packageManagerFlags));
         } catch (PackageManager.NameNotFoundException e) {
             return Optional.empty();
@@ -139,7 +137,7 @@ public class AppDetailsActivity extends AppCompatActivity {
 
         appDetails.add(new AppMetadata());
 
-        Observable.zip( Observable.just(appDetailsManager.getCategory()).subscribeOn(Schedulers.io()),
+        Observable.zip(Observable.just(appDetailsManager.getCategory()).subscribeOn(Schedulers.io()),
                         Observable.just(appDetailsManager.getMinSdk()).subscribeOn(Schedulers.io()),
                         Observable.just(appDetailsManager.getTargetSdk()).subscribeOn(Schedulers.io()),
                         Observable.just(appDetailsManager.getInstallSource()).subscribeOn(Schedulers.io()),
@@ -166,7 +164,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(appMetadata -> {
                     //Grid Data Set
-                    appDetails.set(0,appMetadata);
+                    appDetails.set(0, appMetadata);
                     adapter.notifyItemChanged(0);
                 });
 
@@ -254,7 +252,6 @@ public class AppDetailsActivity extends AppCompatActivity {
                 });
 
     }
-
 
 
     public boolean checkStoragePermission() {
