@@ -32,6 +32,7 @@
             app:expandedTitleMarginBottom="52dp"
             app:maxLines="1"
             app:titleTextEllipsize="end"
+            app:expandedTitleMarginEnd="56dp"
             app:collapsedTitleTextAppearance="?textAppearanceTitleMedium"
             app:expandedTitleTextAppearance="@style/App.TextAppearance.AppName">
 
@@ -78,7 +79,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="bottom"
                 android:layout_marginStart="110dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="56dp"
                 android:ellipsize="middle"
                 android:gravity="top"
                 android:maxLines="2"
@@ -87,6 +88,20 @@
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.9"
                 tools:text="v 1.0.5" />
+
+
+            <ImageView
+                android:id="@+id/imgSplitIndicator"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="end|bottom"
+                app:layout_collapseMode="parallax"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:layout_collapseParallaxMultiplier="0.9"
+                android:layout_marginBottom="30dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_split_config_apk"/>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

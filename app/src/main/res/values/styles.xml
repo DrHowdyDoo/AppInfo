@@ -21,7 +21,7 @@
 
 
     <style name="App.TextAppearance.AppName" parent="TextAppearance.Material3.TitleMedium">
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
     <style name="App.TextAppearance.TitleMedium" parent="TextAppearance.Material3.TitleMedium">

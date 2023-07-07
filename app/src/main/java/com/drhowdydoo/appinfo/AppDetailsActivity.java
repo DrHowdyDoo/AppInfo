@@ -75,6 +75,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         String appVersion = intent.getStringExtra("appVersion");
         if (appVersion != null && !appVersion.isBlank()) binding.tvVersion.setText("v" + appVersion);
         isSplitApp = intent.getBooleanExtra("isSplitApp",false);
+        binding.imgSplitIndicator.setVisibility(isSplitApp ? View.VISIBLE : View.GONE);
         isApk = intent.getBooleanExtra("isApk", false);
         apkAbsolutePath = intent.getStringExtra("apkAbsolutePath");
         isInstalled = intent.getBooleanExtra("isInstalled", true);
