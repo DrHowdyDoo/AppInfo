@@ -33,12 +33,14 @@ public class SettingsActivity extends AppCompatActivity {
         handleIconShape();
         handleScan();
 
-
     }
 
     private void handleScan() {
         binding.switchScanHiddenFiles.setOnCheckedChangeListener((buttonView, isChecked) -> {
             editor.putBoolean("com.drhowdydoo.appinfo.scan-hidden-folders",isChecked).apply();
+        });
+        binding.switchShowSplitApks.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            editor.putBoolean("com.drhowdydoo.appinfo.show-split-apks",isChecked).apply();
         });
     }
 
@@ -95,6 +97,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         boolean scanHiddenFolders = preferences.getBoolean("com.drhowdydoo.appinfo.scan-hidden-folders",true);
         binding.switchScanHiddenFiles.setChecked(scanHiddenFolders);
+
+        boolean showSplitApks = preferences.getBoolean("com.drhowdydoo.appinfo.show-split-apks",true);
+        binding.switchShowSplitApks.setChecked(showSplitApks);
     }
 
     /**

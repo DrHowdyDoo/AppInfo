@@ -37,6 +37,7 @@ public class ApkInfoManager {
     private SharedPreferences preferences;
 
     private boolean scanHiddenFolders;
+    private boolean showSplitApks;
 
     public ApkInfoManager() {
 
@@ -52,6 +53,7 @@ public class ApkInfoManager {
     public void getAllApks(File directory, ApkFragment apkFragment) {
 
         scanHiddenFolders = preferences.getBoolean("com.drhowdydoo.appinfo.scan-hidden-folders",true);
+        showSplitApks = preferences.getBoolean("com.drhowdydoo.appinfo.show-split-apks",true);
 
         File[] files = directory.listFiles();
         if (files == null) return;
@@ -90,6 +92,7 @@ public class ApkInfoManager {
 
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                if (file.getFileName().toString().toLowerCase().startsWith("split") && !showSplitApks) return FileVisitResult.SKIP_SUBTREE;
                 if (file.getFileName().toString().endsWith(".apk")) {
                     apkFiles.add(file.toFile());
                 }
