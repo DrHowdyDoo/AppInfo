@@ -62,8 +62,10 @@
                 android:layout_marginBottom="1dp"
                 android:layout_gravity="bottom"
                 android:src="@drawable/split_app"
-                android:layout_width="12dp"
-                android:layout_height="12dp"/>
+                android:padding="2dp"
+                android:background="@drawable/filled_pill"
+                android:layout_width="14dp"
+                android:layout_height="14dp"/>
 
             <TextView
                 android:id="@+id/tvSystemApp"
@@ -72,8 +74,11 @@
                 tools:visibility="visible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?textAppearanceLabelSmall"
+                android:paddingHorizontal="4dp"
+                android:gravity="center"
+                android:paddingVertical="1dp"
                 android:textColor="?colorPrimary"
+                android:textAppearance="?textAppearanceLabelSmall"
                 android:text="@string/system"
                 tools:text="System"
                 />

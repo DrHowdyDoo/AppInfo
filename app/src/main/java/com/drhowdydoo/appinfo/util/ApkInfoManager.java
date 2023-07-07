@@ -103,7 +103,7 @@ public class ApkInfoManager {
         String apkName = apkFile.getName();
         String apkPath = apkFile.getParent();
         String apkAbsolutePath = apkFile.getAbsolutePath();
-        Drawable apkIcon = AppCompatResources.getDrawable(context, R.drawable.round_android_24);
+        Drawable apkIcon = AppCompatResources.getDrawable(context, R.drawable.empty_icon_placeholder);
         String apkVersion = "";
         boolean isInstalled = true;
         PackageInfo apkInfo = null;
