@@ -11,7 +11,7 @@
 
     <Button
         android:id="@+id/btnInfo"
-        style="?materialIconButtonFilledTonalStyle"
+        style="@style/Widget.App.IconButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="Open this app's system info"
@@ -22,7 +22,7 @@
 
     <Button
         android:id="@+id/btnShare"
-        style="?materialIconButtonFilledTonalStyle"
+        style="@style/Widget.App.IconButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="Share app playStore link"
@@ -33,7 +33,7 @@
 
     <Button
         android:id="@+id/btnPlayStore"
-        style="?materialIconButtonFilledTonalStyle"
+        style="@style/Widget.App.IconButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="Open this app on playStore"
@@ -511,6 +511,7 @@
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
             android:layout_marginEnd="4dp">
 
             <LinearLayout
@@ -558,6 +559,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardColor"
             style="@style/Widget.App.CardView.Elevated.Round"
+            android:layout_marginBottom="2dp"
             android:layout_width="0dp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
