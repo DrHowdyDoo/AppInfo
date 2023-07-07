@@ -63,7 +63,7 @@
                 android:layout_marginBottom="4dp"
                 android:layout_gravity="start|bottom"
                 app:indicatorSize="76dp"
-                android:layout_marginStart="11dp"
+                android:layout_marginStart="12dp"
                 app:layout_collapseMode="parallax"
                 app:trackCornerRadius="12dp"
                 android:visibility="gone"
