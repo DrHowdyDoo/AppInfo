@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,11 +31,7 @@ import com.drhowdydoo.appinfo.util.ApkInfoManager;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.drhowdydoo.appinfo.viewmodel.ApkListViewModel;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,9 +98,11 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         getAllApks();
     }
 
-    private void getAllApks(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) return;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) return;
+    private void getAllApks() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager())
+            return;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
+            return;
 
         binding.groupStoragePermission.setVisibility(View.GONE);
         if (apkListViewModel.getSavedApkInfoList().isEmpty() && Utilities.shouldSearchApks) {
@@ -127,7 +124,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
                 && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             binding.tvStoragePermission.setText("App needs storage access\nto search for all apks");
             binding.groupStoragePermission.setVisibility(View.VISIBLE);
-        }else binding.groupStoragePermission.setVisibility(View.GONE);
+        } else binding.groupStoragePermission.setVisibility(View.GONE);
     }
 
 

@@ -12,8 +12,6 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.view.View;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -59,6 +57,7 @@ public class AppDetailsActivity extends AppCompatActivity {
     private String appName;
     private boolean isInstalled;
     private boolean permissionAskedForFirstTime = true;
+
     @SuppressLint({"CheckResult", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -260,9 +259,11 @@ public class AppDetailsActivity extends AppCompatActivity {
     public boolean checkStoragePermission() {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) return true;
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+            return true;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) return true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager())
+            return true;
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
 
@@ -291,7 +292,10 @@ public class AppDetailsActivity extends AppCompatActivity {
         new MaterialAlertDialogBuilder(this)
                 .setIcon(R.drawable.baseline_gpp_maybe_24)
                 .setTitle("Permission required   😅")
-                .setMessage("Manage external storage permission required to perform this action ^_^")
+                .setMessage("Manage external storage permission required to perform this action\n" +
+                        "To grant storage permission, please follow these steps:\n" +
+                        "Press 'Allow' to navigate to the ALL FILES ACCESS page for this app\n" +
+                        "Then look for the 'Allow access to manage all files' permission and ensure it is enabled.\n")
                 .setPositiveButton("Allow", (dialog, which) -> {
                     Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
                     intent.setData(Uri.parse("package:" + "com.drhowdydoo.appinfo"));

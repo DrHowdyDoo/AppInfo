@@ -1,5 +1,7 @@
 package com.drhowdydoo.appinfo.bottomsheet;
 
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +22,9 @@ import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.PermissionManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 public class SortBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener {
 
@@ -68,6 +73,13 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (PermissionManager.hasUsageStatsPermission(requireActivity())) {
+            appBinding.tvLockedTitle.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -104,9 +116,22 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
     }
 
     private void getPermission() {
-        startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-                .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                .setData(Uri.parse("package:" + "com.drhowdydoo.appinfo")));
+        try {
+            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                    .setData(Uri.parse("package:" + "com.drhowdydoo.appinfo")));
+        } catch (ActivityNotFoundException activityNotFoundException) {
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setIcon(R.drawable.baseline_gpp_maybe_24)
+                    .setTitle("Permission required   😅")
+                    .setMessage("Usage access required to use this sort option\n" +
+                            "To grant the permission, please follow these steps:\n" +
+                            "Go to Settings -> Apps & notifications -> Advanced -> Special app access -> Usage access -> AppInfo\n" +
+                            "Then look for the 'Permit usage access' permission and ensure it is enabled.\n")
+                    .setPositiveButton("Got it", (dialog, which) -> dismiss())
+                    .show();
+        }
+
     }
 
     private String textSwitcher(boolean isReverse) {
