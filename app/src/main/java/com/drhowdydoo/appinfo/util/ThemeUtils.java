@@ -12,8 +12,7 @@ public class ThemeUtils {
     @SuppressLint("WrongConstant")
     public static void applyTheme(Context context, int mode) {
 
-        int api = Build.VERSION.SDK_INT;
-        if (api >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             UiModeManager uiModeManager = (UiModeManager) context.getSystemService(Context.UI_MODE_SERVICE);
             if (mode == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
                 mode = uiModeManager.getNightMode();

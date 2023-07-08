@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.drhowdydoo.appinfo.databinding.ActivitySettingsBinding;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.ThemeUtils;
+import com.google.android.material.color.DynamicColors;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -19,12 +20,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("SettingsActivity Recreated with theme");
         preferences = getSharedPreferences("com.drhowdydoo.appinfo.preferences", MODE_PRIVATE);
         editor = preferences.edit();
         int themeMode = preferences.getInt("com.drhowdydoo.appinfo.theme", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        System.out.println("SettingsActivity Recreated with theme : " + themeMode);
         ThemeUtils.applyTheme(this, themeMode);
         super.onCreate(savedInstanceState);
+        DynamicColors.applyToActivityIfAvailable(this);
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -37,12 +39,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void handleScan() {
-        binding.switchScanHiddenFiles.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            editor.putBoolean("com.drhowdydoo.appinfo.scan-hidden-folders", isChecked).apply();
-        });
-        binding.switchShowSplitApks.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            editor.putBoolean("com.drhowdydoo.appinfo.show-split-apks", isChecked).apply();
-        });
+        binding.switchScanHiddenFiles.setOnCheckedChangeListener((buttonView, isChecked) -> editor.putBoolean("com.drhowdydoo.appinfo.scan-hidden-folders", isChecked).apply());
+        binding.switchShowSplitApks.setOnCheckedChangeListener((buttonView, isChecked) -> editor.putBoolean("com.drhowdydoo.appinfo.show-split-apks", isChecked).apply());
     }
 
     private void handleIconShape() {
@@ -64,21 +62,21 @@ public class SettingsActivity extends AppCompatActivity {
             binding.btnDarkTheme.setChecked(true);
             binding.btnSystemTheme.setChecked(false);
             binding.btnLightTheme.setChecked(false);
-            applyTheme(AppCompatDelegate.MODE_NIGHT_YES);
+            applyTheme();
         });
         binding.btnLightTheme.setOnClickListener(v -> {
             editor.putInt("com.drhowdydoo.appinfo.theme", AppCompatDelegate.MODE_NIGHT_NO).apply();
             binding.btnLightTheme.setChecked(true);
             binding.btnSystemTheme.setChecked(false);
             binding.btnDarkTheme.setChecked(false);
-            applyTheme(AppCompatDelegate.MODE_NIGHT_NO);
+            applyTheme();
         });
         binding.btnSystemTheme.setOnClickListener(v -> {
             editor.putInt("com.drhowdydoo.appinfo.theme", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM).apply();
             binding.btnSystemTheme.setChecked(true);
             binding.btnDarkTheme.setChecked(false);
             binding.btnLightTheme.setChecked(false);
-            applyTheme(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+            applyTheme();
         });
     }
 
@@ -104,9 +102,9 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
-     * @param mode Smoothly applies theme change with fading transition.
+     * Smoothly applies theme change with fading transition.
      */
-    private void applyTheme(int mode) {
+    private void applyTheme() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

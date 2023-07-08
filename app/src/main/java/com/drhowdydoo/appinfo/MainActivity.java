@@ -41,10 +41,10 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
+        super.onCreate(savedInstanceState);
         SharedPreferences preferences = getSharedPreferences("com.drhowdydoo.appinfo.preferences", MODE_PRIVATE);
         int themeMode = preferences.getInt("com.drhowdydoo.appinfo.theme", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         ThemeUtils.applyTheme(this, themeMode);
-        super.onCreate(savedInstanceState);
         DynamicColors.applyToActivityIfAvailable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

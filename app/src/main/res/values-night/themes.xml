@@ -33,10 +33,10 @@
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
         <item name="android:windowActivityTransitions">true</item>
-        <item name="android:windowSharedElementEnterTransition">
-            @transition/shared_element_transition</item>
-        <item name="android:windowSharedElementExitTransition">
-            @transition/shared_element_transition</item>
+
+
+        <item name="android:windowSharedElementEnterTransition">@transition/shared_element_transition</item>
+        <item name="android:windowSharedElementExitTransition">@transition/shared_element_transition</item>
 
         <item name="popupMenuBackground">@drawable/custom_popup_background</item>
 

@@ -1,7 +1,6 @@
 package com.drhowdydoo.appinfo.bottomsheet;
 
 import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,8 +22,6 @@ import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.PermissionManager;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 
 public class SortBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener {
 

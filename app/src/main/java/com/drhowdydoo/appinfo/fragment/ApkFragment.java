@@ -120,8 +120,8 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (!Environment.isExternalStorageManager()) {
                 binding.groupStoragePermission.setVisibility(View.VISIBLE);
-            }else binding.groupStoragePermission.setVisibility(View.GONE);
-           return;
+            } else binding.groupStoragePermission.setVisibility(View.GONE);
+            return;
         }
 
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
