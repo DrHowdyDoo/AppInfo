@@ -88,6 +88,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
                     }
                 });
 
+
         return binding.getRoot();
     }
 
@@ -116,12 +117,14 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     }
 
     private void checkStoragePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
-            binding.groupStoragePermission.setVisibility(View.VISIBLE);
-        } else binding.groupStoragePermission.setVisibility(View.GONE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                binding.groupStoragePermission.setVisibility(View.VISIBLE);
+            }else binding.groupStoragePermission.setVisibility(View.GONE);
+           return;
+        }
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R
-                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             binding.tvStoragePermission.setText("App needs storage access\nto search for all apks");
             binding.groupStoragePermission.setVisibility(View.VISIBLE);
         } else binding.groupStoragePermission.setVisibility(View.GONE);

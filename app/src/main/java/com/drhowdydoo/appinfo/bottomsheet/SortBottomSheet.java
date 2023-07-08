@@ -77,7 +77,7 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
     public void onResume() {
         super.onResume();
         if (PermissionManager.hasUsageStatsPermission(requireActivity())) {
-            appBinding.tvLockedTitle.setVisibility(View.GONE);
+            if (appBinding != null) appBinding.tvLockedTitle.setVisibility(View.GONE);
         }
     }
 

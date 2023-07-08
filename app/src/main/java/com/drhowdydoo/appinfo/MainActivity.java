@@ -175,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
         return super.dispatchTouchEvent(event);
     }
 
-
     @Override
     public void onSort(String text) {
         binding.btnSort.setText(text);
