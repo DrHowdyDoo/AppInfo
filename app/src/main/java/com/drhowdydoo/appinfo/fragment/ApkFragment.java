@@ -1,16 +1,23 @@
 package com.drhowdydoo.appinfo.fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,7 +32,11 @@ import com.drhowdydoo.appinfo.util.ApkInfoManager;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.drhowdydoo.appinfo.viewmodel.ApkListViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +50,9 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     private ApkInfoManager apkInfoManager;
     private MainActivity mainActivity;
     private boolean isPaused = false;
+    private ActivityResultLauncher<String> requestPermissionLauncher;
+
+    private boolean permissionAskedForFirstTime = true;
 
     public ApkFragment() {
     }
@@ -72,6 +86,13 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
             apkInfoManager.getAllApks(Environment.getExternalStorageDirectory(), this);
         });
 
+        requestPermissionLauncher =
+                registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                    if (isGranted) {
+                        getAllApks();
+                    }
+                });
+
         return binding.getRoot();
     }
 
@@ -79,29 +100,36 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         isPaused = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (Environment.isExternalStorageManager()) {
-                binding.groupStoragePermission.setVisibility(View.GONE);
-                if (apkListViewModel.getSavedApkInfoList().isEmpty() && Utilities.shouldSearchApks) {
-                    Utilities.shouldSearchApks = false;
-                    binding.progressGroup.setVisibility(View.VISIBLE);
-                    binding.notFound.setVisibility(View.GONE);
-                    apkInfoManager.getAllApks(Environment.getExternalStorageDirectory(), this);
-                }
-            }
+        getAllApks();
+    }
+
+    private void getAllApks(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) return;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) return;
+
+        binding.groupStoragePermission.setVisibility(View.GONE);
+        if (apkListViewModel.getSavedApkInfoList().isEmpty() && Utilities.shouldSearchApks) {
+            Utilities.shouldSearchApks = false;
+            binding.progressGroup.setVisibility(View.VISIBLE);
+            binding.notFound.setVisibility(View.GONE);
+            apkInfoManager.getAllApks(Environment.getExternalStorageDirectory(), this);
         }
         mainActivity.onFilter(getFilterText());
         mainActivity.onSort(getSortText());
-
     }
 
     private void checkStoragePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (!Environment.isExternalStorageManager()) {
-                binding.groupStoragePermission.setVisibility(View.VISIBLE);
-            } else binding.groupStoragePermission.setVisibility(View.GONE);
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
+            binding.groupStoragePermission.setVisibility(View.VISIBLE);
+        } else binding.groupStoragePermission.setVisibility(View.GONE);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R
+                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            binding.tvStoragePermission.setText("App needs storage access\nto search for all apks");
+            binding.groupStoragePermission.setVisibility(View.VISIBLE);
+        }else binding.groupStoragePermission.setVisibility(View.GONE);
     }
+
 
     public void setData(List<ApkInfo> apkInfoList, boolean dispatch) {
         binding.notFound.setVisibility(apkInfoList.isEmpty() ? View.VISIBLE : View.GONE);
@@ -169,10 +197,23 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btnStorageAccess && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-            intent.setData(Uri.parse("package:" + "com.drhowdydoo.appinfo"));
-            startActivity(intent);
+        if (id == R.id.btnStorageAccess) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.setData(Uri.parse("package:" + "com.drhowdydoo.appinfo"));
+                startActivity(intent);
+            }
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                //ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) && !permissionAskedForFirstTime) {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.parse("package:" + "com.drhowdydoo.appinfo"));
+                    startActivity(intent);
+                } else {
+                    permissionAskedForFirstTime = false;
+                    requestPermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                }
+            }
         }
     }
 

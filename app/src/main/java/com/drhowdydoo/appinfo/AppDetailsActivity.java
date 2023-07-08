@@ -12,6 +12,8 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -56,7 +58,7 @@ public class AppDetailsActivity extends AppCompatActivity {
     private boolean isSplitApp;
     private String appName;
     private boolean isInstalled;
-
+    private boolean permissionAskedForFirstTime = true;
     @SuppressLint({"CheckResult", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +112,7 @@ public class AppDetailsActivity extends AppCompatActivity {
 
                 });
         System.out.println("Activity startup : " + (System.currentTimeMillis() - startTime) + "ms");
+
     }
 
 
@@ -255,12 +258,33 @@ public class AppDetailsActivity extends AppCompatActivity {
 
 
     public boolean checkStoragePermission() {
-        if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-                || Environment.isExternalStorageManager()) return true;
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) return true;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) return true;
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+
+            if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) && !permissionAskedForFirstTime) {
+                new MaterialAlertDialogBuilder(this)
+                        .setIcon(R.drawable.baseline_gpp_maybe_24)
+                        .setTitle("Permission required   😅")
+                        .setMessage("Storage access required to perform this action\nTo grant storage permission, please follow these steps:\n" +
+                                "1. Press 'Allow' to navigate to the app's settings page\n" +
+                                "2. In the settings, navigate to the 'Permissions tab.\n" +
+                                "3. Look for the 'Storage' permission and ensure it is enabled.\n")
+                        .setPositiveButton("Allow", (dialog, which) -> {
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            intent.setData(Uri.parse("package:" + "com.drhowdydoo.appinfo"));
+                            startActivity(intent);
+                        })
+                        .setNegativeButton("Deny", (dialog, which) -> dialog.dismiss())
+                        .show();
+            } else {
+                permissionAskedForFirstTime = false;
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            }
             return false;
         }
 
