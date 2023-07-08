@@ -132,7 +132,6 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
 
 
     public void setData(List<ApkInfo> apkInfoList, boolean dispatch) {
-        binding.notFound.setVisibility(apkInfoList.isEmpty() ? View.VISIBLE : View.GONE);
         apkListViewModel.setApkInfoList(apkInfoList);
         if (dispatch) dispatchData();
     }
@@ -142,6 +141,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         List<ApkInfo> filteredList = getFilteredList(apkListViewModel.getFilterState());
         filteredList.sort(new ApkInfoComparator(apkListViewModel.getSortState()));
         apkListViewModel.setSavedApkInfoList(filteredList);
+        binding.notFound.setVisibility(filteredList.isEmpty() ? View.VISIBLE : View.GONE);
         adapter.setData(filteredList);
         binding.recyclerView.scrollToPosition(0);
         if (!isPaused) {

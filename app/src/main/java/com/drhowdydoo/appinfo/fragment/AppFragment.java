@@ -110,7 +110,6 @@ public class AppFragment extends Fragment {
 
     @SuppressLint("DefaultLocale")
     public void setData(List<AppInfo> appInfoList, boolean dispatch) {
-        binding.notFound.setVisibility(appInfoList.isEmpty() ? View.VISIBLE : View.GONE);
         appListViewModel.setAppInfoList(appInfoList);
         if (dispatch) dispatchData();
     }
@@ -126,6 +125,7 @@ public class AppFragment extends Fragment {
             onSortFilterListener.onSort(getSortButtonText(sortedState));
             onSortFilterListener.onFilter(getFilterButtonText(filterState, filteredList.size()));
         }
+        binding.notFound.setVisibility(filteredList.isEmpty() ? View.VISIBLE : View.GONE);
         adapter.setData(filteredList);
         binding.recyclerView.scrollToPosition(0);
     }
