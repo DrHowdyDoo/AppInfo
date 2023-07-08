@@ -19,13 +19,16 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        preferences = getSharedPreferences("com.drhowdydoo.appinfo.preferences", MODE_PRIVATE);
+        editor = preferences.edit();
+        int themeMode = preferences.getInt("com.drhowdydoo.appinfo.theme", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        System.out.println("SettingsActivity Recreated with theme : " + themeMode);
+        ThemeUtils.applyTheme(this, themeMode);
         super.onCreate(savedInstanceState);
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        preferences = getSharedPreferences("com.drhowdydoo.appinfo.preferences", MODE_PRIVATE);
-        editor = preferences.edit();
-
+        binding.materialToolBar.setNavigationOnClickListener(v -> onBackPressed());
         init();
         handleTheme();
         handleIconShape();
@@ -102,10 +105,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     /**
      * @param mode Smoothly applies theme change with fading transition.
-     *             You have to add android:configChanges="uiMode" in the activity manifest.
      */
     private void applyTheme(int mode) {
-        ThemeUtils.applyTheme(this, mode);
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

@@ -26,7 +26,6 @@
         tools:targetApi="tiramisu">
         <activity
             android:name=".SettingsActivity"
-            android:configChanges="uiMode"
             android:exported="false" />
         <activity
             android:name=".AppDetailsActivity"
@@ -47,7 +46,7 @@
             android:name=".contentprovider.ApkFileProvider"
             android:authorities="com.drhowdydoo.appinfo.provider"
             android:exported="false"
-            android:grantUriPermissions="true"></provider>
+            android:grantUriPermissions="true" />
     </application>
 
 </manifest>

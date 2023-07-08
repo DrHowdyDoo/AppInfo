@@ -51,5 +51,4 @@
 
     <style name="Widget.App.IconButton" parent="Widget.Material3.Button.IconButton.Outlined"/>
 
-
 </resources>

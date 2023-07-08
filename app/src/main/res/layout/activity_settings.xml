@@ -1,209 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".SettingsActivity">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
 
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:id="@+id/collapsingToolbar"
+        style="?attr/collapsingToolbarLayoutMediumStyle"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/collapsingToolbarLayoutMediumSize">
 
-        <TextView
-            android:id="@+id/tvHeading"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/materialToolBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="108dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/settings"
-            android:textAppearance="?textAppearanceDisplaySmall"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:title="@string/settings"
+            app:navigationIcon="@drawable/round_arrow_back"
+            app:navigationIconTint="?colorControlNormal"
+            app:layout_collapseMode="pin"
+            android:layout_height="?actionBarSize"
+            android:elevation="0dp"/>
 
-        <TextView
-            android:id="@+id/tvThemeTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="62dp"
-            android:text="@string/theme"
-            android:textAppearance="?textAppearanceBodyLarge"
-            android:textColor="?colorPrimary"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/tvHeading"
-            app:layout_constraintTop_toBottomOf="@id/tvHeading" />
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDarkTheme"
-            style="@style/Widget.Material3.Button.IconButton.Outlined"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:checkable="true"
-            android:padding="24dp"
-            app:icon="@drawable/round_dark_mode"
-            app:iconSize="24dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/btnSystemTheme"
-            app:layout_constraintTop_toBottomOf="@id/tvThemeTitle" />
+</com.google.android.material.appbar.AppBarLayout>
 
-        <TextView
-            android:id="@+id/tvDarkTheme"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/dark"
-            android:textAppearance="?textAppearanceLabelLarge"
-            app:layout_constraintEnd_toEndOf="@+id/btnDarkTheme"
-            app:layout_constraintStart_toStartOf="@+id/btnDarkTheme"
-            app:layout_constraintTop_toBottomOf="@+id/btnDarkTheme" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSystemTheme"
-            style="@style/Widget.Material3.Button.IconButton.Outlined"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:checkable="true"
-            android:padding="24dp"
-            app:icon="@drawable/round_auto_mode"
-            app:iconSize="24dp"
-            app:layout_constraintLeft_toRightOf="@id/btnDarkTheme"
-            app:layout_constraintRight_toLeftOf="@id/btnLightTheme"
-            app:layout_constraintTop_toBottomOf="@id/tvThemeTitle" />
-
-        <TextView
-            android:id="@+id/tvSystemTheme"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/system"
-            android:textAppearance="?textAppearanceLabelLarge"
-            app:layout_constraintEnd_toEndOf="@+id/btnSystemTheme"
-            app:layout_constraintStart_toStartOf="@+id/btnSystemTheme"
-            app:layout_constraintTop_toBottomOf="@+id/btnSystemTheme" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnLightTheme"
-            style="@style/Widget.Material3.Button.IconButton.Outlined"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:checkable="true"
-            android:padding="24dp"
-            app:icon="@drawable/round_light_mode"
-            app:iconSize="24dp"
-            app:layout_constraintLeft_toRightOf="@id/btnSystemTheme"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvThemeTitle" />
-
-        <TextView
-            android:id="@+id/tvLightTheme"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/light"
-            android:textAppearance="?textAppearanceLabelLarge"
-            app:layout_constraintEnd_toEndOf="@+id/btnLightTheme"
-            app:layout_constraintStart_toStartOf="@+id/btnLightTheme"
-            app:layout_constraintTop_toBottomOf="@+id/btnLightTheme" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/themeBarrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="tvDarkTheme,tvSystemTheme,tvLightTheme" />
-
-        <TextView
-            android:id="@+id/tvIconTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/icon_shape"
-            android:textAppearance="?textAppearanceBodyLarge"
-            android:textColor="?colorPrimary"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/tvHeading"
-            app:layout_constraintTop_toBottomOf="@id/themeBarrier" />
-
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRoundIcon"
-            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:padding="12dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/round"
-            app:icon="@drawable/round_circle"
-            app:iconPadding="8dp"
-            app:iconSize="24dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/btnSquircleIcon"
-            app:layout_constraintTop_toBottomOf="@id/tvIconTitle" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSquircleIcon"
-            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:layout_marginTop="16dp"
-            android:padding="14dp"
-            android:text="@string/squircle"
-            app:icon="@drawable/ic_squircle"
-            app:layout_constraintLeft_toRightOf="@id/btnRoundIcon"
-            app:layout_constraintRight_toRightOf="parent"
-            app:iconPadding="8dp"
-            app:iconSize="20dp"
-            app:layout_constraintTop_toBottomOf="@id/tvIconTitle" />
-
-        <TextView
-            android:id="@+id/tvSearchTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/scan"
-            android:textAppearance="?textAppearanceBodyLarge"
-            android:textColor="?colorPrimary"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/tvHeading"
-            app:layout_constraintTop_toBottomOf="@id/btnRoundIcon" />
-
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switchScanHiddenFiles"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/scan_hidden_folders"
-            android:drawableStart="@drawable/outline_folder_off"
+            android:layout_height="match_parent"
             android:paddingHorizontal="16dp"
-            android:drawablePadding="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvSearchTitle" />
+            android:paddingVertical="16dp">
 
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switchShowSplitApks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/show_split_apks"
-            android:drawableStart="@drawable/round_remove_red_eye"
-            android:paddingHorizontal="16dp"
-            android:drawablePadding="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switchScanHiddenFiles" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/tvThemeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/theme"
+                android:textAppearance="?textAppearanceLabelLarge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.core.widget.NestedScrollView>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDarkTheme"
+                style="@style/Widget.Material3.Button.IconButton.Outlined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:checkable="true"
+                android:padding="24dp"
+                app:icon="@drawable/round_dark_mode"
+                app:iconSize="24dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btnSystemTheme"
+                app:layout_constraintTop_toBottomOf="@id/tvThemeTitle" />
+
+            <TextView
+                android:id="@+id/tvDarkTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/dark"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintEnd_toEndOf="@+id/btnDarkTheme"
+                app:layout_constraintStart_toStartOf="@+id/btnDarkTheme"
+                app:layout_constraintTop_toBottomOf="@+id/btnDarkTheme" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSystemTheme"
+                style="@style/Widget.Material3.Button.IconButton.Outlined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:checkable="true"
+                android:padding="24dp"
+                app:icon="@drawable/round_auto_mode"
+                app:iconSize="24dp"
+                app:layout_constraintLeft_toRightOf="@id/btnDarkTheme"
+                app:layout_constraintRight_toLeftOf="@id/btnLightTheme"
+                app:layout_constraintTop_toBottomOf="@id/tvThemeTitle" />
+
+            <TextView
+                android:id="@+id/tvSystemTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/system"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintEnd_toEndOf="@+id/btnSystemTheme"
+                app:layout_constraintStart_toStartOf="@+id/btnSystemTheme"
+                app:layout_constraintTop_toBottomOf="@+id/btnSystemTheme" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLightTheme"
+                style="@style/Widget.Material3.Button.IconButton.Outlined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:checkable="true"
+                android:padding="24dp"
+                app:icon="@drawable/round_light_mode"
+                app:iconSize="24dp"
+                app:layout_constraintLeft_toRightOf="@id/btnSystemTheme"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvThemeTitle" />
+
+            <TextView
+                android:id="@+id/tvLightTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/light"
+                android:textAppearance="?textAppearanceLabelMedium"
+                app:layout_constraintEnd_toEndOf="@+id/btnLightTheme"
+                app:layout_constraintStart_toStartOf="@+id/btnLightTheme"
+                app:layout_constraintTop_toBottomOf="@+id/btnLightTheme" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/themeBarrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="tvDarkTheme,tvSystemTheme,tvLightTheme" />
+
+
+            <TextView
+                android:id="@+id/tvIconTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/icon_shape"
+                android:textAppearance="?textAppearanceLabelLarge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/themeBarrier" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRoundIcon"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:padding="12dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/round"
+                app:icon="@drawable/round_circle"
+                app:iconPadding="8dp"
+                app:iconSize="24dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/btnSquircleIcon"
+                app:layout_constraintTop_toBottomOf="@id/tvIconTitle" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSquircleIcon"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:layout_marginTop="12dp"
+                android:padding="14dp"
+                android:text="@string/squircle"
+                app:icon="@drawable/ic_squircle"
+                app:layout_constraintLeft_toRightOf="@id/btnRoundIcon"
+                app:layout_constraintRight_toRightOf="parent"
+                app:iconPadding="8dp"
+                app:iconSize="20dp"
+                app:layout_constraintTop_toBottomOf="@id/tvIconTitle" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginHorizontal="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnRoundIcon" />
+
+            <TextView
+                android:id="@+id/tvSearchTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="52dp"
+                android:text="@string/scan"
+                android:textAppearance="?textAppearanceLabelLarge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnRoundIcon" />
+
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchScanHiddenFiles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/scan_hidden_folders"
+                android:drawableStart="@drawable/outline_folder_off"
+                android:paddingHorizontal="8dp"
+                android:drawablePadding="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSearchTitle" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/switchShowSplitApks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/show_split_apks"
+                android:drawableStart="@drawable/round_remove_red_eye"
+                android:paddingHorizontal="8dp"
+                android:drawablePadding="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/switchScanHiddenFiles" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
