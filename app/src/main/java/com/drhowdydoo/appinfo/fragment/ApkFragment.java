@@ -32,6 +32,7 @@ import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.drhowdydoo.appinfo.viewmodel.ApkListViewModel;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     private MainActivity mainActivity;
     private boolean isPaused = false;
     private ActivityResultLauncher<String> requestPermissionLauncher;
+    private SharedPreferences preferences;
 
     private boolean permissionAskedForFirstTime = true;
 
@@ -65,9 +67,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         checkStoragePermission();
         binding.btnStorageAccess.setOnClickListener(this);
         apkListViewModel = new ViewModelProvider(this).get(ApkListViewModel.class);
-        SharedPreferences preferences = requireContext().getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
         adapter = new ApkRecyclerViewAdapter(requireActivity(), apkListViewModel.getSavedApkInfoList());
-        adapter.setFlags(preferences.getInt("com.drhowdydoo.appinfo.icon-shape", Constants.SHOW_ROUND_APP_ICON));
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.setItemAnimator(null);
@@ -92,10 +92,17 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         return binding.getRoot();
     }
 
+    private File getApkSearchDir(int scanMode) {
+        if (scanMode == 0) {
+            return new File(Environment.getExternalStorageDirectory(),"Download");
+        } else return Environment.getExternalStorageDirectory();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         isPaused = false;
+        preferences = requireContext().getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
         getAllApks();
     }
 

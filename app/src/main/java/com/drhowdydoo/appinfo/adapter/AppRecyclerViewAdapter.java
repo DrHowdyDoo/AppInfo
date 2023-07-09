@@ -60,19 +60,13 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
         holder.tvAppName.setText(appInfo.getAppName());
         holder.tvAppSize.setText(Formatter.formatShortFileSize(context, appInfo.getSize()));
 
-        if (flagSet.contains(Constants.SHOW_SQUARE_APP_ICON)) {
-            Glide.with(context)
-                    .load(appInfo.getAppIcon())
-                    .transform(new FitCenter(), new RoundedCorners(32))
-                    .error(R.drawable.round_pest_24)
-                    .into(holder.imgAppIcon);
-        } else {
-            Glide.with(context)
-                    .load(appInfo.getAppIcon())
-                    .circleCrop()
-                    .error(R.drawable.round_pest_24)
-                    .into(holder.imgAppIcon);
-        }
+
+        Glide.with(context)
+                .load(appInfo.getAppIcon())
+                .circleCrop()
+                .error(R.drawable.round_pest_24)
+                .into(holder.imgAppIcon);
+
 
         holder.tvAppStats.setVisibility(View.VISIBLE);
         holder.dotSeperator.setVisibility(View.VISIBLE);

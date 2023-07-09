@@ -65,21 +65,11 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         String apkStatus = apkInfo.isInstalled() ? "installed" : "not installed";
         holder.tvApkStatus.setText(apkStatus);
 
-        if (flagSet.contains(Constants.SHOW_SQUARE_APP_ICON)) {
-            Glide.with(context)
-                    .load(apkInfo
-                            .getApkIcon())
-                    .transform(new RoundedCorners(32))
-                    .error(R.drawable.round_pest_24)
-                    .into(holder.imgApkIcon);
-        } else {
-            Glide.with(context)
-                    .load(apkInfo
-                            .getApkIcon())
-                    .circleCrop()
-                    .error(R.drawable.round_pest_24)
-                    .into(holder.imgApkIcon);
-        }
+        Glide.with(context)
+                .load(apkInfo.getApkIcon())
+                .circleCrop()
+                .error(R.drawable.round_pest_24)
+                .into(holder.imgApkIcon);
     }
 
     @Override

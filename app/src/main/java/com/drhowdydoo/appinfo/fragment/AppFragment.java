@@ -59,7 +59,6 @@ public class AppFragment extends Fragment {
         appListViewModel = new ViewModelProvider(this).get(AppListViewModel.class);
         SharedPreferences preferences = requireContext().getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
         adapter = new AppRecyclerViewAdapter(requireActivity(), appListViewModel.getSavedAppInfoList());
-        adapter.setFlags(preferences.getInt("com.drhowdydoo.appinfo.icon-shape", Constants.SHOW_ROUND_APP_ICON));
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.setItemAnimator(null);
