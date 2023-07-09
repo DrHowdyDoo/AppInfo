@@ -48,6 +48,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     private boolean isPaused = false;
     private ActivityResultLauncher<String> requestPermissionLauncher;
     private SharedPreferences preferences;
+    private int scanMode;
 
     private boolean permissionAskedForFirstTime = true;
 
@@ -77,8 +78,10 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
 
         apkInfoManager = new ApkInfoManager(requireActivity());
 
+        preferences = requireContext().getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
+        scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode",2);
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            apkInfoManager.getAllApks(Environment.getExternalStorageDirectory(), this);
+            apkInfoManager.getAllApks(getApkSearchDir(scanMode), this);
         });
 
         requestPermissionLauncher =
@@ -102,11 +105,13 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         isPaused = false;
-        preferences = requireContext().getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
         getAllApks();
     }
 
     private void getAllApks() {
+
+        scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode",2);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager())
             return;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED)
@@ -117,7 +122,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
             Utilities.shouldSearchApks = false;
             binding.progressGroup.setVisibility(View.VISIBLE);
             binding.notFound.setVisibility(View.GONE);
-            apkInfoManager.getAllApks(Environment.getExternalStorageDirectory(), this);
+            apkInfoManager.getAllApks(getApkSearchDir(scanMode), this);
         }
         mainActivity.onFilter(getFilterText());
         mainActivity.onSort(getSortText());

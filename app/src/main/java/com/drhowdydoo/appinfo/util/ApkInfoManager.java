@@ -54,12 +54,17 @@ public class ApkInfoManager {
 
         scanHiddenFolders = preferences.getBoolean("com.drhowdydoo.appinfo.scan-hidden-folders", true);
         showSplitApks = preferences.getBoolean("com.drhowdydoo.appinfo.show-split-apks", true);
+        int scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode",2);
 
         File[] files = directory.listFiles();
+
         if (files == null) return;
         Observable<File> directoryObservable = Observable.fromArray(files)
-                .flatMap(file -> file.isDirectory() ? Observable.just(file) : Observable.empty())
-                .flatMap(file -> Utilities.skipDirectoriesSet.contains(file.getName()) ? Observable.empty() : Observable.just(file));
+                .flatMap(file -> {
+                    if (scanMode == 2) {
+                        return Utilities.skipDirectoriesSet.contains(file.getName()) ? Observable.empty() : Observable.just(file);
+                    }else return Observable.just(file);
+                });
 
         Observable<List<File>> apkFilesObservable = directoryObservable
                 .map(this::findAPKFiles);
@@ -92,6 +97,7 @@ public class ApkInfoManager {
 
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                if (attrs.isDirectory()) return FileVisitResult.CONTINUE;
                 if (file.getFileName().toString().toLowerCase().startsWith("split") && !showSplitApks)
                     return FileVisitResult.SKIP_SUBTREE;
                 if (file.getFileName().toString().endsWith(".apk")) {
