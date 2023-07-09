@@ -35,5 +35,6 @@
     <string name="scan_hidden_folders">Scan hidden folders</string>
     <string name="show_split_apks">Show split apks in the results</string>
     <string name="scan_mode">Scan mode</string>
+    <string name="search_type">Search type</string>
 
 </resources>

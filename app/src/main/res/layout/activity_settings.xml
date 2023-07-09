@@ -150,7 +150,7 @@
 
 
             <TextView
-                android:id="@+id/tvSearchTitle"
+                android:id="@+id/tvScanTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -171,7 +171,7 @@
                 android:drawablePadding="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvSearchTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/tvScanTitle" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switchShowSplitApks"
@@ -201,6 +201,45 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/switchShowSplitApks" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/mtrl_divider_scan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/btnScanMode"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="16dp" />
+
+            <TextView
+                android:id="@+id/tvSearchTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/search"
+                android:textAppearance="?textAppearanceLabelLarge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mtrl_divider_scan" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSearchType"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
+                android:text="@string/search_type"
+                android:gravity="start|center_vertical"
+                app:icon="@drawable/round_manage_search"
+                app:iconTint="?colorControlNormal"
+                app:iconSize="24dp"
+                app:iconPadding="18dp"
+                android:layout_marginTop="12dp"
+                android:textColor="?colorOnBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSearchTitle" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

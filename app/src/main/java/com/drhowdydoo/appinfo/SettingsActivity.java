@@ -48,7 +48,46 @@ public class SettingsActivity extends AppCompatActivity {
         init();
         handleTheme();
         handleScan();
+        handleSearch();
 
+    }
+
+    private void handleSearch() {
+        CharSequence[] scanModes = {"Strict", "Normal"};
+        String[] scanModesSubs = {"Finds results that start with the provided search term or prefix.",
+                "Finds results that contain the search term, regardless of its position within the text."};
+
+        SpannableString[] spans = new SpannableString[2];
+        spans[0] = new SpannableString(scanModes[0] + "\n" + scanModesSubs[0]);
+        spans[1] = new SpannableString(scanModes[1] + "\n" + scanModesSubs[1]);
+
+
+        spans[0].setSpan(new TextAppearanceSpan(this,com.google.android.material.R.style.TextAppearance_Material3_BodySmall), scanModes[0].length() + 1, (scanModes[0].length() + scanModesSubs[0].length() + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spans[1].setSpan(new TextAppearanceSpan(this,com.google.android.material.R.style.TextAppearance_Material3_BodySmall), scanModes[1].length() + 1, (scanModes[1].length() + scanModesSubs[1].length() + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ArrayAdapter<SpannableString> adapter = new ArrayAdapter<>(this, R.layout.list_item_layout, spans) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                textView.setText(spans[position]);
+                return textView;
+            }
+        };
+
+        binding.btnSearchType.setOnClickListener(v -> {
+            int searchType = preferences.getInt("com.drhowdydoo.appinfo.search-type",0);
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("Search type")
+                    .setSingleChoiceItems(adapter, searchType, (dialog, which) -> {
+                        editor.putInt("com.drhowdydoo.appinfo.search-type",which).apply();
+                        setSearchTypeSub(which);
+                        dialog.dismiss();
+                    })
+                    .setPositiveButton("Cancel", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+        });
     }
 
     private void handleScan() {
@@ -83,9 +122,9 @@ public class SettingsActivity extends AppCompatActivity {
             }
         };
 
-        int scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode",2);
 
         binding.btnScanMode.setOnClickListener(v -> {
+            int scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode",2);
                 new MaterialAlertDialogBuilder(this)
                         .setTitle("Scan mode")
                         .setSingleChoiceItems(adapter, scanMode, (dialog, which) -> {
@@ -145,6 +184,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         int scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode",2);
         setScanModeSub(scanMode);
+
+        int searchType = preferences.getInt("com.drhowdydoo.appinfo.search-type",0);
+        setSearchTypeSub(searchType);
     }
 
     private void setScanModeSub(int mode) {
@@ -157,6 +199,18 @@ public class SettingsActivity extends AppCompatActivity {
                 (scanModeTitle.length() + scanModeSubTitle.length() + 1),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         binding.btnScanMode.setText(span);
+    }
+
+    private void setSearchTypeSub(int mode) {
+        String searchTypeTitle = "Search type";
+        String searchTypeSubtitle = mode == 0 ? "Strict" : "Normal";
+        SpannableString span = new SpannableString(searchTypeTitle + "\n" + searchTypeSubtitle);
+        span.setSpan(new TextAppearanceSpan(this,
+                        com.google.android.material.R.style.TextAppearance_Material3_BodySmall),
+                searchTypeTitle.length(),
+                (searchTypeTitle.length() + searchTypeSubtitle.length() + 1),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        binding.btnSearchType.setText(span);
     }
 
     /**

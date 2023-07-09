@@ -40,6 +40,7 @@ public class AppFragment extends Fragment {
     private AppListViewModel appListViewModel;
     private MainActivity mainActivity;
 
+    private SharedPreferences preferences;
     private boolean isPaused = false;
 
     public AppFragment() {
@@ -57,7 +58,7 @@ public class AppFragment extends Fragment {
         View rootView = binding.getRoot();
 
         appListViewModel = new ViewModelProvider(this).get(AppListViewModel.class);
-        SharedPreferences preferences = requireContext().getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
+        preferences = requireContext().getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
         adapter = new AppRecyclerViewAdapter(requireActivity(), appListViewModel.getSavedAppInfoList());
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
@@ -223,7 +224,7 @@ public class AppFragment extends Fragment {
         if (!input.isEmpty()) {
             List<AppInfo> searchResults = appListViewModel.getSavedAppInfoList()
                     .stream()
-                    .filter(appInfo -> appInfo.getAppName().toLowerCase().startsWith(input.toLowerCase()) || appInfo.getPackageName().toLowerCase().startsWith(input.toLowerCase()))
+                    .filter(appInfo -> searchIn(input.toLowerCase(), appInfo.getAppName().toLowerCase()) || searchIn(input.toLowerCase(), appInfo.getPackageName().toLowerCase()))
                     .collect(Collectors.toList());
             adapter.updateData(searchResults);
             onSortFilterListener.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
@@ -234,6 +235,12 @@ public class AppFragment extends Fragment {
             onSortFilterListener.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
             binding.tvNoResultsFound.setVisibility(View.GONE);
         }
+    }
+
+    private boolean searchIn(String input, String target) {
+        int searchType = preferences.getInt("com.drhowdydoo.appinfo.search-type",0);
+        if (searchType == 0) return target.startsWith(input);
+        else return target.contains(input);
     }
 
     @Override

@@ -233,7 +233,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         if (!input.isEmpty()) {
             List<ApkInfo> searchResults = apkListViewModel.getSavedApkInfoList()
                     .stream()
-                    .filter(apkInfo -> apkInfo.getApkName().toLowerCase().startsWith(input.toLowerCase()))
+                    .filter(apkInfo -> searchIn(input.toLowerCase(), apkInfo.getApkName().toLowerCase()))
                     .collect(Collectors.toList());
             adapter.updateData(searchResults);
             mainActivity.onFilter(getFilterText());
@@ -244,6 +244,12 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
             mainActivity.onFilter(getFilterText());
             binding.tvNoResultsFound.setVisibility(View.GONE);
         }
+    }
+
+    private boolean searchIn(String input, String target) {
+        int searchType = preferences.getInt("com.drhowdydoo.appinfo.search-type",0);
+        if (searchType == 0) return target.startsWith(input);
+        else return target.contains(input);
     }
 
     @Override
