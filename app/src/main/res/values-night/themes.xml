@@ -39,6 +39,7 @@
         <item name="android:windowSharedElementExitTransition">@transition/shared_element_transition</item>
 
         <item name="popupMenuBackground">@drawable/custom_popup_background</item>
+        <item name="windowActionModeOverlay">true</item>
 
     </style>
 </resources>

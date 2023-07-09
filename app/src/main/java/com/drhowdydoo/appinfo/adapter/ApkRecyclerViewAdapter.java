@@ -17,9 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.drhowdydoo.appinfo.AppDetailsActivity;
-import com.drhowdydoo.appinfo.MainActivity;
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.ApkListItemBinding;
+import com.drhowdydoo.appinfo.interfaces.onItemClickListener;
 import com.drhowdydoo.appinfo.model.ApkInfo;
 import com.drhowdydoo.appinfo.util.ApkInfoDiffCallback;
 
@@ -35,10 +35,12 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
     private List<ApkInfo> apkInfoList;
     private HashSet<Integer> flagSet = new HashSet<>();
     private ActionMode actionMode;
+    private onItemClickListener itemLongClickListener;
 
-    public ApkRecyclerViewAdapter(Context context, List<ApkInfo> apkInfoList) {
+    public ApkRecyclerViewAdapter(Context context, List<ApkInfo> apkInfoList, onItemClickListener itemLongClickListener) {
         this.context = context;
         this.apkInfoList = new ArrayList<>(apkInfoList);
+        this.itemLongClickListener = itemLongClickListener;
     }
 
     @NonNull
@@ -132,7 +134,8 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
 
         @Override
         public boolean onLongClick(View v) {
-            return false;
+            itemLongClickListener.onItemLongClicked();
+            return true;
         }
     }
 

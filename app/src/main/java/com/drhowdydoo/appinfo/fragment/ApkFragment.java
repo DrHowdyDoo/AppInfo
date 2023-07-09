@@ -11,11 +11,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import android.view.ActionMode;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,6 +28,7 @@ import com.drhowdydoo.appinfo.MainActivity;
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.adapter.ApkRecyclerViewAdapter;
 import com.drhowdydoo.appinfo.databinding.FragmentApkBinding;
+import com.drhowdydoo.appinfo.interfaces.onItemClickListener;
 import com.drhowdydoo.appinfo.model.ApkInfo;
 import com.drhowdydoo.appinfo.util.ApkInfoComparator;
 import com.drhowdydoo.appinfo.util.ApkInfoManager;
@@ -38,7 +42,7 @@ import java.util.stream.Collectors;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
-public class ApkFragment extends Fragment implements View.OnClickListener {
+public class ApkFragment extends Fragment implements View.OnClickListener, onItemClickListener {
 
     private FragmentApkBinding binding;
     private ApkRecyclerViewAdapter adapter;
@@ -68,7 +72,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         checkStoragePermission();
         binding.btnStorageAccess.setOnClickListener(this);
         apkListViewModel = new ViewModelProvider(this).get(ApkListViewModel.class);
-        adapter = new ApkRecyclerViewAdapter(requireActivity(), apkListViewModel.getSavedApkInfoList());
+        adapter = new ApkRecyclerViewAdapter(requireActivity(), apkListViewModel.getSavedApkInfoList(), this);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.setItemAnimator(null);
@@ -256,5 +260,37 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     public void onPause() {
         super.onPause();
         isPaused = true;
+    }
+
+    @Override
+    public void onItemLongClicked() {
+        ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.contextual_action_bar,menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                if (item.getItemId() == R.id.delete) {
+                    //delete apks
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
+            }
+        };
+
+        requireActivity().startActionMode(actionModeCallback);
     }
 }
