@@ -61,8 +61,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         CharSequence[] scanModes = {"Quick scan", "Full scan", "Smart scan"};
         String[] scanModesSubs = {"Checks folders in your system where apks are commonly found",
-                                  "Checks all folders for apks. This could take a little longer",
-                                  "Quick scan but with wider search"};
+                                  "Checks full storage for apks. This could take a little longer",
+                                  "Checks folders in your system where apks may be found"};
 
         SpannableString[] spans = new SpannableString[3];
         spans[0] = new SpannableString(scanModes[0] + "\n" + scanModesSubs[0]);
