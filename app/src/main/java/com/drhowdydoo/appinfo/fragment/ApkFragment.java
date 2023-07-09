@@ -79,7 +79,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
         apkInfoManager = new ApkInfoManager(requireActivity());
 
         preferences = requireContext().getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
-        scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode",2);
+        scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode", 2);
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
             apkInfoManager.getAllApks(getApkSearchDir(scanMode), this);
         });
@@ -97,7 +97,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
 
     private File getApkSearchDir(int scanMode) {
         if (scanMode == 0) {
-            return new File(Environment.getExternalStorageDirectory(),"Download");
+            return new File(Environment.getExternalStorageDirectory(), "Download");
         } else return Environment.getExternalStorageDirectory();
     }
 
@@ -110,7 +110,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
 
     private void getAllApks() {
 
-        scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode",2);
+        scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode", 2);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager())
             return;
@@ -247,7 +247,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener {
     }
 
     private boolean searchIn(String input, String target) {
-        int searchType = preferences.getInt("com.drhowdydoo.appinfo.search-type",0);
+        int searchType = preferences.getInt("com.drhowdydoo.appinfo.search-type", 0);
         if (searchType == 0) return target.startsWith(input);
         else return target.contains(input);
     }

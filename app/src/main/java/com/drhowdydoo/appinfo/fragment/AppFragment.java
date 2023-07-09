@@ -238,7 +238,7 @@ public class AppFragment extends Fragment {
     }
 
     private boolean searchIn(String input, String target) {
-        int searchType = preferences.getInt("com.drhowdydoo.appinfo.search-type",0);
+        int searchType = preferences.getInt("com.drhowdydoo.appinfo.search-type", 0);
         if (searchType == 0) return target.startsWith(input);
         else return target.contains(input);
     }

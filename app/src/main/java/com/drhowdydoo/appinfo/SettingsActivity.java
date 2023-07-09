@@ -1,14 +1,10 @@
 package com.drhowdydoo.appinfo;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.drhowdydoo.appinfo.databinding.ActivitySettingsBinding;
-import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.ThemeUtils;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -62,8 +57,8 @@ public class SettingsActivity extends AppCompatActivity {
         spans[1] = new SpannableString(scanModes[1] + "\n" + scanModesSubs[1]);
 
 
-        spans[0].setSpan(new TextAppearanceSpan(this,com.google.android.material.R.style.TextAppearance_Material3_BodySmall), scanModes[0].length() + 1, (scanModes[0].length() + scanModesSubs[0].length() + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spans[1].setSpan(new TextAppearanceSpan(this,com.google.android.material.R.style.TextAppearance_Material3_BodySmall), scanModes[1].length() + 1, (scanModes[1].length() + scanModesSubs[1].length() + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spans[0].setSpan(new TextAppearanceSpan(this, com.google.android.material.R.style.TextAppearance_Material3_BodySmall), scanModes[0].length() + 1, (scanModes[0].length() + scanModesSubs[0].length() + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spans[1].setSpan(new TextAppearanceSpan(this, com.google.android.material.R.style.TextAppearance_Material3_BodySmall), scanModes[1].length() + 1, (scanModes[1].length() + scanModesSubs[1].length() + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         ArrayAdapter<SpannableString> adapter = new ArrayAdapter<>(this, R.layout.list_item_layout, spans) {
             @NonNull
             @Override
@@ -75,11 +70,11 @@ public class SettingsActivity extends AppCompatActivity {
         };
 
         binding.btnSearchType.setOnClickListener(v -> {
-            int searchType = preferences.getInt("com.drhowdydoo.appinfo.search-type",0);
+            int searchType = preferences.getInt("com.drhowdydoo.appinfo.search-type", 0);
             new MaterialAlertDialogBuilder(this)
                     .setTitle("Search type")
                     .setSingleChoiceItems(adapter, searchType, (dialog, which) -> {
-                        editor.putInt("com.drhowdydoo.appinfo.search-type",which).apply();
+                        editor.putInt("com.drhowdydoo.appinfo.search-type", which).apply();
                         setSearchTypeSub(which);
                         dialog.dismiss();
                     })
@@ -93,15 +88,17 @@ public class SettingsActivity extends AppCompatActivity {
     private void handleScan() {
         binding.switchScanHiddenFiles.setOnCheckedChangeListener((buttonView, isChecked) -> editor.putBoolean("com.drhowdydoo.appinfo.scan-hidden-folders", isChecked).apply());
         binding.switchShowSplitApks.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) binding.switchShowSplitApks.setCompoundDrawablesWithIntrinsicBounds(R.drawable.round_remove_red_eye,0,0,0);
-            else binding.switchShowSplitApks.setCompoundDrawablesWithIntrinsicBounds(R.drawable.round_visibility_off,0,0,0);
+            if (isChecked)
+                binding.switchShowSplitApks.setCompoundDrawablesWithIntrinsicBounds(R.drawable.round_remove_red_eye, 0, 0, 0);
+            else
+                binding.switchShowSplitApks.setCompoundDrawablesWithIntrinsicBounds(R.drawable.round_visibility_off, 0, 0, 0);
             editor.putBoolean("com.drhowdydoo.appinfo.show-split-apks", isChecked).apply();
         });
 
         CharSequence[] scanModes = {"Quick scan", "Full scan", "Smart scan"};
         String[] scanModesSubs = {"Checks folders in your system where apks are commonly found",
-                                  "Checks full storage for apks. This could take a little longer",
-                                  "Checks folders in your system where apks may be found"};
+                "Checks full storage for apks. This could take a little longer",
+                "Checks folders in your system where apks may be found"};
 
         SpannableString[] spans = new SpannableString[3];
         spans[0] = new SpannableString(scanModes[0] + "\n" + scanModesSubs[0]);
@@ -109,9 +106,9 @@ public class SettingsActivity extends AppCompatActivity {
         spans[2] = new SpannableString(scanModes[2] + "\n" + scanModesSubs[2]);
 
 
-        spans[0].setSpan(new TextAppearanceSpan(this,com.google.android.material.R.style.TextAppearance_Material3_BodySmall), scanModes[0].length() + 1, (scanModes[0].length() + scanModesSubs[0].length() + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spans[1].setSpan(new TextAppearanceSpan(this,com.google.android.material.R.style.TextAppearance_Material3_BodySmall), scanModes[1].length() + 1, (scanModes[1].length() + scanModesSubs[1].length() + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spans[2].setSpan(new TextAppearanceSpan(this,com.google.android.material.R.style.TextAppearance_Material3_BodySmall), scanModes[2].length() + 1, (scanModes[2].length() + scanModesSubs[2].length() + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spans[0].setSpan(new TextAppearanceSpan(this, com.google.android.material.R.style.TextAppearance_Material3_BodySmall), scanModes[0].length() + 1, (scanModes[0].length() + scanModesSubs[0].length() + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spans[1].setSpan(new TextAppearanceSpan(this, com.google.android.material.R.style.TextAppearance_Material3_BodySmall), scanModes[1].length() + 1, (scanModes[1].length() + scanModesSubs[1].length() + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spans[2].setSpan(new TextAppearanceSpan(this, com.google.android.material.R.style.TextAppearance_Material3_BodySmall), scanModes[2].length() + 1, (scanModes[2].length() + scanModesSubs[2].length() + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         ArrayAdapter<SpannableString> adapter = new ArrayAdapter<>(this, R.layout.list_item_layout, spans) {
             @NonNull
             @Override
@@ -124,18 +121,18 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         binding.btnScanMode.setOnClickListener(v -> {
-            int scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode",2);
-                new MaterialAlertDialogBuilder(this)
-                        .setTitle("Scan mode")
-                        .setSingleChoiceItems(adapter, scanMode, (dialog, which) -> {
-                            editor.putInt("com.drhowdydoo.appinfo.scan-mode",which).apply();
-                            setScanModeSub(which);
-                            dialog.dismiss();
-                        })
-                        .setPositiveButton("Cancel", (dialog, which) -> {
-                            dialog.dismiss();
-                        })
-                        .show();
+            int scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode", 2);
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("Scan mode")
+                    .setSingleChoiceItems(adapter, scanMode, (dialog, which) -> {
+                        editor.putInt("com.drhowdydoo.appinfo.scan-mode", which).apply();
+                        setScanModeSub(which);
+                        dialog.dismiss();
+                    })
+                    .setPositiveButton("Cancel", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
         });
     }
 
@@ -179,13 +176,15 @@ public class SettingsActivity extends AppCompatActivity {
 
         boolean showSplitApks = preferences.getBoolean("com.drhowdydoo.appinfo.show-split-apks", true);
         binding.switchShowSplitApks.setChecked(showSplitApks);
-        if (showSplitApks) binding.switchShowSplitApks.setCompoundDrawablesWithIntrinsicBounds(R.drawable.round_remove_red_eye,0,0,0);
-        else binding.switchShowSplitApks.setCompoundDrawablesWithIntrinsicBounds(R.drawable.round_visibility_off,0,0,0);
+        if (showSplitApks)
+            binding.switchShowSplitApks.setCompoundDrawablesWithIntrinsicBounds(R.drawable.round_remove_red_eye, 0, 0, 0);
+        else
+            binding.switchShowSplitApks.setCompoundDrawablesWithIntrinsicBounds(R.drawable.round_visibility_off, 0, 0, 0);
 
-        int scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode",2);
+        int scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode", 2);
         setScanModeSub(scanMode);
 
-        int searchType = preferences.getInt("com.drhowdydoo.appinfo.search-type",0);
+        int searchType = preferences.getInt("com.drhowdydoo.appinfo.search-type", 0);
         setSearchTypeSub(searchType);
     }
 

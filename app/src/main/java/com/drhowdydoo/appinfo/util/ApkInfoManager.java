@@ -54,7 +54,7 @@ public class ApkInfoManager {
 
         scanHiddenFolders = preferences.getBoolean("com.drhowdydoo.appinfo.scan-hidden-folders", true);
         showSplitApks = preferences.getBoolean("com.drhowdydoo.appinfo.show-split-apks", true);
-        int scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode",2);
+        int scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode", 2);
 
         File[] files = directory.listFiles();
 
@@ -63,7 +63,7 @@ public class ApkInfoManager {
                 .flatMap(file -> {
                     if (scanMode == 2) {
                         return Utilities.skipDirectoriesSet.contains(file.getName()) ? Observable.empty() : Observable.just(file);
-                    }else return Observable.just(file);
+                    } else return Observable.just(file);
                 });
 
         Observable<List<File>> apkFilesObservable = directoryObservable

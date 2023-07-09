@@ -11,17 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.drhowdydoo.appinfo.AppDetailsActivity;
+import com.drhowdydoo.appinfo.MainActivity;
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.ApkListItemBinding;
 import com.drhowdydoo.appinfo.model.ApkInfo;
 import com.drhowdydoo.appinfo.util.ApkInfoDiffCallback;
-import com.drhowdydoo.appinfo.util.Constants;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +34,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
     private Context context;
     private List<ApkInfo> apkInfoList;
     private HashSet<Integer> flagSet = new HashSet<>();
+    private ActionMode actionMode;
 
     public ApkRecyclerViewAdapter(Context context, List<ApkInfo> apkInfoList) {
         this.context = context;
@@ -97,7 +98,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         diffResult.dispatchUpdatesTo(this);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
 
         public ImageView imgApkIcon;
         public TextView tvApkName, tvApkSize, tvApkVersion, tvApkPath, tvApkStatus;
@@ -105,6 +106,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         public ViewHolder(@NonNull ApkListItemBinding binding) {
             super(binding.getRoot());
             binding.getRoot().setOnClickListener(this);
+            binding.getRoot().setOnLongClickListener(this);
             imgApkIcon = binding.imgApkIcon;
             tvApkName = binding.tvApkName;
             tvApkSize = binding.tvApkSize;
@@ -126,6 +128,11 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
             intent.putExtra("isInstalled", apkInfo.isInstalled());
             intent.putExtra("packageName", packageName);
             context.startActivity(intent);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            return false;
         }
     }
 
