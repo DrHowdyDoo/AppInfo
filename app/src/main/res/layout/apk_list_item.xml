@@ -95,11 +95,11 @@
         app:layout_constraintTop_toTopOf="@+id/tvApkSize"
         tools:text="INSTALLED" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
+    <ImageView
         android:id="@+id/checkbox"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:checked="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/check"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/imgApkIcon"
         app:layout_constraintEnd_toEndOf="@+id/imgApkIcon"

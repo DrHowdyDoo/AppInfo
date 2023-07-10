@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.view.ActionMode;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,9 +22,7 @@ import com.drhowdydoo.appinfo.databinding.ApkListItemBinding;
 import com.drhowdydoo.appinfo.interfaces.AdapterListener;
 import com.drhowdydoo.appinfo.model.ApkInfo;
 import com.drhowdydoo.appinfo.util.ApkInfoDiffCallback;
-import com.google.android.material.checkbox.MaterialCheckBox;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -62,10 +59,10 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         ApkInfo apkInfo = apkInfoList.get(position);
 
         if (adapterListener.isContextualBarShown()) {
-            holder.materialCheckBox.setVisibility(apkInfo.isSelected() ? View.VISIBLE : View.GONE);
+            holder.checkbox.setVisibility(apkInfo.isSelected() ? View.VISIBLE : View.GONE);
             holder.parent.setActivated(apkInfo.isSelected());
         } else {
-            holder.materialCheckBox.setVisibility(View.GONE);
+            holder.checkbox.setVisibility(View.GONE);
             holder.parent.setActivated(false);
         }
 
@@ -118,7 +115,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
 
         public ImageView imgApkIcon;
         public TextView tvApkName, tvApkSize, tvApkVersion, tvApkPath, tvApkStatus;
-        public MaterialCheckBox materialCheckBox;
+        public ImageView checkbox;
         public ConstraintLayout parent;
 
         public ViewHolder(@NonNull ApkListItemBinding binding) {
@@ -131,7 +128,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
             tvApkVersion = binding.tvApkVersion;
             tvApkPath = binding.tvApkPath;
             tvApkStatus = binding.tvApkStatus;
-            materialCheckBox = binding.checkbox;
+            checkbox = binding.checkbox;
             parent = binding.getRoot();
         }
 
@@ -172,7 +169,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
             adapterListener.onItemLongClicked();
             int position = getBindingAdapterPosition();
             apkInfoList.get(position).setSelected(true);
-            materialCheckBox.setVisibility(View.VISIBLE);
+            checkbox.setVisibility(View.VISIBLE);
             parent.setActivated(true);
             selectedItemCount = selectedItemCount + 1;
             adapterListener.setContextualBarTitle(selectedItemCount);
