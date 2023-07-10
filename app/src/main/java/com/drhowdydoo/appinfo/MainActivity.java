@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +23,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.FileProvider;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -234,6 +236,16 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+                ApkFragment apkFragment = (ApkFragment) getSupportFragmentManager().findFragmentByTag("f1");
+                List<String> paths;
+                if (apkFragment != null) {
+                    paths = apkFragment.getSelectedApkPaths();
+                } else {
+                    paths = new ArrayList<>();
+                }
+
+
                 if (item.getItemId() == R.id.delete) {
 
                     DeleteDialogLayoutBinding deleteDialogLayoutBinding = DeleteDialogLayoutBinding.inflate(LayoutInflater.from(MainActivity.this));
@@ -241,14 +253,6 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
                             .setView(deleteDialogLayoutBinding.getRoot())
                             .create();
                     alertDialog.show();
-
-                    ApkFragment apkFragment = (ApkFragment) getSupportFragmentManager().findFragmentByTag("f1");
-                    List<String> paths;
-                    if (apkFragment != null) {
-                        paths = apkFragment.getSelectedApkPaths();
-                    } else {
-                        paths = new ArrayList<>();
-                    }
 
                     deleteDialogLayoutBinding.tvTitle.setText(paths.size() == 1 ? "Delete this apk ?" : "Delete " + "these " + paths.size() + " apks ?");
                     deleteDialogLayoutBinding.btnDelete.setOnClickListener(v -> {
@@ -268,6 +272,21 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
                     });
 
                     return true;
+                }
+                else if (item.getItemId() == R.id.share) {
+                    Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                    intent.setType("application/vnd.android.package-archive");
+                    ArrayList<Uri> uriList = new ArrayList<>();
+                    paths.forEach(path -> {
+                        Uri uri = FileProvider.getUriForFile(
+                                MainActivity.this,
+                                "com.drhowdydoo.appinfo.fileprovider", new File(path));
+                        uriList.add(uri);
+                    });
+                    intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriList);
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(Intent.createChooser(intent, "Share apk(s) via"));
+                    mode.finish();
                 }
                 return false;
             }
