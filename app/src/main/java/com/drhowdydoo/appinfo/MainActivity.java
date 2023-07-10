@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
     private MainViewModel mainViewModel;
     private boolean isPageSelected = false;
     private ActionMode actionMode;
+    private boolean isAllItemSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -226,12 +227,15 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 mode.getMenuInflater().inflate(R.menu.contextual_action_bar,menu);
+                menu.getItem(2).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
                 return true;
             }
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
+                if (isAllItemSelected) menu.getItem(2).setTitle("Deselect all");
+                else menu.getItem(2).setTitle("Select all");
+                return true;
             }
 
             @Override
@@ -287,6 +291,21 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivity(Intent.createChooser(intent, "Share apk(s) via"));
                     mode.finish();
+                    return true;
+                }
+                else if (item.getItemId() == R.id.selection) {
+                    if (apkFragment != null) {
+                        if (isAllItemSelected) {
+                            apkFragment.deselectAllApk();
+                            isAllItemSelected = false;
+                            mode.finish();
+                            return true;
+                        }
+                        apkFragment.selectAllApk();
+                        isAllItemSelected = true;
+                    }
+                    mode.invalidate();
+                    return true;
                 }
                 return false;
             }
@@ -317,5 +336,10 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
 
     public void setContextualBarTitle(int count) {
         actionMode.setTitle(count + " selected");
+    }
+
+    public void allItemSelected() {
+        isAllItemSelected = true;
+        actionMode.invalidate();
     }
 }

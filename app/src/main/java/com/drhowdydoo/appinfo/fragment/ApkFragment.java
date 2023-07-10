@@ -291,4 +291,17 @@ public class ApkFragment extends Fragment implements View.OnClickListener,Adapte
         apkListViewModel.getSavedApkInfoList().removeIf(ApkInfo::isSelected);
         adapter.removeDeletedApksFromList();
     }
+
+    public void selectAllApk() {
+        adapter.selectAllApk();
+    }
+
+    public void deselectAllApk(){
+        adapter.deselectAllApk();
+    }
+
+    @Override
+    public void allItemSelected() {
+        mainActivity.allItemSelected();
+    }
 }

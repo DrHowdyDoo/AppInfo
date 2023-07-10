@@ -16,4 +16,9 @@
         android:contentDescription="@string/delete"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/selection"
+        android:title="@string/select_all"
+        android:contentDescription="@string/select_all"
+        app:showAsAction="never" />
 </menu>

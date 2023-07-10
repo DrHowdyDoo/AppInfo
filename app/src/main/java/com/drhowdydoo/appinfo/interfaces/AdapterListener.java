@@ -8,4 +8,6 @@ public interface AdapterListener {
     void removeContextualBar();
     void setContextualBarTitle(int count);
 
+    void allItemSelected();
+
 }

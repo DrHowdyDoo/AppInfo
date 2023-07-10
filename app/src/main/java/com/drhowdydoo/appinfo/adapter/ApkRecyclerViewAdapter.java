@@ -142,6 +142,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
                 adapterListener.setContextualBarTitle(selectedItemCount);
                 notifyItemChanged(position);
                 if (selectedItemCount == 0) adapterListener.removeContextualBar();
+                if (selectedItemCount == apkInfoList.size()) adapterListener.allItemSelected();
             }
             else {
                 openApkInfo();
@@ -188,8 +189,25 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         return apkInfoList.stream().filter(ApkInfo::isSelected).map(ApkInfo::getApkAbsolutePath).collect(Collectors.toList());
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void removeDeletedApksFromList() {
         apkInfoList.removeIf(ApkInfo::isSelected);
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void selectAllApk() {
+        selectedItemCount = apkInfoList.size();
+        adapterListener.setContextualBarTitle(selectedItemCount);
+        apkInfoList.forEach(apkInfo -> apkInfo.setSelected(true));
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void deselectAllApk() {
+        selectedItemCount = 0;
+        adapterListener.setContextualBarTitle(selectedItemCount);
+        apkInfoList.forEach(apkInfo -> apkInfo.setSelected(false));
         notifyDataSetChanged();
     }
 

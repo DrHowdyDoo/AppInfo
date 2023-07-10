@@ -39,5 +39,6 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="delete_these_apk_files">Delete these apk files ?</string>
+    <string name="select_all">Select all</string>
 
 </resources>
