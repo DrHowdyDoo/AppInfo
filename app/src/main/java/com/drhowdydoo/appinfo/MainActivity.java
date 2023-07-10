@@ -277,10 +277,15 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
                     actionMode = null;
                     ApkFragment apkFragment = (ApkFragment) getSupportFragmentManager().findFragmentByTag("f1");
                     if (apkFragment != null) apkFragment.contextualBarRemoved();
+                getWindow().setStatusBarColor(ThemeUtils.getColorAttr(MainActivity.this, android.R.attr.colorBackground));
             }
         };
 
+
+        getWindow().setStatusBarColor(SurfaceColors.SURFACE_2.getColor(this));
         actionMode = startActionMode(actionModeCallback);
+
+
 
     }
     public boolean isContextualBarShown() {

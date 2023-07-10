@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.UiModeManager;
 import android.content.Context;
 import android.os.Build;
+import android.util.TypedValue;
 
+import androidx.annotation.AttrRes;
 import androidx.appcompat.app.AppCompatDelegate;
 
 public class ThemeUtils {
@@ -22,6 +24,12 @@ public class ThemeUtils {
             AppCompatDelegate.setDefaultNightMode(mode);
         }
 
+    }
+
+    public static int getColorAttr(Context context, @AttrRes int resId) {
+        TypedValue typedValue = new TypedValue();
+        context.getTheme().resolveAttribute(resId, typedValue, true);
+        return typedValue.data;
     }
 }
 
