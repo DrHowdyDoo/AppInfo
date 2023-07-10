@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
-public class ApkFragment extends Fragment implements View.OnClickListener,AdapterListener {
+public class ApkFragment extends Fragment implements View.OnClickListener, AdapterListener {
 
     private FragmentApkBinding binding;
     private ApkRecyclerViewAdapter adapter;
@@ -261,7 +261,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener,Adapte
 
     @Override
     public void onItemLongClicked() {
-       mainActivity.showContextualBar();
+        mainActivity.showContextualBar();
     }
 
     @Override
@@ -293,7 +293,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener,Adapte
         if (apkListViewModel.getSavedApkInfoList().isEmpty()) {
             binding.notFound.setVisibility(View.VISIBLE);
             mainActivity.onFilter("All Apks");
-        }else {
+        } else {
             binding.notFound.setVisibility(View.GONE);
         }
     }
@@ -302,7 +302,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener,Adapte
         adapter.selectAllApk();
     }
 
-    public void deselectAllApk(){
+    public void deselectAllApk() {
         adapter.deselectAllApk();
     }
 

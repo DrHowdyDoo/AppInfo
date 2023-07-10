@@ -111,73 +111,6 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         diffResult.dispatchUpdatesTo(this);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
-
-        public ImageView imgApkIcon;
-        public TextView tvApkName, tvApkSize, tvApkVersion, tvApkPath, tvApkStatus;
-        public ImageView checkbox;
-        public ConstraintLayout parent;
-
-        public ViewHolder(@NonNull ApkListItemBinding binding) {
-            super(binding.getRoot());
-            binding.getRoot().setOnClickListener(this);
-            binding.getRoot().setOnLongClickListener(this);
-            imgApkIcon = binding.imgApkIcon;
-            tvApkName = binding.tvApkName;
-            tvApkSize = binding.tvApkSize;
-            tvApkVersion = binding.tvApkVersion;
-            tvApkPath = binding.tvApkPath;
-            tvApkStatus = binding.tvApkStatus;
-            checkbox = binding.checkbox;
-            parent = binding.getRoot();
-        }
-
-        @Override
-        public void onClick(View v) {
-            if (adapterListener.isContextualBarShown()) {
-                int position = getBindingAdapterPosition();
-                ApkInfo apkInfo = apkInfoList.get(position);
-                apkInfo.setSelected(!apkInfo.isSelected());
-                selectedItemCount = apkInfo.isSelected() ? selectedItemCount + 1 : selectedItemCount - 1;
-                adapterListener.setContextualBarTitle(selectedItemCount);
-                notifyItemChanged(position);
-                if (selectedItemCount == 0) adapterListener.removeContextualBar();
-                if (selectedItemCount == apkInfoList.size()) adapterListener.allItemSelected();
-            }
-            else {
-                openApkInfo();
-            }
-
-        }
-
-        private void openApkInfo() {
-            Intent intent = new Intent(context, AppDetailsActivity.class);
-            ApkInfo apkInfo = apkInfoList.get(getBindingAdapterPosition());
-            String packageName = apkInfo.getApkInfo() != null ? apkInfo.getApkInfo().packageName : "";
-            intent.putExtra("isApk", true);
-            intent.putExtra("appName", apkInfo.getApkName());
-            intent.putExtra("appVersion", apkInfo.getApkVersion());
-            intent.putExtra("appSize", apkInfo.getApkSize());
-            intent.putExtra("apkAbsolutePath", apkInfo.getApkAbsolutePath());
-            intent.putExtra("isInstalled", apkInfo.isInstalled());
-            intent.putExtra("packageName", packageName);
-            context.startActivity(intent);
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            if (adapterListener.isContextualBarShown()) return false;
-            adapterListener.onItemLongClicked();
-            int position = getBindingAdapterPosition();
-            apkInfoList.get(position).setSelected(true);
-            checkbox.setVisibility(View.VISIBLE);
-            parent.setActivated(true);
-            selectedItemCount = selectedItemCount + 1;
-            adapterListener.setContextualBarTitle(selectedItemCount);
-            return true;
-        }
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     public void contextualBarRemoved() {
         selectedItemCount = 0;
@@ -209,6 +142,72 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         adapterListener.setContextualBarTitle(selectedItemCount);
         apkInfoList.forEach(apkInfo -> apkInfo.setSelected(false));
         notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+
+        public ImageView imgApkIcon;
+        public TextView tvApkName, tvApkSize, tvApkVersion, tvApkPath, tvApkStatus;
+        public ImageView checkbox;
+        public ConstraintLayout parent;
+
+        public ViewHolder(@NonNull ApkListItemBinding binding) {
+            super(binding.getRoot());
+            binding.getRoot().setOnClickListener(this);
+            binding.getRoot().setOnLongClickListener(this);
+            imgApkIcon = binding.imgApkIcon;
+            tvApkName = binding.tvApkName;
+            tvApkSize = binding.tvApkSize;
+            tvApkVersion = binding.tvApkVersion;
+            tvApkPath = binding.tvApkPath;
+            tvApkStatus = binding.tvApkStatus;
+            checkbox = binding.checkbox;
+            parent = binding.getRoot();
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (adapterListener.isContextualBarShown()) {
+                int position = getBindingAdapterPosition();
+                ApkInfo apkInfo = apkInfoList.get(position);
+                apkInfo.setSelected(!apkInfo.isSelected());
+                selectedItemCount = apkInfo.isSelected() ? selectedItemCount + 1 : selectedItemCount - 1;
+                adapterListener.setContextualBarTitle(selectedItemCount);
+                notifyItemChanged(position);
+                if (selectedItemCount == 0) adapterListener.removeContextualBar();
+                if (selectedItemCount == apkInfoList.size()) adapterListener.allItemSelected();
+            } else {
+                openApkInfo();
+            }
+
+        }
+
+        private void openApkInfo() {
+            Intent intent = new Intent(context, AppDetailsActivity.class);
+            ApkInfo apkInfo = apkInfoList.get(getBindingAdapterPosition());
+            String packageName = apkInfo.getApkInfo() != null ? apkInfo.getApkInfo().packageName : "";
+            intent.putExtra("isApk", true);
+            intent.putExtra("appName", apkInfo.getApkName());
+            intent.putExtra("appVersion", apkInfo.getApkVersion());
+            intent.putExtra("appSize", apkInfo.getApkSize());
+            intent.putExtra("apkAbsolutePath", apkInfo.getApkAbsolutePath());
+            intent.putExtra("isInstalled", apkInfo.isInstalled());
+            intent.putExtra("packageName", packageName);
+            context.startActivity(intent);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (adapterListener.isContextualBarShown()) return false;
+            adapterListener.onItemLongClicked();
+            int position = getBindingAdapterPosition();
+            apkInfoList.get(position).setSelected(true);
+            checkbox.setVisibility(View.VISIBLE);
+            parent.setActivated(true);
+            selectedItemCount = selectedItemCount + 1;
+            adapterListener.setContextualBarTitle(selectedItemCount);
+            return true;
+        }
     }
 
 }

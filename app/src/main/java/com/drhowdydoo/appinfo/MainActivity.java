@@ -2,7 +2,6 @@ package com.drhowdydoo.appinfo;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -22,7 +21,6 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.FileProvider;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.Fragment;
@@ -226,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
         ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.contextual_action_bar,menu);
+                mode.getMenuInflater().inflate(R.menu.contextual_action_bar, menu);
                 menu.getItem(2).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
                 return true;
             }
@@ -267,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
                         });
                         mode.finish();
                         alertDialog.dismiss();
-                        Snackbar.make(MainActivity.this,binding.getRoot(),"Deleted " + paths.size() + " apk(s)", BaseTransientBottomBar.LENGTH_SHORT).show();
+                        Snackbar.make(MainActivity.this, binding.getRoot(), "Deleted " + paths.size() + " apk(s)", BaseTransientBottomBar.LENGTH_SHORT).show();
                     });
 
                     deleteDialogLayoutBinding.btnCancel.setOnClickListener(v -> {
@@ -276,8 +274,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
                     });
 
                     return true;
-                }
-                else if (item.getItemId() == R.id.share) {
+                } else if (item.getItemId() == R.id.share) {
                     Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                     intent.setType("application/vnd.android.package-archive");
                     ArrayList<Uri> uriList = new ArrayList<>();
@@ -292,8 +289,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
                     startActivity(Intent.createChooser(intent, "Share apk(s) via"));
                     mode.finish();
                     return true;
-                }
-                else if (item.getItemId() == R.id.selection) {
+                } else if (item.getItemId() == R.id.selection) {
                     if (apkFragment != null) {
                         if (isAllItemSelected) {
                             apkFragment.deselectAllApk();
@@ -312,9 +308,9 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                    actionMode = null;
-                    ApkFragment apkFragment = (ApkFragment) getSupportFragmentManager().findFragmentByTag("f1");
-                    if (apkFragment != null) apkFragment.contextualBarRemoved();
+                actionMode = null;
+                ApkFragment apkFragment = (ApkFragment) getSupportFragmentManager().findFragmentByTag("f1");
+                if (apkFragment != null) apkFragment.contextualBarRemoved();
                 getWindow().setStatusBarColor(ThemeUtils.getColorAttr(MainActivity.this, android.R.attr.colorBackground));
             }
         };
@@ -324,13 +320,13 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
         actionMode = startActionMode(actionModeCallback);
 
 
-
     }
+
     public boolean isContextualBarShown() {
         return actionMode != null;
     }
 
-    public void removeContextualBar(){
+    public void removeContextualBar() {
         actionMode.finish();
     }
 
