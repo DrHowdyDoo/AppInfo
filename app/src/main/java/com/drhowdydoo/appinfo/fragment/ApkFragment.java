@@ -290,6 +290,12 @@ public class ApkFragment extends Fragment implements View.OnClickListener,Adapte
     public void updateList() {
         apkListViewModel.getSavedApkInfoList().removeIf(ApkInfo::isSelected);
         adapter.removeDeletedApksFromList();
+        if (apkListViewModel.getSavedApkInfoList().isEmpty()) {
+            binding.notFound.setVisibility(View.VISIBLE);
+            mainActivity.onFilter("All Apks");
+        }else {
+            binding.notFound.setVisibility(View.GONE);
+        }
     }
 
     public void selectAllApk() {
