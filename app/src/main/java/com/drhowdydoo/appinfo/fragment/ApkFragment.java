@@ -11,14 +11,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import android.view.ActionMode;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,7 +25,7 @@ import com.drhowdydoo.appinfo.MainActivity;
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.adapter.ApkRecyclerViewAdapter;
 import com.drhowdydoo.appinfo.databinding.FragmentApkBinding;
-import com.drhowdydoo.appinfo.interfaces.onItemClickListener;
+import com.drhowdydoo.appinfo.interfaces.AdapterListener;
 import com.drhowdydoo.appinfo.model.ApkInfo;
 import com.drhowdydoo.appinfo.util.ApkInfoComparator;
 import com.drhowdydoo.appinfo.util.ApkInfoManager;
@@ -42,7 +39,7 @@ import java.util.stream.Collectors;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
-public class ApkFragment extends Fragment implements View.OnClickListener, onItemClickListener {
+public class ApkFragment extends Fragment implements View.OnClickListener,AdapterListener {
 
     private FragmentApkBinding binding;
     private ApkRecyclerViewAdapter adapter;
@@ -264,33 +261,34 @@ public class ApkFragment extends Fragment implements View.OnClickListener, onIte
 
     @Override
     public void onItemLongClicked() {
-        ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.contextual_action_bar,menu);
-                return true;
-            }
+       mainActivity.showContextualBar();
+    }
 
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
+    @Override
+    public void removeContextualBar() {
+        mainActivity.removeContextualBar();
+    }
 
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                if (item.getItemId() == R.id.delete) {
-                    //delete apks
-                    return true;
-                }
-                return false;
-            }
+    @Override
+    public void setContextualBarTitle(int count) {
+        mainActivity.setContextualBarTitle(count);
+    }
 
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
+    @Override
+    public boolean isContextualBarShown() {
+        return mainActivity.isContextualBarShown();
+    }
 
-            }
-        };
+    public void contextualBarRemoved() {
+        if (adapter != null) adapter.contextualBarRemoved();
+    }
 
-        requireActivity().startActionMode(actionModeCallback);
+    public List<String> getSelectedApkPaths() {
+        return adapter.getSelectedApkPaths();
+    }
+
+    public void updateList() {
+        apkListViewModel.getSavedApkInfoList().removeIf(ApkInfo::isSelected);
+        adapter.removeDeletedApksFromList();
     }
 }

@@ -2,19 +2,26 @@ package com.drhowdydoo.appinfo;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ActionMode;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,19 +31,28 @@ import com.drhowdydoo.appinfo.adapter.ViewPagerAdapter;
 import com.drhowdydoo.appinfo.bottomsheet.FilterBottomSheet;
 import com.drhowdydoo.appinfo.bottomsheet.SortBottomSheet;
 import com.drhowdydoo.appinfo.databinding.ActivityMainBinding;
+import com.drhowdydoo.appinfo.databinding.DeleteDialogLayoutBinding;
 import com.drhowdydoo.appinfo.fragment.ApkFragment;
 import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.interfaces.OnSortFilterListener;
 import com.drhowdydoo.appinfo.util.ThemeUtils;
 import com.drhowdydoo.appinfo.viewmodel.MainViewModel;
 import com.google.android.material.color.DynamicColors;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.elevation.SurfaceColors;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnSortFilterListener {
 
     private ActivityMainBinding binding;
     private MainViewModel mainViewModel;
     private boolean isPageSelected = false;
+    private ActionMode actionMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,7 +211,87 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
 
     private void onFragmentChanged(int position) {
         setSearchHint();
-        if (position == 0) binding.searchInput.setText(mainViewModel.getAppSearchText());
-        else if (position == 1) binding.searchInput.setText(mainViewModel.getApkSearchText());
+        if (position == 0) {
+            binding.searchInput.setText(mainViewModel.getAppSearchText());
+            if (actionMode != null) actionMode.finish();
+        } else if (position == 1) {
+            binding.searchInput.setText(mainViewModel.getApkSearchText());
+        }
+    }
+
+    public void showContextualBar() {
+        ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.contextual_action_bar,menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                if (item.getItemId() == R.id.delete) {
+
+                    DeleteDialogLayoutBinding deleteDialogLayoutBinding = DeleteDialogLayoutBinding.inflate(LayoutInflater.from(MainActivity.this));
+                    AlertDialog alertDialog = new MaterialAlertDialogBuilder(MainActivity.this)
+                            .setView(deleteDialogLayoutBinding.getRoot())
+                            .create();
+                    alertDialog.show();
+
+                    ApkFragment apkFragment = (ApkFragment) getSupportFragmentManager().findFragmentByTag("f1");
+                    List<String> paths;
+                    if (apkFragment != null) {
+                        paths = apkFragment.getSelectedApkPaths();
+                    } else {
+                        paths = new ArrayList<>();
+                    }
+
+                    deleteDialogLayoutBinding.tvTitle.setText(paths.size() == 1 ? "Delete this apk ?" : "Delete " + "these " + paths.size() + " apks ?");
+                    deleteDialogLayoutBinding.btnDelete.setOnClickListener(v -> {
+                        if (apkFragment != null) apkFragment.updateList();
+                        paths.forEach(apkPath -> {
+                            File file = new File(apkPath);
+                            if (file.exists()) file.delete();
+                        });
+                        mode.finish();
+                        alertDialog.dismiss();
+                        Snackbar.make(MainActivity.this,binding.getRoot(),"Deleted " + paths.size() + " apk(s)", BaseTransientBottomBar.LENGTH_SHORT).show();
+                    });
+
+                    deleteDialogLayoutBinding.btnCancel.setOnClickListener(v -> {
+                        alertDialog.dismiss();
+                        mode.finish();
+                    });
+
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                    actionMode = null;
+                    ApkFragment apkFragment = (ApkFragment) getSupportFragmentManager().findFragmentByTag("f1");
+                    if (apkFragment != null) apkFragment.contextualBarRemoved();
+            }
+        };
+
+        actionMode = startActionMode(actionModeCallback);
+
+    }
+    public boolean isContextualBarShown() {
+        return actionMode != null;
+    }
+
+    public void removeContextualBar(){
+        actionMode.finish();
+    }
+
+    public void setContextualBarTitle(int count) {
+        actionMode.setTitle(count + " selected");
     }
 }

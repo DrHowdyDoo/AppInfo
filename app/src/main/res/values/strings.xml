@@ -37,5 +37,7 @@
     <string name="scan_mode">Scan mode</string>
     <string name="search_type">Search type</string>
     <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_these_apk_files">Delete these apk files ?</string>
 
 </resources>

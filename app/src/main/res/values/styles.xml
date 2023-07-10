@@ -20,8 +20,8 @@
     </style>
 
 
-    <style name="App.TextAppearance.AppName" parent="TextAppearance.Material3.TitleMedium">
-        <item name="android:textSize">22sp</item>
+    <style name="App.TextAppearance.AppName" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="App.TextAppearance.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
@@ -50,5 +50,17 @@
     </style>
 
     <style name="Widget.App.IconButton" parent="Widget.Material3.Button.IconButton.Outlined"/>
+
+    <style name="Widget.App.ActionMode" parent="Widget.Material3.ActionMode">
+        <item name="titleTextStyle">?textAppearanceTitleMedium</item>
+    </style>
+
+    <style name="Widget.App.Snackbar" parent="Widget.Material3.Snackbar">
+        <item name="shapeAppearance">@style/RoundedSnackBar</item>
+    </style>
+
+    <style name="RoundedSnackBar" parent="ShapeAppearance.Material3.Corner.ExtraSmall">
+        <item name="cornerSize">24dp</item>
+    </style>
 
 </resources>

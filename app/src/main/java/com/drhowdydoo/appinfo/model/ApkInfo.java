@@ -12,6 +12,7 @@ public class ApkInfo {
     private String apkAbsolutePath;
     private String apkVersion;
     private PackageInfo apkInfo;
+    private boolean isSelected;
 
     private boolean isInstalled;
 
@@ -30,6 +31,14 @@ public class ApkInfo {
         this.apkVersion = apkVersion;
         this.apkInfo = apkInfo;
         this.isInstalled = isInstalled;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public String getApkName() {
