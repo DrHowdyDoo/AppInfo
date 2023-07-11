@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -67,6 +68,12 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
         binding = FragmentApkBinding.inflate(inflater, container, false);
 
         checkStoragePermission();
+        if (savedInstanceState != null) {
+            boolean isEmptyPlaceholderVisible = savedInstanceState.getBoolean("com.drhowdydoo.appinfo.empty-list-placeholder-visible", false);
+            boolean isProgressIndicatorVisible = savedInstanceState.getBoolean("com.drhowdydoo.appinfo.progress-indicator-visible", false);
+            binding.notFound.setVisibility(isEmptyPlaceholderVisible ? View.VISIBLE : View.GONE);
+            binding.progressGroup.setVisibility(isProgressIndicatorVisible ? View.VISIBLE : View.GONE);
+        }
         binding.btnStorageAccess.setOnClickListener(this);
         apkListViewModel = new ViewModelProvider(this).get(ApkListViewModel.class);
         adapter = new ApkRecyclerViewAdapter(requireActivity(), apkListViewModel.getSavedApkInfoList(), this);
@@ -92,6 +99,15 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
                     }
                 });
 
+        apkListViewModel.getBackgroundTaskStateLiveData().observe(getViewLifecycleOwner(), isRunning -> {
+            binding.swipeRefreshLayout.setRefreshing(false);
+            binding.progressGroup.setVisibility(isRunning ? View.VISIBLE : View.GONE);
+            binding.notFound.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+        });
+
+        apkListViewModel.getFetchedApkInfoList().observe(getViewLifecycleOwner(), fetchedApkInfoList -> {
+            setData(fetchedApkInfoList, true);
+        });
 
         return binding.getRoot();
     }
@@ -309,5 +325,13 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
     @Override
     public void allItemSelected() {
         mainActivity.allItemSelected();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        System.out.println("onSaveInstanceState");
+        outState.putBoolean("com.drhowdydoo.appinfo.empty-list-placeholder-visible",binding.notFound.isShown());
+        outState.putBoolean("com.drhowdydoo.appinfo.progress-indicator-visible",binding.progressGroup.isShown());
     }
 }

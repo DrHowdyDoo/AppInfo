@@ -15,7 +15,7 @@
     <string name="apk_icon">Apk Icon</string>
     <string name="no_results">No results</string>
     <string name="app_details">App details</string>
-    <string name="no_apks_found">No apks found</string>
+    <string name="no_apks_found">No apks found\n Try changing filter ?</string>
     <string name="no_apps_found">No apps found</string>
     <string name="share_playstore_link">Share playstore link</string>
     <string name="share">Share</string>

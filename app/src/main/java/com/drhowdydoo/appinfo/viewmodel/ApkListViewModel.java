@@ -1,5 +1,7 @@
 package com.drhowdydoo.appinfo.viewmodel;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.drhowdydoo.appinfo.model.ApkInfo;
@@ -48,5 +50,25 @@ public class ApkListViewModel extends ViewModel {
 
     public void setFilterState(int filterState) {
         this.filterState = filterState;
+    }
+
+    private MutableLiveData<Boolean> backgroundTaskStateLiveData = new MutableLiveData<>();
+
+    public void setBackgroundTaskState(boolean isRunning) {
+        backgroundTaskStateLiveData.postValue(isRunning);
+    }
+
+    public LiveData<Boolean> getBackgroundTaskStateLiveData() {
+        return backgroundTaskStateLiveData;
+    }
+
+    private MutableLiveData<List<ApkInfo>> fetchedApkInfoList = new MutableLiveData<>();
+
+    public LiveData<List<ApkInfo>> getFetchedApkInfoList() {
+        return fetchedApkInfoList;
+    }
+
+    public void setFetchedApkInfoList(List<ApkInfo> fetchedApkInfoList) {
+        this.fetchedApkInfoList.postValue(fetchedApkInfoList);
     }
 }

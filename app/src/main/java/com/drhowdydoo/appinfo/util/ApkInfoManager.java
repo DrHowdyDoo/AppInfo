@@ -8,10 +8,12 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.fragment.ApkFragment;
 import com.drhowdydoo.appinfo.model.ApkInfo;
+import com.drhowdydoo.appinfo.viewmodel.ApkListViewModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,6 +57,7 @@ public class ApkInfoManager {
         scanHiddenFolders = preferences.getBoolean("com.drhowdydoo.appinfo.scan-hidden-folders", true);
         showSplitApks = preferences.getBoolean("com.drhowdydoo.appinfo.show-split-apks", true);
         int scanMode = preferences.getInt("com.drhowdydoo.appinfo.scan-mode", 2);
+        ApkListViewModel apkListViewModel = new ViewModelProvider(apkFragment).get(ApkListViewModel.class);
 
         File[] files = directory.listFiles();
 
@@ -75,10 +78,10 @@ public class ApkInfoManager {
                 .map(this::getApkInfo)
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
-                .doFinally(apkFragment::hideProgressBar)
+                .doFinally(() -> apkListViewModel.setBackgroundTaskState(false))
                 .subscribe(apkInfoList -> {
-                    System.out.println("Apk List : " + apkInfoList.size());
-                    apkFragment.setData(apkInfoList, true);
+                    //apkFragment.setData(apkInfoList, true);
+                    apkListViewModel.setFetchedApkInfoList(apkInfoList);
                 }, Throwable::printStackTrace);
 
     }
