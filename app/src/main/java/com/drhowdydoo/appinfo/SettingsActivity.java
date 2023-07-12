@@ -162,7 +162,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void init() {
-        int theme = preferences.getInt("com.drhowdydoo.appinfo.theme", 0);
+        int theme = preferences.getInt("com.drhowdydoo.appinfo.theme", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         if (theme == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
             binding.btnSystemTheme.setChecked(true);
         } else if (theme == AppCompatDelegate.MODE_NIGHT_YES) {

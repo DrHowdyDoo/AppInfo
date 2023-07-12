@@ -79,6 +79,7 @@
             android:maxWidth="720dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            tools:visibility="visible"
             android:layout_margin="16dp"
             app:boxBackgroundColor="?colorSecondaryContainer"
             app:boxStrokeWidth="0dp"

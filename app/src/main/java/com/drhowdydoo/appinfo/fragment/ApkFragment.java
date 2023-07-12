@@ -102,7 +102,10 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
         apkListViewModel.getBackgroundTaskStateLiveData().observe(getViewLifecycleOwner(), isRunning -> {
             binding.swipeRefreshLayout.setRefreshing(false);
             binding.progressGroup.setVisibility(isRunning ? View.VISIBLE : View.GONE);
-            binding.notFound.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+            binding.notFound.setVisibility(adapter.getItemCount() == 0
+                    && !binding.groupStoragePermission.isShown()
+                    && !binding.progressGroup.isShown() ?
+                    View.VISIBLE : View.GONE);
         });
 
         apkListViewModel.getFetchedApkInfoList().observe(getViewLifecycleOwner(), fetchedApkInfoList -> {
@@ -170,13 +173,16 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
         List<ApkInfo> filteredList = getFilteredList(apkListViewModel.getFilterState());
         filteredList.sort(new ApkInfoComparator(apkListViewModel.getSortState()));
         apkListViewModel.setSavedApkInfoList(filteredList);
-        binding.notFound.setVisibility(filteredList.isEmpty() ? View.VISIBLE : View.GONE);
         adapter.setData(filteredList);
         binding.recyclerView.scrollToPosition(0);
         if (!isPaused) {
             mainActivity.onFilter(getFilterText());
             mainActivity.onSort(getSortText());
         }
+        binding.notFound.setVisibility(adapter.getItemCount() == 0
+                && !binding.groupStoragePermission.isShown()
+                && !binding.progressGroup.isShown() ?
+                View.VISIBLE : View.GONE);
     }
 
     public void hideProgressBar() {
@@ -250,17 +256,18 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
         if (!input.isEmpty()) {
             List<ApkInfo> searchResults = apkListViewModel.getSavedApkInfoList()
                     .stream()
-                    .filter(apkInfo -> searchIn(input.toLowerCase(), apkInfo.getApkName().toLowerCase()))
+                    .filter(apkInfo -> searchIn(input.toLowerCase(), apkInfo.getApkName().toLowerCase()) || searchIn(input.toLowerCase(), apkInfo.getApkInfo().packageName.toLowerCase()))
                     .collect(Collectors.toList());
             adapter.updateData(searchResults);
             mainActivity.onFilter(getFilterText());
-            if (searchResults.isEmpty()) binding.tvNoResultsFound.setVisibility(View.VISIBLE);
-            else binding.tvNoResultsFound.setVisibility(View.GONE);
         } else {
             adapter.setData(apkListViewModel.getSavedApkInfoList());
             mainActivity.onFilter(getFilterText());
-            binding.tvNoResultsFound.setVisibility(View.GONE);
         }
+        binding.notFound.setVisibility(adapter.getItemCount() == 0
+                && !binding.groupStoragePermission.isShown()
+                && !binding.progressGroup.isShown() ?
+                View.VISIBLE : View.GONE);
     }
 
     private boolean searchIn(String input, String target) {

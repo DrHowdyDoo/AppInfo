@@ -125,9 +125,11 @@ public class AppFragment extends Fragment {
             onSortFilterListener.onSort(getSortButtonText(sortedState));
             onSortFilterListener.onFilter(getFilterButtonText(filterState, filteredList.size()));
         }
-        binding.notFound.setVisibility(filteredList.isEmpty() ? View.VISIBLE : View.GONE);
         adapter.setData(filteredList);
         binding.recyclerView.scrollToPosition(0);
+        binding.notFound.setVisibility(adapter.getItemCount() == 0
+                && !binding.progressGroup.isShown() ?
+                View.VISIBLE : View.GONE);
     }
 
     public void hideProgressIndicators() {
@@ -228,13 +230,13 @@ public class AppFragment extends Fragment {
                     .collect(Collectors.toList());
             adapter.updateData(searchResults);
             onSortFilterListener.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
-            if (searchResults.isEmpty()) binding.tvNoResultsFound.setVisibility(View.VISIBLE);
-            else binding.tvNoResultsFound.setVisibility(View.GONE);
         } else {
             adapter.setData(appListViewModel.getSavedAppInfoList());
             onSortFilterListener.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
-            binding.tvNoResultsFound.setVisibility(View.GONE);
         }
+        binding.notFound.setVisibility(adapter.getItemCount() == 0
+                && !binding.progressGroup.isShown() ?
+                View.VISIBLE : View.GONE);
     }
 
     private boolean searchIn(String input, String target) {

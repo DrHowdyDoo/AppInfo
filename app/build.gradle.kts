@@ -10,8 +10,8 @@ android {
         applicationId = "com.drhowdydoo.appinfo"
         minSdk = 27
         targetSdk = 33
-        versionCode = 3
-        versionName = "1.0.0"
+        versionCode = 7
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

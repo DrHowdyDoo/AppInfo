@@ -167,8 +167,8 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
      * Changes the search bar hint with respective to the fragments.
      */
     private void setSearchHint() {
-        if (binding.viewPager.getCurrentItem() == 0) binding.searchBar.setHint("Search Apps");
-        else binding.searchBar.setHint("Search Apks");
+        if (binding.viewPager.getCurrentItem() == 0) binding.searchBar.setHint("Search apps by name or package");
+        else binding.searchBar.setHint("Search apks by name or package");
     }
 
 

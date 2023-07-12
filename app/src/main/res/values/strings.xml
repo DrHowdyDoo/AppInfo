@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">AppInfo</string>
     <string name="search">Search</string>
-    <string name="search_app">Search Apps</string>
+    <string name="search_app">Search apps by name or package</string>
     <string name="apps">Apps</string>
     <string name="apks">Apks</string>
     <string name="all_apps">All Apps</string>
