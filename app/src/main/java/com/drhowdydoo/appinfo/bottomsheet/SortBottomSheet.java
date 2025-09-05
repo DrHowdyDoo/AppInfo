@@ -47,6 +47,7 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
             appBinding.btnSortByName.setOnClickListener(this);
             appBinding.btnSortBySize.setOnClickListener(this);
             appBinding.btnSortByLastUpdate.setOnClickListener(this);
+            appBinding.btnSortByInstallDate.setOnClickListener(this);
             appBinding.btnSortByLastUsed.setOnClickListener(this);
             appBinding.btnSortByMostUsed.setOnClickListener(this);
             appBinding.switchReverseSort.setChecked(((AppFragment) fragment).isReversedSort());
@@ -102,6 +103,8 @@ public class SortBottomSheet extends BottomSheetDialogFragment implements View.O
                     return;
                 }
                 appFragment.sort(Constants.SORT_BY_MOST_USED, isReverseSort);
+            } else if (id == R.id.btnSortByInstallDate) {
+                appFragment.sort(Constants.SORT_BY_INSTALL_DATE, isReverseSort);
             }
 
         } else if (fragment instanceof ApkFragment) {

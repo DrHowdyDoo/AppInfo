@@ -19,6 +19,8 @@ public class AppInfo {
     private long totalForegroundTime;
     private String packageName;
 
+    private long installTmStamp;
+
     public AppInfo(String appName,
                    Drawable appIcon,
                    long appLastUpdateTime,
@@ -26,7 +28,7 @@ public class AppInfo {
                    boolean isSplitApp,
                    String appVersion,
                    boolean isSystemApp,
-                   String packageName) {
+                   String packageName, long installTmStamp) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.appLastUpdateTime = appLastUpdateTime;
@@ -35,6 +37,7 @@ public class AppInfo {
         this.appVersion = appVersion;
         this.isSystemApp = isSystemApp;
         this.packageName = packageName;
+        this.installTmStamp = installTmStamp;
     }
 
 
@@ -124,6 +127,14 @@ public class AppInfo {
 
     public void setTotalForegroundTime(long totalForegroundTime) {
         this.totalForegroundTime = totalForegroundTime;
+    }
+
+    public long getInstallTmStamp() {
+        return installTmStamp;
+    }
+
+    public void setInstallTmStamp(long installTmStamp) {
+        this.installTmStamp = installTmStamp;
     }
 
     @Override

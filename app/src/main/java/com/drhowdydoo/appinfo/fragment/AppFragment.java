@@ -165,6 +165,8 @@ public class AppFragment extends Fragment {
             adapter.setFlags(Constants.SHOW_LAST_USED_TIME);
             appInfoManager.addLastUsedTimeToAppInfo(appListViewModel.getAppInfoList(), this);
             return;
+        } else if (sortBy == Constants.SORT_BY_INSTALL_DATE) {
+            adapter.setFlags(Constants.SHOW_INSTALL_DATE);
         } else adapter.setFlags(Constants.SHOW_LAST_UPDATED_TIME);
         if (sortBy == Constants.SORT_BY_MOST_USED) {
             adapter.setFlags(Constants.HIDE_APP_STATS);
@@ -184,6 +186,8 @@ public class AppFragment extends Fragment {
                 return "Size";
             case Constants.SORT_BY_LAST_USED:
                 return "Last used";
+            case Constants.SORT_BY_INSTALL_DATE:
+                return "Install date";
             case Constants.SORT_BY_MOST_USED:
                 if (appListViewModel.isReverseSort()) return "Least used";
                 return "Most used";

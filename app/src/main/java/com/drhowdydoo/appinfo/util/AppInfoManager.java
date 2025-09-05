@@ -71,11 +71,13 @@ public class AppInfoManager {
 
         long lastUpdateTime = Constants.LAST_UPDATED_TIME_NOT_AVAILABLE;
         boolean isSplit;
+        long installTmStamp = Constants.INSTALL_TIMESTAMP_NOT_AVAILABLE;
         String appVersion = "";
 
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(applicationInfo.packageName, PackageManager.GET_META_DATA);
             lastUpdateTime = now() - packageInfo.lastUpdateTime;
+            installTmStamp = packageInfo.firstInstallTime;
             appVersion = packageInfo.versionName;
         } catch (PackageManager.NameNotFoundException notFoundException) {
             notFoundException.printStackTrace();
@@ -94,7 +96,8 @@ public class AppInfoManager {
                 isSplit,
                 appVersion,
                 isSystemApp,
-                applicationInfo.packageName);
+                applicationInfo.packageName,
+                installTmStamp);
 
         if (PermissionManager.hasUsageStatsPermission(context)) {
             long totalAppSize = 0;

@@ -25,6 +25,7 @@ import com.drhowdydoo.appinfo.util.AppInfoDiffCallback;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.TimeFormatter;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -73,6 +74,8 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
             holder.tvAppStats.setText(TimeFormatter.format(appInfo.getLastTimeUsed(), "Used"));
         } else if (flagSet.contains(Constants.HIDE_APP_STATS)) {
             holder.tvAppStats.setText(TimeFormatter.formatDuration(appInfo.getTotalForegroundTime()));
+        } else if (flagSet.contains(Constants.SHOW_INSTALL_DATE)) {
+            holder.tvAppStats.setText(String.format("Installed on %s", DateFormat.getDateInstance().format(appInfo.getInstallTmStamp())));
         } else {
             holder.tvAppStats.setText(TimeFormatter.format(appInfo.getAppLastUpdateTime(), "Updated"));
         }
