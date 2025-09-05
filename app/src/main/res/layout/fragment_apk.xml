@@ -79,6 +79,9 @@
         android:layout_marginTop="8dp"
         app:trackCornerRadius="6dp"
         app:trackThickness="6dp"
+        app:wavelength="30dp"
+        app:waveSpeed="1dp"
+        app:waveAmplitude="2dp"
         app:layout_constraintEnd_toEndOf="@+id/tvProgressText"
         app:layout_constraintStart_toStartOf="@+id/tvProgressText"
         app:layout_constraintTop_toBottomOf="@+id/tvProgressText"/>

@@ -28,7 +28,7 @@
 
             <Button
                 android:id="@+id/btnSortByName"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Name"/>
@@ -39,7 +39,7 @@
 
             <Button
                 android:id="@+id/btnSortBySize"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Size"/>
@@ -50,7 +50,7 @@
 
             <Button
                 android:id="@+id/btnSortByLastUpdate"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Last updated"/>
@@ -87,7 +87,7 @@
 
             <Button
                 android:id="@+id/btnSortByLastUsed"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Last used"/>
@@ -98,7 +98,7 @@
 
             <Button
                 android:id="@+id/btnSortByMostUsed"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Most used"/>

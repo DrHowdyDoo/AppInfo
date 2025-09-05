@@ -29,7 +29,7 @@
 
             <Button
                 android:id="@+id/btnFilterAllApps"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="All Apps"/>
@@ -40,7 +40,7 @@
 
             <Button
                 android:id="@+id/btnFilterSystemApps"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="System Apps"/>
@@ -51,7 +51,7 @@
 
             <Button
                 android:id="@+id/btnFilterNonSystemApps"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Non System Apps"/>

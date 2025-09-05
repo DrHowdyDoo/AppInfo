@@ -1,5 +1,7 @@
 package com.drhowdydoo.appinfo.util;
 
+import android.content.pm.PackageManager;
+
 import com.drhowdydoo.appinfo.model.AppInfo;
 
 import java.util.Comparator;

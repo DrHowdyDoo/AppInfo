@@ -4,14 +4,14 @@ plugins {
 
 android {
     namespace = "com.drhowdydoo.appinfo"
-    compileSdk = 33
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.drhowdydoo.appinfo"
         minSdk = 27
-        targetSdk = 33
-        versionCode = 7
-        versionName = "1.0.2"
+        targetSdk = 36
+        versionCode = 10
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,19 +36,19 @@ android {
 
 dependencies {
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel:2.9.2")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0")) // To fix duplicate class error (org.jetbrains.kotlin:kotlin-stdlib:1.8.10)
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12") // To detect memory leaks
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14") // To detect memory leaks
+    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("com.google.android.material:material:1.14.0-alpha04")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    implementation("androidx.recyclerview:recyclerview:1.3.0")
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("com.github.bumptech.glide:glide:4.15.1")
-    implementation("io.reactivex.rxjava3:rxjava:3.1.6")
+    implementation("com.github.bumptech.glide:glide:5.0.4")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.11")
     implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
-    implementation("me.zhanghai.android.fastscroll:library:1.2.0")
+    implementation("me.zhanghai.android.fastscroll:library:1.3.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

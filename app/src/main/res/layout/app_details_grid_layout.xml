@@ -15,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="Open this app's system info"
-        android:padding="12dp"
         app:icon="@drawable/round_info_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="Share app playStore link"
-        android:padding="12dp"
+        app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small"
         app:icon="@drawable/round_share_24"
         app:layout_constraintStart_toEndOf="@+id/btnInfo"
         app:layout_constraintTop_toTopOf="parent" />
@@ -37,8 +36,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="Open this app on playStore"
-        android:padding="12dp"
+        android:layout_marginStart="4dp"
         app:icon="@drawable/ic_playstore_24"
+        app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small.Wide"
         app:layout_constraintStart_toEndOf="@+id/btnShare"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,8 +51,6 @@
         app:layout_constraintHorizontal_bias="1"
         android:contentDescription="Extract this app's apk file"
         android:gravity="center"
-        android:paddingVertical="12dp"
-        android:paddingHorizontal="12dp"
         app:iconPadding="8dp"
         android:text="Extract Apk"
         app:icon="@drawable/round_extract_24"

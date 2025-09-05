@@ -29,7 +29,7 @@
 
             <Button
                 android:id="@+id/btnFilterAllApks"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="All Apks"/>
@@ -40,7 +40,7 @@
 
             <Button
                 android:id="@+id/btnFilterInstalledApks"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Installed"/>
@@ -51,7 +51,7 @@
 
             <Button
                 android:id="@+id/btnFilterNotInstalledApks"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Not Installed"/>

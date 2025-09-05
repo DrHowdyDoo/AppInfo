@@ -17,6 +17,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
+import android.util.Log;
 
 import com.drhowdydoo.appinfo.model.StringCount;
 
@@ -168,7 +169,12 @@ public class AppDetailsManager {
             } else {
                 installSource = context.getPackageManager().getInstallerPackageName(packageInfo.packageName);
             }
-            installSource = installSource != null ? Utilities.sourcePackageMap.getOrDefault(installSource, installSource) : "Unknown";
+            if (installSource != null) {
+                installSource = Utilities.sourcePackageMap.getOrDefault(installSource, installSource);
+            } else {
+                installSource = "Unknown";
+            }
+            System.out.println("getInstallSource: " + installSource);
         } catch (PackageManager.NameNotFoundException | IllegalArgumentException exception) {
             installSource = "Unknown";
         }

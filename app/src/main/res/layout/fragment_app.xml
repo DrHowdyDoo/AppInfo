@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="80dp"
+            android:paddingBottom="96dp"
             android:paddingTop="16dp" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -32,48 +32,40 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <ImageView
-        android:id="@+id/imgProgressIcon"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        app:layout_constraintVertical_bias="0.28"
-        android:src="@drawable/round_widgets_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <TextView
         android:id="@+id/tvProgressText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/loading_apps"
-        android:layout_marginTop="4dp"
-        android:textAppearance="?textAppearanceLabelLarge"
-        app:layout_constraintEnd_toEndOf="@+id/imgProgressIcon"
-        app:layout_constraintStart_toStartOf="@+id/imgProgressIcon"
-        app:layout_constraintTop_toBottomOf="@+id/imgProgressIcon" />
-
-
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progressBar"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
         android:layout_marginTop="8dp"
-        app:trackCornerRadius="6dp"
-        app:trackThickness="6dp"
-        app:layout_constraintEnd_toEndOf="@+id/tvProgressText"
-        app:layout_constraintStart_toStartOf="@+id/tvProgressText"
-        app:layout_constraintTop_toBottomOf="@+id/tvProgressText"/>
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textAppearance="?textAppearanceTitleLargeEmphasized"
+        app:layout_constraintEnd_toEndOf="@+id/progressBar"
+        app:layout_constraintStart_toStartOf="@+id/progressBar"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+    <com.google.android.material.loadingindicator.LoadingIndicator
+        android:id="@+id/progressBar"
+        style="@style/Widget.Material3.LoadingIndicator.Contained"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:containerWidth="88dp"
+        app:containerHeight="88dp"
+        app:indicatorSize="72dp"
+        app:layout_constraintVertical_bias="0.28"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/progressGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="imgProgressIcon,tvProgressText,progressBar"/>
+        app:constraint_referenced_ids="tvProgressText,progressBar"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabScrollBack"

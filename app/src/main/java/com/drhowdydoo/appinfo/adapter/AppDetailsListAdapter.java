@@ -28,6 +28,7 @@ import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.loadingindicator.LoadingIndicator;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
@@ -231,7 +232,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public ImageView icon, fileIcon;
         public TextView tvTitle, tvValue, tvExpandIndicator;
         public MaterialCardView container;
-        public CircularProgressIndicator progressBar;
+        public LoadingIndicator progressBar;
         public LinearProgressIndicator fontExtractionIndicator;
         public Button btnExtractFont;
         public LinearLayout fontBtnContainer;

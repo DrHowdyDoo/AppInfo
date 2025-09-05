@@ -57,12 +57,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDarkTheme"
-                style="@style/Widget.Material3.Button.IconButton.Outlined"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Outlined"
+                app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:checkable="true"
-                android:padding="24dp"
                 app:icon="@drawable/round_dark_mode"
                 app:iconSize="24dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -82,13 +82,13 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSystemTheme"
-                style="@style/Widget.Material3.Button.IconButton.Outlined"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Outlined"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:checkable="true"
-                android:padding="24dp"
                 app:icon="@drawable/round_auto_mode"
+                app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Large.Wide"
                 app:iconSize="24dp"
                 app:layout_constraintLeft_toRightOf="@id/btnDarkTheme"
                 app:layout_constraintRight_toLeftOf="@id/btnLightTheme"
@@ -107,12 +107,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLightTheme"
-                style="@style/Widget.Material3.Button.IconButton.Outlined"
+                style="@style/Widget.Material3Expressive.Button.IconButton.Outlined"
+                app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:checkable="true"
-                android:padding="24dp"
                 app:icon="@drawable/round_light_mode"
                 app:iconSize="24dp"
                 app:layout_constraintLeft_toRightOf="@id/btnSystemTheme"
@@ -187,16 +187,17 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnScanMode"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
                 android:text="@string/scan_mode"
                 android:gravity="start|center_vertical"
                 app:icon="@drawable/round_radio_button_checked"
                 app:iconTint="?colorControlNormal"
                 app:iconSize="24dp"
                 app:iconPadding="18dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:textColor="?colorOnBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -225,7 +226,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSearchType"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="8dp"

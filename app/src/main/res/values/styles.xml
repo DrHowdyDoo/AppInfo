@@ -49,7 +49,7 @@
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="Widget.App.IconButton" parent="Widget.Material3.Button.IconButton.Outlined"/>
+    <style name="Widget.App.IconButton" parent="Widget.Material3Expressive.Button.IconButton.Outlined"/>
 
     <style name="Widget.App.ActionMode" parent="Widget.Material3.ActionMode">
         <item name="titleTextStyle">?textAppearanceTitleMedium</item>

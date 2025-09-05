@@ -43,18 +43,15 @@
         app:cardCornerRadius="24dp"
         style="?materialCardViewElevatedStyle">
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
+        <com.google.android.material.loadingindicator.LoadingIndicator
             android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
+            style="@style/Widget.Material3.LoadingIndicator.Contained"
             android:layout_gravity="center_vertical|start"
-            android:indeterminate="true"
-            app:trackThickness="20dp"
-            style="@style/Widget.Material3.CircularProgressIndicator.Small"
             tools:visibility="visible"
             android:layout_margin="16dp"
             android:visibility="gone"
-            android:layout_height="wrap_content"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,10 +105,9 @@
                     android:visibility="gone"
                     tools:visibility="visible"
                     android:gravity="center"
-                    app:iconPadding="8dp"
                     app:icon="@drawable/round_extract_24"
-                    style="?materialIconButtonFilledTonalStyle"
-                    android:text="Extract"/>
+                    app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small.Narrow"
+                    style="?materialIconButtonFilledTonalStyle" />
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
                     android:id="@+id/pbFontExtraction"
@@ -122,6 +118,9 @@
                     tools:visibility="visible"
                     android:indeterminate="true"
                     app:trackCornerRadius="16dp"
+                    app:wavelength="26dp"
+                    app:waveSpeed="1dp"
+                    app:waveAmplitude="2dp"
                     app:indeterminateAnimationType="disjoint"
                     android:layout_gravity="center"
                     android:layout_height="wrap_content"/>

@@ -8,7 +8,7 @@
     <string name="sort_by">Sort By</string>
     <string name="app_icon">App Icon</string>
     <string name="dot_divider">•</string>
-    <string name="loading_apps">Loading Apps</string>
+    <string name="loading_apps">Loading Apps…</string>
     <string name="system">System</string>
     <string name="searching_for_apks">Searching for Apks</string>
     <string name="allow_access">Allow access</string>

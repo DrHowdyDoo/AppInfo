@@ -12,7 +12,7 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:background="?android:colorBackground"
         app:liftOnScroll="false"
         android:layout_gravity="top"
         android:animateLayoutChanges="true"
@@ -22,7 +22,7 @@
             android:id="@+id/collapsingToolBar"
             style="?attr/collapsingToolbarLayoutLargeStyle"
             android:layout_width="match_parent"
-            app:contentScrim="?android:colorBackground"
+            app:contentScrim="@android:color/transparent"
             app:titleCollapseMode="scale"
             android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
             app:expandedTitleTextAppearance="?attr/textAppearanceDisplayMedium"
@@ -44,12 +44,13 @@
             android:id="@+id/operationButtonLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_gravity="bottom"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnFilter"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -60,7 +61,7 @@
 
             <Button
                 android:id="@+id/btnSort"
-                style="@style/Widget.Material3.Button.TextButton"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

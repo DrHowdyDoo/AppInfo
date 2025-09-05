@@ -64,7 +64,9 @@ public class Utilities {
             Map.entry(Build.VERSION_CODES.S, "Android 12"),
             Map.entry(Build.VERSION_CODES.S_V2, "Android 12L"),
             Map.entry(Build.VERSION_CODES.TIRAMISU, "Android 13 TIRAMISU"),
-            Map.entry(34, "Android 14 UpsideDownCake")
+            Map.entry(34, "Android 14 UpsideDownCake"),
+            Map.entry(35, "Android 15 VanillaIceCream"),
+            Map.entry(36, "Android 16 Baklava")
     );
 
 
