@@ -101,7 +101,7 @@
         android:id="@+id/cardCategory"
         style="@style/Widget.App.CardView.Elevated.Round"
         android:layout_width="0dp"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -149,7 +149,7 @@
         android:id="@+id/cardSource"
         style="@style/Widget.App.CardView.Elevated.Round"
         android:layout_width="0dp"
-        android:layout_height="0dp">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -184,8 +184,9 @@
                     android:id="@+id/tvSourceValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
-                    tools:text="Undefined" />
+                    tools:text="Undefined\nasasas" />
 
             </LinearLayout>
 
@@ -232,6 +233,7 @@
                     android:id="@+id/tvInstalledDtValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
                     tools:text="30-May-2023" />
 
@@ -280,6 +282,7 @@
                     android:id="@+id/tvUpdatedDtValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
                     tools:text="30-May-2023" />
 
@@ -328,6 +331,7 @@
                     android:id="@+id/tvMinSdkValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
                     tools:text="API 27 \nAndroid 8.0 Oreo" />
 
@@ -377,6 +381,7 @@
                     android:id="@+id/tvTargetSdkValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
                     tools:text="API 33 \nAndroid 13 \nTIRAMISU" />
 
@@ -501,6 +506,7 @@
                     android:id="@+id/tvMainClassValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
                     tools:text="com.drhowdydoo.appinfo.MainActivity" />
 
@@ -561,6 +567,7 @@
                         android:id="@+id/tvThemeValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textIsSelectable="true"
                         android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
                         tools:text="Theme.youtube.Dynamic" />
 

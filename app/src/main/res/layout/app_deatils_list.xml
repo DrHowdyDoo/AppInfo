@@ -127,7 +127,7 @@
                     tools:visibility="visible"
                     android:gravity="center"
                     app:icon="@drawable/round_extract_24"
-                    app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small.Wide"
+                    app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Xsmall.Wide"
                     style="?materialIconButtonFilledTonalStyle" />
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator

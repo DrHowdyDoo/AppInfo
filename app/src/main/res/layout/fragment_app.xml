@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         app:containerWidth="88dp"
         app:containerHeight="88dp"
-        app:indicatorSize="72dp"
+        app:indicatorSize="62dp"
         app:layout_constraintVertical_bias="0.28"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

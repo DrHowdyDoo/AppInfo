@@ -172,7 +172,7 @@ public class AppDetailsManager {
             if (installSource != null) {
                 installSource = Utilities.sourcePackageMap.getOrDefault(installSource, installSource);
             } else {
-                installSource = "Unknown";
+                installSource = "System update or\nInstalled via ADB";
             }
             System.out.println("getInstallSource: " + installSource);
         } catch (PackageManager.NameNotFoundException | IllegalArgumentException exception) {
