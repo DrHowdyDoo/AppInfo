@@ -124,6 +124,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
             } else {
                 itemViewHolder.tvExpandIndicator.setVisibility(View.GONE);
+                itemViewHolder.btnExpandView.setVisibility(View.GONE);
             }
 
             itemViewHolder.btnExpandView.setOnClickListener(v -> {

@@ -56,6 +56,17 @@
                 android:layout_height="wrap_content"
                 android:text="Non System Apps"/>
 
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnFilterNonPlaystoreApps"
+                style="@style/Widget.Material3Expressive.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sideloaded"/>
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

@@ -153,6 +153,9 @@ public class AppFragment extends Fragment {
         } else if (filter == Constants.FILTER_NON_SYSTEM_APPS) {
             return appListViewModel.getAppInfoList().stream().filter(appInfo -> !appInfo.isSystemApp()).collect(Collectors.toList());
         }
+        else if (filter == Constants.FILTER_NON_PLAYSTORE_APPS) {
+            return appListViewModel.getAppInfoList().stream().filter(appInfo -> !appInfo.getInstallSource().equalsIgnoreCase("com.android.vending") && !appInfo.isSystemApp()).collect(Collectors.toList());
+        }
         return appListViewModel.getAppInfoList();
     }
 
@@ -205,6 +208,8 @@ public class AppFragment extends Fragment {
                 return size > 0 ? String.format("%s (%d) ", "System Apps", size) : "System Apps";
             case Constants.FILTER_NON_SYSTEM_APPS:
                 return size > 0 ? String.format("%s (%d) ", "Non System Apps", size) : "Non System Apps";
+            case Constants.FILTER_NON_PLAYSTORE_APPS:
+                return size > 0 ? String.format("%s (%d) ", "Sideloaded", size) : "Sideloaded";
         }
 
         return "Filter";

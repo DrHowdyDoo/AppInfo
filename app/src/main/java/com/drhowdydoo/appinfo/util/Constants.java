@@ -10,6 +10,8 @@ public class Constants {
     public static final int SHOW_ROUND_APP_ICON = -3;
     public static final int FILTER_SYSTEM_APPS = 4;
     public static final int FILTER_NON_SYSTEM_APPS = 5;
+
+    public static final int FILTER_NON_PLAYSTORE_APPS = -5;
     public static final int NO_FILTER = 6;
     public static final int SORT_BY_NAME = 7;
     public static final int SORT_BY_SIZE = 8;

@@ -10,6 +10,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 
 import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.model.AppInfo;
@@ -73,6 +74,7 @@ public class AppInfoManager {
         boolean isSplit;
         long installTmStamp = Constants.INSTALL_TIMESTAMP_NOT_AVAILABLE;
         String appVersion = "";
+        String installSource = getInstallSource(applicationInfo.packageName);
 
         try {
             PackageInfo packageInfo = packageManager.getPackageInfo(applicationInfo.packageName, PackageManager.GET_META_DATA);
@@ -97,7 +99,8 @@ public class AppInfoManager {
                 appVersion,
                 isSystemApp,
                 applicationInfo.packageName,
-                installTmStamp);
+                installTmStamp,
+                installSource);
 
         if (PermissionManager.hasUsageStatsPermission(context)) {
             long totalAppSize = 0;
@@ -198,6 +201,22 @@ public class AppInfoManager {
             return Constants.FOREGROUND_TIME_NOT_AVAILABLE;
         }
 
+    }
+
+    public String getInstallSource(String packageName) {
+        String installSource = "";
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                installSource = context.getPackageManager().getInstallSourceInfo(packageName).getInstallingPackageName();
+            } else {
+                installSource = context.getPackageManager().getInstallerPackageName(packageName);
+            }
+            return installSource != null ? installSource : "Unknown";
+        } catch (PackageManager.NameNotFoundException | IllegalArgumentException exception) {
+            installSource = "Unknown";
+        }
+
+        return installSource;
     }
 
     private long now() {

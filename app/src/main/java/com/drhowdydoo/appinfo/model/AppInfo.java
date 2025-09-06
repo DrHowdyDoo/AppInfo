@@ -21,6 +21,8 @@ public class AppInfo {
 
     private long installTmStamp;
 
+    private String installSource;
+
     public AppInfo(String appName,
                    Drawable appIcon,
                    long appLastUpdateTime,
@@ -28,7 +30,7 @@ public class AppInfo {
                    boolean isSplitApp,
                    String appVersion,
                    boolean isSystemApp,
-                   String packageName, long installTmStamp) {
+                   String packageName, long installTmStamp, String installSource) {
         this.appName = appName;
         this.appIcon = appIcon;
         this.appLastUpdateTime = appLastUpdateTime;
@@ -38,6 +40,7 @@ public class AppInfo {
         this.isSystemApp = isSystemApp;
         this.packageName = packageName;
         this.installTmStamp = installTmStamp;
+        this.installSource = installSource;
     }
 
 
@@ -136,6 +139,14 @@ public class AppInfo {
     public void setInstallTmStamp(long installTmStamp) {
         this.installTmStamp = installTmStamp;
     }
+    public String getInstallSource() {
+        return installSource;
+    }
+
+    public void setInstallSource(String installSource) {
+        this.installSource = installSource;
+    }
+
 
     @Override
     public boolean equals(Object o) {
