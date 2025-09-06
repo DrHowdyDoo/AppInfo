@@ -7,6 +7,7 @@
     android:layout_marginBottom="24dp"
     android:clipToPadding="false"
     android:paddingBottom="8dp"
+    android:id="@+id/container"
     tools:ignore="hardCodedText,contentDescription">
 
     <Button
@@ -47,16 +48,31 @@
         style="@style/Widget.Material3.Button.IconButton.Filled"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintHorizontal_bias="1"
         android:contentDescription="Extract this app's apk file"
         android:gravity="center"
-        app:iconPadding="8dp"
         android:text="Extract Apk"
         app:icon="@drawable/round_extract_24"
+        app:iconPadding="8dp"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.loadingindicator.LoadingIndicator
+        android:id="@+id/extractApkLoadingIndicator"
+        android:visibility="gone"
+        tools:visibility="visible"
+        style="@style/Widget.Material3.LoadingIndicator.Contained"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:containerHeight="40dp"
+        app:containerWidth="40dp"
+        app:indicatorSize="26dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnExtractApk"
+        app:layout_constraintEnd_toEndOf="@+id/btnExtractApk"
+        app:layout_constraintStart_toStartOf="@+id/btnExtractApk"
+        app:layout_constraintTop_toTopOf="@+id/btnExtractApk" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

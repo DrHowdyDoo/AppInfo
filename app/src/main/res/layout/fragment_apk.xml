@@ -61,6 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/searching_for_apks"
+        app:drawableTint="?attr/colorPrimary"
         app:layout_constraintVertical_bias="0.28"
         android:textAppearance="?textAppearanceLabelLarge"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -68,7 +69,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:drawablePadding="8dp"
-        app:drawableTopCompat="@drawable/twotone_folder_open_24" />
+        app:drawableTopCompat="@drawable/ic_android_black_56dp" />
 
 
     <com.google.android.material.progressindicator.LinearProgressIndicator

@@ -5,9 +5,15 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.Environment;
+import android.transition.AutoTransition;
+import android.transition.ChangeBounds;
+import android.transition.ChangeClipBounds;
+import android.transition.ChangeTransform;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,9 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.drhowdydoo.appinfo.AppDetailsActivity;
+import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.bottomsheet.ShareBottomSheet;
 import com.drhowdydoo.appinfo.databinding.AppDeatilsListBinding;
 import com.drhowdydoo.appinfo.databinding.AppDetailsGridLayoutBinding;
@@ -27,6 +35,7 @@ import com.drhowdydoo.appinfo.util.ApkExtractor;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.Utilities;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.loadingindicator.LoadingIndicator;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -110,20 +119,24 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     itemViewHolder.tvExpandIndicator.setVisibility(View.GONE);
                 } else {
                     itemViewHolder.tvExpandIndicator.setVisibility(View.VISIBLE);
+                    itemViewHolder.btnExpandView.setVisibility(View.VISIBLE);
                     itemViewHolder.tvValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
                 }
             } else {
                 itemViewHolder.tvExpandIndicator.setVisibility(View.GONE);
             }
 
-            itemViewHolder.tvValue.setOnClickListener(v -> {
+            itemViewHolder.btnExpandView.setOnClickListener(v -> {
                 boolean isExpanded = appDetail.isExpanded();
                 if (!isExpandable) return;
+                TransitionManager.beginDelayedTransition(itemViewHolder.container, new ChangeClipBounds());
                 if (isExpanded) {
+                    itemViewHolder.btnExpandView.setIcon(ContextCompat.getDrawable(context, R.drawable.round_expand_more_24));
                     itemViewHolder.tvValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
                     itemViewHolder.tvExpandIndicator.setVisibility(View.VISIBLE);
                     appDetail.setExpanded(false);
                 } else {
+                    itemViewHolder.btnExpandView.setIcon(ContextCompat.getDrawable(context, R.drawable.round_expand_less_24));
                     itemViewHolder.tvValue.setMaxLines(Integer.MAX_VALUE);
                     itemViewHolder.tvExpandIndicator.setVisibility(View.GONE);
                     appDetail.setExpanded(true);
@@ -178,14 +191,18 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 Toast.makeText(context, "Storage not accessible", Toast.LENGTH_SHORT).show();
                 return;
             }
-            holder.gridBinding.btnExtractApk.setEnabled(false);
+
+            TransitionManager.beginDelayedTransition(holder.gridBinding.getRoot(), new ChangeBounds());
+            holder.gridBinding.btnExtractApk.setVisibility(View.INVISIBLE);
+            holder.gridBinding.extractApkLoadingIndicator.setVisibility(View.VISIBLE);
             Utilities.shouldSearchApks = true;
             activity.hideProgressBar(false);
             Observable.fromAction(() -> ApkExtractor.extractApk(appName, packageInfo))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
-                        holder.gridBinding.btnExtractApk.setEnabled(true);
+                        holder.gridBinding.btnExtractApk.setVisibility(View.VISIBLE);
+                        holder.gridBinding.extractApkLoadingIndicator.setVisibility(View.GONE);
                         activity.hideProgressBar(true);
                         Toast.makeText(context, "APK files extracted to AppInfo folder in the root directory", Toast.LENGTH_SHORT).show();
                     })
@@ -235,6 +252,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public LoadingIndicator progressBar;
         public LinearProgressIndicator fontExtractionIndicator;
         public Button btnExtractFont;
+        public MaterialButton btnExpandView;
         public LinearLayout fontBtnContainer;
 
         public ItemViewHolder(@NonNull AppDeatilsListBinding binding) {
@@ -249,6 +267,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             fontExtractionIndicator = binding.pbFontExtraction;
             fileIcon = binding.imgFontFile;
             fontBtnContainer = binding.fontBtnContainer;
+            btnExpandView = binding.btnExpandView;
         }
     }
 

@@ -26,13 +26,30 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Activities"
-        android:layout_marginTop="8dp"
-        android:textAppearance="?textAppearanceTitleMedium" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Activities"
+            android:layout_marginTop="8dp"
+            android:textAppearance="?textAppearanceTitleMedium" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnExpandView"
+            style="?attr/materialIconButtonFilledStyle"
+            app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Xsmall"
+            android:layout_gravity="top|end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="expand more"
+            android:checkable="true"
+            app:icon="@drawable/round_expand_more_24"/>
+
+    </FrameLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/listContainer"
@@ -59,12 +76,14 @@
             android:paddingHorizontal="@dimen/pill_margin_horizontal"
             android:paddingVertical="@dimen/pill_margin_vertical"
             android:clipToPadding="false"
+            android:clickable="false"
             android:orientation="vertical">
 
             <HorizontalScrollView
                 android:id="@+id/horizontalScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="false"
                 android:scrollbars="none">
 
                 <TextView
@@ -73,6 +92,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:focusable="true"
+                    android:textIsSelectable="true"
                     android:textAppearance="@style/TextAppearance.App.BodyMedium"
                     tools:ignore="TouchTargetSizeCheck"
                     tools:text="com.drhowdydoo.appInfo.fragment.AppFragment" />
@@ -87,6 +107,7 @@
                 android:visibility="gone"
                 tools:visibility="visible"
                 android:layout_height="wrap_content" />
+
 
             <LinearLayout
                 android:id="@+id/fontBtnContainer"
@@ -106,7 +127,7 @@
                     tools:visibility="visible"
                     android:gravity="center"
                     app:icon="@drawable/round_extract_24"
-                    app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small.Narrow"
+                    app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small.Wide"
                     style="?materialIconButtonFilledTonalStyle" />
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -130,7 +151,7 @@
                     android:layout_gravity="center"
                     android:visibility="gone"
                     tools:visibility="visible"
-                    android:src="@drawable/twotone_create_new_folder_24"
+                    android:src="@drawable/apk_file"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:elevation="0dp"
