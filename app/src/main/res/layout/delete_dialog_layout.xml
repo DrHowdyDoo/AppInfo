@@ -30,7 +30,7 @@
 
     <Button
         android:id="@+id/btnDelete"
-        style="?materialIconButtonFilledTonalStyle"
+        style="?attr/materialButtonTonalStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -50,7 +50,7 @@
 
     <Button
         android:id="@+id/btnCancel"
-        style="?materialIconButtonOutlinedStyle"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"

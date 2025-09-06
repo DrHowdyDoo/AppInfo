@@ -21,6 +21,7 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingBottom="96dp"
+            android:layoutAnimation="@anim/layout_animation_fall_down"
             android:paddingTop="16dp" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

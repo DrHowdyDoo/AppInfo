@@ -126,6 +126,7 @@ public class AppFragment extends Fragment {
             onSortFilterListener.onFilter(getFilterButtonText(filterState, filteredList.size()));
         }
         adapter.setData(filteredList);
+        binding.recyclerView.scheduleLayoutAnimation();
         binding.recyclerView.scrollToPosition(0);
         binding.notFound.setVisibility(adapter.getItemCount() == 0
                 && !binding.progressGroup.isShown() ?
