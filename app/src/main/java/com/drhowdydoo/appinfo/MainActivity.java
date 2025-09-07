@@ -36,6 +36,7 @@ import com.drhowdydoo.appinfo.databinding.DeleteDialogLayoutBinding;
 import com.drhowdydoo.appinfo.fragment.ApkFragment;
 import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.interfaces.OnSortFilterListener;
+import com.drhowdydoo.appinfo.model.Action;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.ThemeUtils;
 import com.drhowdydoo.appinfo.viewmodel.MainViewModel;
@@ -78,9 +79,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        if (mainViewModel.isSearchVisible()) {
-            binding.searchBar.setVisibility(View.VISIBLE);
-        }
+        binding.searchBar.setVisibility(mainViewModel.getSearchView()[mainViewModel.getPagerPosition().getValue()].getVisibility());
 
         binding.viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -90,9 +89,9 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
 
             @Override
             public void onPageSelected(int position) {
+                mainViewModel.getPagerPosition().setValue(position);
                 isPageSelected = true;
                 binding.bottomNavigation.getMenu().getItem(position).setChecked(true);
-                onFragmentChanged(position);
                 super.onPageSelected(position);
             }
 
@@ -102,19 +101,27 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
             }
         });
 
+        mainViewModel.getPagerPosition().observe(this, position -> {
+            setSearchHint(position);
+            if (mainViewModel.getSearchView()[position].getVisibility() == View.VISIBLE)
+                binding.searchInput.setText(mainViewModel.getSearchView()[position].getText());
+            if (position == 0 && actionMode != null) actionMode.finish();
+        });
+
         binding.bottomNavigation.setOnItemSelectedListener(item -> {
             int position = item.getItemId() == R.id.app ? 0 : 1;
             binding.viewPager.setCurrentItem(position);
-            onFragmentChanged(position);
+            mainViewModel.getPagerPosition().setValue(position);
             return true;
         });
 
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
                 new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == Constants.RESULT_CODE_APK_RESULT_CHANGE) {
+                    if (result.getResultCode() == Constants.SETTINGS_CHANGE_SHOW_SPLIT_APKS) {
                         if (result.getData() != null) {
-                            mainViewModel.setShowSplitApks(result.getData().getBooleanExtra(Constants.showSplitApks, false));
+                            Action<Boolean> action = new Action<>(Constants.SETTINGS_CHANGE_SHOW_SPLIT_APKS, result.getData().getBooleanExtra(Constants.ACTION_SHOW_SPLIT_APKS, false));
+                            mainViewModel.getEvent().setValue(action);
                         }
                     }
                 });
@@ -123,11 +130,11 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
             if (item.getItemId() == R.id.search) {
                 if (binding.searchBar.isShown()) {
                     binding.searchBar.setVisibility(View.GONE);
-                    mainViewModel.setSearchVisible(false);
+                    mainViewModel.getSearchView()[mainViewModel.getPagerPosition().getValue()].setVisibility(View.GONE);
                 } else {
                     binding.searchBar.setVisibility(View.VISIBLE);
-                    mainViewModel.setSearchVisible(true);
-                    setSearchHint();
+                    mainViewModel.getSearchView()[mainViewModel.getPagerPosition().getValue()].setVisibility(View.VISIBLE);
+                    setSearchHint(mainViewModel.getPagerPosition().getValue());
                     binding.searchInput.requestFocus();
                     imm.showSoftInput(binding.searchInput, InputMethodManager.SHOW_IMPLICIT);
                 }
@@ -177,8 +184,8 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
     /**
      * Changes the search bar hint with respective to the fragments.
      */
-    private void setSearchHint() {
-        if (binding.viewPager.getCurrentItem() == 0) binding.searchBar.setHint("Search apps by name or package");
+    private void setSearchHint(int position) {
+        if (position == 0) binding.searchBar.setHint("Search apps by name or package");
         else binding.searchBar.setHint("Search apks by name or package");
     }
 
@@ -221,15 +228,6 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
         else return getSupportFragmentManager().findFragmentByTag("f1");
     }
 
-    private void onFragmentChanged(int position) {
-        setSearchHint();
-        if (position == 0) {
-            binding.searchInput.setText(mainViewModel.getAppSearchText());
-            if (actionMode != null) actionMode.finish();
-        } else if (position == 1) {
-            binding.searchInput.setText(mainViewModel.getApkSearchText());
-        }
-    }
 
     public void showContextualBar() {
         ActionMode.Callback actionModeCallback = new ActionMode.Callback() {

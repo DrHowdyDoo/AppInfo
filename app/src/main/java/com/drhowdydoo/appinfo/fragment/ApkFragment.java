@@ -19,7 +19,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -34,7 +33,6 @@ import com.drhowdydoo.appinfo.util.ApkInfoManager;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.drhowdydoo.appinfo.viewmodel.ApkListViewModel;
-import com.drhowdydoo.appinfo.viewmodel.MainViewModel;
 
 import java.io.File;
 import java.util.List;

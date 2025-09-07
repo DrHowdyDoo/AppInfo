@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.drhowdydoo.appinfo.R;
 import com.drhowdydoo.appinfo.databinding.BottomSheetFilterApkBinding;
@@ -15,12 +17,14 @@ import com.drhowdydoo.appinfo.databinding.BottomSheetFilterBinding;
 import com.drhowdydoo.appinfo.fragment.ApkFragment;
 import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.util.Constants;
+import com.drhowdydoo.appinfo.viewmodel.MainViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class FilterBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener {
 
 
     private Fragment fragment;
+    private MainViewModel mainViewModel;
 
     public FilterBottomSheet(Fragment fragment) {
         this.fragment = fragment;
@@ -29,11 +33,13 @@ public class FilterBottomSheet extends BottomSheetDialogFragment implements View
     public FilterBottomSheet() {
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if (fragment == null) dismiss();
+        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
         if (fragment instanceof AppFragment) {
             BottomSheetFilterBinding binding = BottomSheetFilterBinding.inflate(inflater, container, false);
 
@@ -56,28 +62,24 @@ public class FilterBottomSheet extends BottomSheetDialogFragment implements View
         int id = v.getId();
 
         if (fragment instanceof AppFragment) {
-            AppFragment appFragment = (AppFragment) fragment;
             if (id == R.id.btnFilterAllApps) {
-                appFragment.filter(Constants.NO_FILTER);
+                mainViewModel.getAppFilter().setValue(Constants.NO_FILTER);
             } else if (id == R.id.btnFilterSystemApps) {
-                appFragment.filter(Constants.FILTER_SYSTEM_APPS);
+                mainViewModel.getAppFilter().setValue(Constants.FILTER_SYSTEM_APPS);
             } else if (id == R.id.btnFilterNonSystemApps) {
-                appFragment.filter(Constants.FILTER_NON_SYSTEM_APPS);
-            }
-            else if (id == R.id.btnFilterNonPlaystoreApps) {
-                appFragment.filter(Constants.FILTER_NON_PLAYSTORE_APPS);
+                mainViewModel.getAppFilter().setValue(Constants.FILTER_NON_SYSTEM_APPS);
+            } else if (id == R.id.btnFilterNonPlaystoreApps) {
+                mainViewModel.getAppFilter().setValue(Constants.FILTER_NON_PLAYSTORE_APPS);
             }
         } else {
-            ApkFragment apkFragment = (ApkFragment) fragment;
             if (id == R.id.btnFilterInstalledApks) {
-                apkFragment.filter(Constants.FILTER_INSTALLED_APKS);
+                mainViewModel.getApkFilter().setValue(Constants.FILTER_INSTALLED_APKS);
             } else if (id == R.id.btnFilterNotInstalledApks) {
-                apkFragment.filter(Constants.FILTER_NOT_INSTALLED_APKS);
+                mainViewModel.getApkFilter().setValue(Constants.FILTER_NOT_INSTALLED_APKS);
             } else if (id == R.id.btnFilterAllApks) {
-                apkFragment.filter(Constants.NO_FILTER);
+                mainViewModel.getApkFilter().setValue(Constants.NO_FILTER);
             }
         }
-
         dismiss();
     }
 }

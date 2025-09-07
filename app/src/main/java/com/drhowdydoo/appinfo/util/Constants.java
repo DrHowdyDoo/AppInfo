@@ -38,5 +38,8 @@ public class Constants {
     public static final int RESULT_CODE_APK_RESULT_CHANGE = 1002;
     public static final String showSplitApks = "SHOW_SPLIT_APKS";
 
+    public static final int SETTINGS_CHANGE_SHOW_SPLIT_APKS = 2001;
+    public static final String ACTION_SHOW_SPLIT_APKS = "ACTION_SHOW_SPLIT_APKS";
+
 
 }
