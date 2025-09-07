@@ -63,4 +63,12 @@
         <item name="cornerSize">24dp</item>
     </style>
 
+    <style name="ShapeAppearance.App.SplitButton.Options" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">50%</item>
+        <item name="cornerSizeBottomLeft">50%</item>
+        <item name="cornerSizeTopRight">4dp</item>
+        <item name="cornerSizeBottomRight">4dp</item>
+    </style>
+    
 </resources>

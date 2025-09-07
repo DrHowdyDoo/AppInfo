@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,11 +40,13 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
     private List<AppInfo> appInfoList;
     private Context context;
     private HashSet<Integer> flagSet = new HashSet<>();
+    private ActivityResultLauncher<Intent> activityResultLauncher;
 
 
-    public AppRecyclerViewAdapter(Context context, List<AppInfo> appInfoList) {
+    public AppRecyclerViewAdapter(Context context, List<AppInfo> appInfoList, ActivityResultLauncher<Intent> activityResultLauncher) {
         this.appInfoList = new ArrayList<>(appInfoList);
         this.context = context;
+        this.activityResultLauncher = activityResultLauncher;
     }
 
     @NonNull
@@ -151,9 +155,9 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
             intent.putExtra("isSplitApp", appInfo.isSplitApp());
             intent.putExtra("packageName", appInfo.getAppInfo().packageName);
             final View transitionView = imgAppIcon;
-            ActivityOptions options = ActivityOptions
+            ActivityOptionsCompat options = ActivityOptionsCompat
                     .makeSceneTransitionAnimation((Activity) context, transitionView, "transitionAppIcon");
-            context.startActivity(intent, options.toBundle());
+            activityResultLauncher.launch(intent, options);
         }
     }
 

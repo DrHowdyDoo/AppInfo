@@ -2,6 +2,7 @@ package com.drhowdydoo.appinfo;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -12,6 +13,8 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +25,8 @@ import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.model.AppMetadata;
 import com.drhowdydoo.appinfo.model.StringCount;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
+import com.drhowdydoo.appinfo.util.AppInfoManager;
+import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.color.DynamicColors;
@@ -83,7 +88,16 @@ public class AppDetailsActivity extends AppCompatActivity {
         //Initial conditional setups
         handleToolbarContentAlignment();
 
-        adapter = new AppDetailsListAdapter(appDetails, this);
+        ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        setResult(Constants.RESULT_CODE_UNINSTALL, new Intent().putExtra("appUninstalled", packageName));
+                        finish();
+                    }
+                });
+
+        adapter = new AppDetailsListAdapter(appDetails, this, activityResultLauncher);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setItemAnimator(null);
         binding.recyclerView.setHasFixedSize(true);

@@ -125,6 +125,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
     public void onResume() {
         super.onResume();
         isPaused = false;
+        System.out.println("onResume called");
         getAllApks();
     }
 
@@ -184,12 +185,6 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
                 && !binding.progressGroup.isShown() ?
                 View.VISIBLE : View.GONE);
     }
-
-    public void hideProgressBar() {
-        binding.swipeRefreshLayout.setRefreshing(false);
-        binding.progressGroup.setVisibility(View.GONE);
-    }
-
 
     private String getSortText() {
         if (apkListViewModel.getSortState() == Constants.SORT_BY_NAME) return "Name";

@@ -43,21 +43,61 @@
         app:layout_constraintStart_toEndOf="@+id/btnShare"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnExtractApk"
-        style="@style/Widget.Material3.Button.IconButton.Filled"
+    <com.google.android.material.button.MaterialSplitButton
+        android:id="@+id/splitBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="Extract this app's apk file"
-        android:gravity="center"
-        android:text="Extract Apk"
-        app:icon="@drawable/round_extract_24"
-        app:iconPadding="8dp"
+        android:padding="0dp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btnExtractApk"
+            style="?attr/materialSplitButtonLeadingFilledStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Extract Apk"
+            app:icon="@drawable/round_extract_24" />
+
+        <Button
+            android:id="@+id/expand_more_or_less_filled"
+            style="?attr/materialSplitButtonIconFilledStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/m3_split_button_chevron_avd" />
+    </com.google.android.material.button.MaterialSplitButton>
+
+    <FrameLayout
+        android:id="@+id/containerSplitBtnOptions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        app:layout_constraintEnd_toEndOf="@+id/splitBtn"
+        app:layout_constraintStart_toStartOf="@+id/splitBtn"
+        app:layout_constraintTop_toBottomOf="@+id/splitBtn">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUninstallApp"
+            style="?attr/materialButtonTonalStyle"
+            app:shapeAppearance="@style/ShapeAppearance.App.SplitButton.Options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="52dp"
+            android:layout_gravity="start"
+            android:checkable="false"
+            android:text="Uninstall"
+            android:gravity="start"
+            android:visibility="gone"
+            app:icon="@drawable/baseline_delete_24"
+            app:iconTint="?colorError"
+            tools:visibility="visible" />
+
+    </FrameLayout>
+
 
     <com.google.android.material.loadingindicator.LoadingIndicator
         android:id="@+id/extractApkLoadingIndicator"
@@ -69,10 +109,10 @@
         app:containerHeight="40dp"
         app:containerWidth="40dp"
         app:indicatorSize="26dp"
-        app:layout_constraintBottom_toBottomOf="@+id/btnExtractApk"
-        app:layout_constraintEnd_toEndOf="@+id/btnExtractApk"
-        app:layout_constraintStart_toStartOf="@+id/btnExtractApk"
-        app:layout_constraintTop_toTopOf="@+id/btnExtractApk" />
+        app:layout_constraintBottom_toBottomOf="@+id/splitBtn"
+        app:layout_constraintEnd_toEndOf="@+id/splitBtn"
+        app:layout_constraintStart_toStartOf="@+id/splitBtn"
+        app:layout_constraintTop_toTopOf="@+id/splitBtn" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

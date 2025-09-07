@@ -2,12 +2,14 @@ package com.drhowdydoo.appinfo.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -59,7 +61,18 @@ public class AppFragment extends Fragment {
 
         appListViewModel = new ViewModelProvider(this).get(AppListViewModel.class);
         preferences = requireContext().getSharedPreferences("com.drhowdydoo.appinfo.preferences", Context.MODE_PRIVATE);
-        adapter = new AppRecyclerViewAdapter(requireActivity(), appListViewModel.getSavedAppInfoList());
+
+        ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+                new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Constants.RESULT_CODE_UNINSTALL) {
+                        appListViewModel.getAppInfoList().removeIf(appInfo -> appInfo.getPackageName().equalsIgnoreCase(result.getData().getStringExtra("appUninstalled")));
+                        appListViewModel.getSavedAppInfoList().removeIf(appInfo -> appInfo.getPackageName().equalsIgnoreCase(result.getData().getStringExtra("appUninstalled")));
+                        adapter.updateData(appListViewModel.getSavedAppInfoList());
+                    }
+                });
+
+        adapter = new AppRecyclerViewAdapter(requireActivity(), appListViewModel.getSavedAppInfoList(),activityResultLauncher);
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.recyclerView.setItemAnimator(null);

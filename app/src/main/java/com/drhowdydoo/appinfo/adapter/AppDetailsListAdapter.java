@@ -2,14 +2,21 @@ package com.drhowdydoo.appinfo.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.transition.AutoTransition;
 import android.transition.ChangeBounds;
 import android.transition.ChangeClipBounds;
+import android.transition.ChangeScroll;
 import android.transition.ChangeTransform;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.transition.TransitionManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,10 +64,12 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private String apkFilePath;
     private boolean isInstalled, isApk, isSplitApp;
     private PackageInfo packageInfo;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
 
-    public AppDetailsListAdapter(List<Object> appDetails, Context context) {
+    public AppDetailsListAdapter(List<Object> appDetails, Context context, ActivityResultLauncher<Intent> activityResultLauncher) {
         this.appDetails = appDetails;
         this.context = context;
+        this.activityResultLauncher = activityResultLauncher;
     }
 
     @NonNull
@@ -194,7 +204,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
 
             TransitionManager.beginDelayedTransition(holder.gridBinding.getRoot(), new ChangeBounds());
-            holder.gridBinding.btnExtractApk.setVisibility(View.INVISIBLE);
+            holder.gridBinding.splitBtn.setVisibility(View.INVISIBLE);
             holder.gridBinding.extractApkLoadingIndicator.setVisibility(View.VISIBLE);
             Utilities.shouldSearchApks = true;
             activity.hideProgressBar(false);
@@ -202,12 +212,30 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally(() -> {
-                        holder.gridBinding.btnExtractApk.setVisibility(View.VISIBLE);
-                        holder.gridBinding.extractApkLoadingIndicator.setVisibility(View.GONE);
+                        holder.gridBinding.splitBtn.setVisibility(View.VISIBLE);
+                        holder.gridBinding.extractApkLoadingIndicator.setVisibility(View.INVISIBLE);
                         activity.hideProgressBar(true);
                         Toast.makeText(context, "APK files extracted to AppInfo folder in the root directory", Toast.LENGTH_SHORT).show();
                     })
                     .subscribe();
+        });
+
+        holder.gridBinding.expandMoreOrLessFilled.setOnClickListener(v -> {
+            int visibility = holder.gridBinding.btnUninstallApp.getVisibility();
+            if (visibility == View.VISIBLE) {
+                TransitionManager.beginDelayedTransition(holder.gridBinding.containerSplitBtnOptions, new Slide(Gravity.TOP));
+                holder.gridBinding.btnUninstallApp.setVisibility(View.INVISIBLE);
+            } else {
+                TransitionManager.beginDelayedTransition(holder.gridBinding.containerSplitBtnOptions, new Slide(Gravity.TOP));
+                holder.gridBinding.btnUninstallApp.setVisibility(View.VISIBLE);
+            }
+        });
+
+        holder.gridBinding.btnUninstallApp.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
+            intent.setData(Uri.parse("package:" + packageInfo.packageName));
+            intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
+            activityResultLauncher.launch(intent);
         });
     }
 
