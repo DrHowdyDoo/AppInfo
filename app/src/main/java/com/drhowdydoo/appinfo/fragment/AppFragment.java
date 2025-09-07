@@ -66,8 +66,14 @@ public class AppFragment extends Fragment {
                 new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Constants.RESULT_CODE_UNINSTALL) {
-                        appListViewModel.getAppInfoList().removeIf(appInfo -> appInfo.getPackageName().equalsIgnoreCase(result.getData().getStringExtra("appUninstalled")));
-                        appListViewModel.getSavedAppInfoList().removeIf(appInfo -> appInfo.getPackageName().equalsIgnoreCase(result.getData().getStringExtra("appUninstalled")));
+                        appListViewModel.getAppInfoList().removeIf(appInfo -> appInfo.getPackageName() != null &&
+                                result.getData() != null &&
+                                result.getData().getStringExtra("appUninstalled") != null &&
+                                appInfo.getPackageName().equalsIgnoreCase(result.getData().getStringExtra("appUninstalled")));
+                        appListViewModel.getSavedAppInfoList().removeIf(appInfo -> appInfo.getPackageName() != null &&
+                                result.getData() != null &&
+                                result.getData().getStringExtra("appUninstalled") != null &&
+                                appInfo.getPackageName().equalsIgnoreCase(result.getData().getStringExtra("appUninstalled")));
                         adapter.updateData(appListViewModel.getSavedAppInfoList());
                     }
                 });
@@ -249,7 +255,8 @@ public class AppFragment extends Fragment {
         if (!input.isEmpty()) {
             List<AppInfo> searchResults = appListViewModel.getSavedAppInfoList()
                     .stream()
-                    .filter(appInfo -> searchIn(input.toLowerCase(), appInfo.getAppName().toLowerCase()) || searchIn(input.toLowerCase(), appInfo.getPackageName().toLowerCase()))
+                    .filter(appInfo -> (appInfo.getAppName() != null && searchIn(input.toLowerCase(), appInfo.getAppName().toLowerCase())) ||
+                    (appInfo.getPackageName() != null && searchIn(input.toLowerCase(), appInfo.getPackageName().toLowerCase())))
                     .collect(Collectors.toList());
             adapter.updateData(searchResults);
             onSortFilterListener.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
@@ -258,7 +265,7 @@ public class AppFragment extends Fragment {
             onSortFilterListener.onFilter(getFilterButtonText(filterState, adapter.getItemCount()));
         }
         binding.notFound.setVisibility(adapter.getItemCount() == 0
-                && !binding.progressGroup.isShown() ?
+                && !(binding.progressGroup.getVisibility() == View.VISIBLE) ?
                 View.VISIBLE : View.GONE);
     }
 

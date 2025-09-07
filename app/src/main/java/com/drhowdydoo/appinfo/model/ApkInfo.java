@@ -3,6 +3,8 @@ package com.drhowdydoo.appinfo.model;
 import android.content.pm.PackageInfo;
 import android.graphics.drawable.Drawable;
 
+import java.util.Objects;
+
 public class ApkInfo {
 
     private String apkName;
@@ -16,12 +18,16 @@ public class ApkInfo {
 
     private boolean isInstalled;
 
+
+    private boolean isSplitConfigApk;
+
     public ApkInfo(String apkName,
                    Drawable apkIcon,
                    long apkSize,
                    String apkPath,
                    String apkAbsolutePath, String apkVersion,
-                   PackageInfo apkInfo, boolean isInstalled) {
+                   PackageInfo apkInfo, boolean isInstalled,
+                   boolean isSplitConfigApk) {
 
         this.apkName = apkName;
         this.apkIcon = apkIcon;
@@ -31,6 +37,7 @@ public class ApkInfo {
         this.apkVersion = apkVersion;
         this.apkInfo = apkInfo;
         this.isInstalled = isInstalled;
+        this.isSplitConfigApk = isSplitConfigApk;
     }
 
     public boolean isSelected() {
@@ -103,5 +110,25 @@ public class ApkInfo {
 
     public void setInstalled(boolean installed) {
         isInstalled = installed;
+    }
+
+    public boolean isSplitConfigApk() {
+        return isSplitConfigApk;
+    }
+
+    public void setSplitConfigApk(boolean splitConfigApk) {
+        isSplitConfigApk = splitConfigApk;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ApkInfo)) return false;
+        ApkInfo apkInfo = (ApkInfo) o;
+        return Objects.equals(apkName, apkInfo.apkName) && Objects.equals(apkPath, apkInfo.apkPath) && Objects.equals(apkAbsolutePath, apkInfo.apkAbsolutePath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(apkName, apkPath, apkAbsolutePath);
     }
 }

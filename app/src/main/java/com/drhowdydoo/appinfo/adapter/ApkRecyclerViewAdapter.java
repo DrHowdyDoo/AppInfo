@@ -128,6 +128,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
         notifyDataSetChanged();
     }
 
+
     @SuppressLint("NotifyDataSetChanged")
     public void selectAllApk() {
         selectedItemCount = apkInfoList.size();

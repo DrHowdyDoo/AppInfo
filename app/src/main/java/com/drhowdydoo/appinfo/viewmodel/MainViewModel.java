@@ -1,5 +1,7 @@
 package com.drhowdydoo.appinfo.viewmodel;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class MainViewModel extends ViewModel {
@@ -7,6 +9,17 @@ public class MainViewModel extends ViewModel {
     private String appSearchText;
     private String apkSearchText;
     private boolean isSearchVisible = false;
+
+    private final MutableLiveData<Boolean> showSplitApks = new MutableLiveData<>(false);
+
+    public LiveData<Boolean> getShowSplitApks() {
+        return showSplitApks;
+    }
+
+    public void setShowSplitApks(boolean show) {
+        showSplitApks.setValue(show);
+    }
+
 
     public String getAppSearchText() {
         return appSearchText;

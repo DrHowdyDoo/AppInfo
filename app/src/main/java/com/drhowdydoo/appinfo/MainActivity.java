@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -35,6 +36,7 @@ import com.drhowdydoo.appinfo.databinding.DeleteDialogLayoutBinding;
 import com.drhowdydoo.appinfo.fragment.ApkFragment;
 import com.drhowdydoo.appinfo.fragment.AppFragment;
 import com.drhowdydoo.appinfo.interfaces.OnSortFilterListener;
+import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.ThemeUtils;
 import com.drhowdydoo.appinfo.viewmodel.MainViewModel;
 import com.google.android.material.color.DynamicColors;
@@ -107,6 +109,15 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
             return true;
         });
 
+        ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+                new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Constants.RESULT_CODE_APK_RESULT_CHANGE) {
+                        if (result.getData() != null) {
+                            mainViewModel.setShowSplitApks(result.getData().getBooleanExtra(Constants.showSplitApks, false));
+                        }
+                    }
+                });
 
         binding.materialToolBar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.search) {
@@ -122,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
                 }
                 return true;
             } else if (item.getItemId() == R.id.settings) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                activityResultLauncher.launch(new Intent(MainActivity.this, SettingsActivity.class));
             }
             return false;
         });

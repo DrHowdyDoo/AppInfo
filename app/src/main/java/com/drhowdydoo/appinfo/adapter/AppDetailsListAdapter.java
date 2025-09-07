@@ -176,7 +176,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         holder.gridBinding.tvColorValue.setText(appMetadata.getColors());
 
         if (!isInstalled) holder.gridBinding.btnInfo.setEnabled(false);
-        if (isApk) holder.gridBinding.btnExtractApk.setEnabled(false);
+        if (isApk) holder.gridBinding.splitBtn.setEnabled(false);
         setUpClickListeners(holder);
     }
 

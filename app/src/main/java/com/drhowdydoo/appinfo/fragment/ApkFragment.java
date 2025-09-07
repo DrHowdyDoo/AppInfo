@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -33,9 +34,11 @@ import com.drhowdydoo.appinfo.util.ApkInfoManager;
 import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.Utilities;
 import com.drhowdydoo.appinfo.viewmodel.ApkListViewModel;
+import com.drhowdydoo.appinfo.viewmodel.MainViewModel;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
@@ -53,6 +56,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
     private int scanMode;
 
     private boolean permissionAskedForFirstTime = true;
+    private MainViewModel mainViewModel;
 
     public ApkFragment() {
     }
@@ -111,6 +115,18 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
         apkListViewModel.getFetchedApkInfoList().observe(getViewLifecycleOwner(), fetchedApkInfoList -> {
             setData(fetchedApkInfoList, true);
         });
+
+        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        mainViewModel.getShowSplitApks().observe(getViewLifecycleOwner(), showSplit -> {
+            if (showSplit != null && !showSplit) {
+                apkListViewModel.getApkInfoList()
+                        .removeIf(apkInfo -> apkInfo != null && apkInfo.isSplitConfigApk());
+                apkListViewModel.getSavedApkInfoList()
+                        .removeIf(apkInfo -> apkInfo != null && apkInfo.isSplitConfigApk());
+                adapter.updateData(apkListViewModel.getSavedApkInfoList());
+            }
+        });
+
 
         return binding.getRoot();
     }
@@ -218,7 +234,8 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
     private List<ApkInfo> getFilteredList(int filter) {
         if (filter == Constants.NO_FILTER) return apkListViewModel.getApkInfoList();
         if (filter == Constants.FILTER_INSTALLED_APKS)
-            return apkListViewModel.getApkInfoList().stream().filter(ApkInfo::isInstalled).collect(Collectors.toList());
+            return apkListViewModel.getApkInfoList().stream()
+                    .filter(ApkInfo::isInstalled).collect(Collectors.toList());
         if (filter == Constants.FILTER_NOT_INSTALLED_APKS)
             return apkListViewModel.getApkInfoList().stream().filter(apkInfo -> !apkInfo.isInstalled()).collect(Collectors.toList());
         return apkListViewModel.getApkInfoList();
@@ -251,7 +268,12 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
         if (!input.isEmpty()) {
             List<ApkInfo> searchResults = apkListViewModel.getSavedApkInfoList()
                     .stream()
-                    .filter(apkInfo -> searchIn(input.toLowerCase(), apkInfo.getApkName().toLowerCase()) || searchIn(input.toLowerCase(), apkInfo.getApkInfo().packageName.toLowerCase()))
+                    .filter(Objects::nonNull)
+                    .filter(apkInfo -> {
+                        return (apkInfo.getApkName() != null && searchIn(input.toLowerCase(), apkInfo.getApkName().toLowerCase())) ||
+                                (apkInfo.getApkInfo() != null &&
+                                        searchIn(input.toLowerCase(), apkInfo.getApkInfo().packageName.toLowerCase()));
+                    })
                     .collect(Collectors.toList());
             adapter.updateData(searchResults);
             mainActivity.onFilter(getFilterText());
@@ -261,7 +283,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
         }
         binding.notFound.setVisibility(adapter.getItemCount() == 0
                 && !binding.groupStoragePermission.isShown()
-                && !binding.progressGroup.isShown() ?
+                && !(binding.progressGroup.getVisibility() == View.VISIBLE) ?
                 View.VISIBLE : View.GONE);
     }
 
@@ -336,4 +358,5 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
         outState.putBoolean("com.drhowdydoo.appinfo.empty-list-placeholder-visible",binding.notFound.isShown());
         outState.putBoolean("com.drhowdydoo.appinfo.progress-indicator-visible",binding.progressGroup.isShown());
     }
+
 }

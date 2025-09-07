@@ -101,7 +101,7 @@ public class ApkInfoManager {
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
                 if (attrs.isDirectory()) return FileVisitResult.CONTINUE;
-                if (file.getFileName().toString().toLowerCase().startsWith("split") && !showSplitApks)
+                if (file.getFileName().toString().toLowerCase().startsWith("split_") && !showSplitApks)
                     return FileVisitResult.SKIP_SUBTREE;
                 if (file.getFileName().toString().endsWith(".apk")) {
                     apkFiles.add(file.toFile());
@@ -126,7 +126,7 @@ public class ApkInfoManager {
         String apkPath = apkFile.getParent();
         String apkAbsolutePath = apkFile.getAbsolutePath();
         Drawable apkIcon = AppCompatResources.getDrawable(context, R.drawable.empty_icon_placeholder);
-        if (apkName.toLowerCase().startsWith("split"))
+        if (apkName.toLowerCase().startsWith("split_"))
             apkIcon = AppCompatResources.getDrawable(context, R.drawable.ic_split_config_apk);
         String apkVersion = "";
         boolean isInstalled = true;
@@ -145,7 +145,7 @@ public class ApkInfoManager {
             apkIcon = apkInfo.applicationInfo.loadIcon(packageManager);
         }
 
-        return new ApkInfo(apkName, apkIcon, apkSize, apkPath, apkAbsolutePath, apkVersion, apkInfo, isInstalled);
+        return new ApkInfo(apkName, apkIcon, apkSize, apkPath, apkAbsolutePath, apkVersion, apkInfo, isInstalled,apkName.toLowerCase().startsWith("split_"));
 
     }
 

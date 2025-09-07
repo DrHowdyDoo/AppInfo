@@ -28,7 +28,10 @@ public class ApkInfoDiffCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return mOldApkInfoList.get(oldItemPosition).getApkInfo().packageName.equalsIgnoreCase(mNewApkInfoList.get(newItemPosition).getApkInfo().packageName);
+        return mOldApkInfoList.get(oldItemPosition).getApkInfo() != null &&
+                mNewApkInfoList.get(newItemPosition).getApkInfo() != null &&
+                mOldApkInfoList.get(oldItemPosition).getApkInfo().packageName
+                        .equalsIgnoreCase(mNewApkInfoList.get(newItemPosition).getApkInfo().packageName);
     }
 
     @Override

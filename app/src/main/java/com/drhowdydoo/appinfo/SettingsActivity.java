@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.drhowdydoo.appinfo.databinding.ActivitySettingsBinding;
+import com.drhowdydoo.appinfo.util.Constants;
 import com.drhowdydoo.appinfo.util.ThemeUtils;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -88,11 +89,17 @@ public class SettingsActivity extends AppCompatActivity {
     private void handleScan() {
         binding.switchScanHiddenFiles.setOnCheckedChangeListener((buttonView, isChecked) -> editor.putBoolean("com.drhowdydoo.appinfo.scan-hidden-folders", isChecked).apply());
         binding.switchShowSplitApks.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked)
+            Intent intent = new Intent();
+            if (isChecked) {
                 binding.switchShowSplitApks.setCompoundDrawablesWithIntrinsicBounds(R.drawable.round_remove_red_eye, 0, 0, 0);
-            else
+                intent.putExtra(Constants.showSplitApks, true);
+            }
+            else {
                 binding.switchShowSplitApks.setCompoundDrawablesWithIntrinsicBounds(R.drawable.round_visibility_off, 0, 0, 0);
+                intent.putExtra(Constants.showSplitApks, false);
+            }
             editor.putBoolean("com.drhowdydoo.appinfo.show-split-apks", isChecked).apply();
+            setResult(Constants.RESULT_CODE_APK_RESULT_CHANGE, intent);
         });
 
         CharSequence[] scanModes = {"Quick scan", "Full scan", "Smart scan"};

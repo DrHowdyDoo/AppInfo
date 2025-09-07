@@ -35,6 +35,8 @@ public class Constants {
     public static final int EXPENDABLE_TEXT_VIEW_MAX_LINES = 12;
 
     public static final int RESULT_CODE_UNINSTALL = 1001;
+    public static final int RESULT_CODE_APK_RESULT_CHANGE = 1002;
+    public static final String showSplitApks = "SHOW_SPLIT_APKS";
 
 
 }
