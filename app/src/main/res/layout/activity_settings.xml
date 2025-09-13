@@ -58,7 +58,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDarkTheme"
                 style="@style/Widget.Material3Expressive.Button.IconButton.Outlined"
-                app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Large"
+                app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -88,7 +88,7 @@
                 android:layout_marginTop="12dp"
                 android:checkable="true"
                 app:icon="@drawable/round_auto_mode"
-                app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Large.Wide"
+                app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Wide"
                 app:iconSize="24dp"
                 app:layout_constraintLeft_toRightOf="@id/btnDarkTheme"
                 app:layout_constraintRight_toLeftOf="@id/btnLightTheme"
@@ -108,7 +108,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLightTheme"
                 style="@style/Widget.Material3Expressive.Button.IconButton.Outlined"
-                app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Large"
+                app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"

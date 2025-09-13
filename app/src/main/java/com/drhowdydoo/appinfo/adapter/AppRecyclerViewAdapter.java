@@ -61,7 +61,7 @@ public class AppRecyclerViewAdapter extends RecyclerView.Adapter<AppRecyclerView
 
         AppInfo appInfo = appInfoList.get(position);
         holder.tvAppName.setText(appInfo.getAppName());
-        holder.tvAppSize.setText(Formatter.formatShortFileSize(context, appInfo.getSize()));
+        holder.tvAppSize.setText(Formatter.formatFileSize(context, appInfo.getSize()));
 
 
         Glide.with(context)

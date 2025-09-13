@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -140,7 +141,6 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             itemViewHolder.btnExpandView.setOnClickListener(v -> {
                 boolean isExpanded = appDetail.isExpanded();
                 if (!isExpandable) return;
-                TransitionManager.beginDelayedTransition(itemViewHolder.container, new ChangeClipBounds());
                 if (isExpanded) {
                     itemViewHolder.btnExpandView.setIcon(ContextCompat.getDrawable(context, R.drawable.round_expand_more_24));
                     itemViewHolder.tvValue.setMaxLines(Constants.EXPENDABLE_TEXT_VIEW_MAX_LINES);
@@ -152,6 +152,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     itemViewHolder.tvExpandIndicator.setVisibility(View.GONE);
                     appDetail.setExpanded(true);
                 }
+                TransitionManager.beginDelayedTransition(itemViewHolder.horizontalScrollView, new AutoTransition());
                 notifyItemChanged(position);
             });
         }
@@ -278,6 +279,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public ImageView icon, fileIcon;
         public TextView tvTitle, tvValue, tvExpandIndicator;
         public MaterialCardView container;
+        public HorizontalScrollView horizontalScrollView;
         public LoadingIndicator progressBar;
         public LinearProgressIndicator fontExtractionIndicator;
         public Button btnExtractFont;
@@ -291,6 +293,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             tvValue = binding.tvValue;
             tvExpandIndicator = binding.tvExpandIndicator;
             container = binding.listContainer;
+            horizontalScrollView = binding.horizontalScrollView;
             btnExtractFont = binding.btnExtractFont;
             progressBar = binding.progressBar;
             fontExtractionIndicator = binding.pbFontExtraction;

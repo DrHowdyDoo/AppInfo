@@ -148,7 +148,7 @@ public class AppFragment extends Fragment {
         binding.recyclerView.scheduleLayoutAnimation();
         binding.recyclerView.scrollToPosition(0);
         binding.notFound.setVisibility(adapter.getItemCount() == 0
-                && !binding.progressGroup.isShown() ?
+                && !(binding.progressGroup.getVisibility() == View.VISIBLE) ?
                 View.VISIBLE : View.GONE);
     }
 

@@ -70,5 +70,21 @@
         <item name="cornerSizeTopRight">4dp</item>
         <item name="cornerSizeBottomRight">4dp</item>
     </style>
+
+    <style name="SizeOverlay.Material3Expressive.Button.IconButton" parent="SizeOverlay.Material3Expressive.Button.IconButton.Large">
+        <item name="containerPaddingStart">24dp</item>
+        <item name="containerPaddingEnd">24dp</item>
+        <item name="containerPaddingTop">24dp</item>
+        <item name="containerPaddingBottom">24dp</item>
+        <item name="containerIconSize">24dp</item>
+    </style>
+
+    <style name="SizeOverlay.Material3Expressive.Button.IconButton.Wide" parent="SizeOverlay.Material3Expressive.Button.IconButton.Large.Wide">
+        <item name="containerPaddingStart">40dp</item>
+        <item name="containerPaddingEnd">40dp</item>
+        <item name="containerPaddingTop">24dp</item>
+        <item name="containerPaddingBottom">24dp</item>
+        <item name="containerIconSize">24dp</item>
+    </style>
     
 </resources>

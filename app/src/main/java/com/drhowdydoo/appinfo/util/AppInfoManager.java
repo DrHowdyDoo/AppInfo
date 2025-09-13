@@ -106,7 +106,7 @@ public class AppInfoManager {
             long totalAppSize = 0;
             try {
                 StorageStats storageStats = storageStatsManager.queryStatsForUid(applicationInfo.storageUuid, applicationInfo.uid);
-                totalAppSize = storageStats.getAppBytes() + storageStats.getCacheBytes() + storageStats.getDataBytes();
+                totalAppSize = storageStats.getAppBytes() + storageStats.getDataBytes();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

@@ -107,8 +107,8 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
             binding.swipeRefreshLayout.setRefreshing(false);
             binding.progressGroup.setVisibility(isRunning ? View.VISIBLE : View.GONE);
             binding.notFound.setVisibility(adapter.getItemCount() == 0
-                    && !binding.groupStoragePermission.isShown()
-                    && !binding.progressGroup.isShown() ?
+                    && !(binding.groupStoragePermission.getVisibility() == View.VISIBLE)
+                    && !(binding.progressGroup.getVisibility() == View.VISIBLE) ?
                     View.VISIBLE : View.GONE);
         });
 
@@ -197,8 +197,8 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
             mainActivity.onSort(getSortText());
         }
         binding.notFound.setVisibility(adapter.getItemCount() == 0
-                && !binding.groupStoragePermission.isShown()
-                && !binding.progressGroup.isShown() ?
+                && !(binding.groupStoragePermission.getVisibility() == View.VISIBLE)
+                && !(binding.progressGroup.getVisibility() == View.VISIBLE) ?
                 View.VISIBLE : View.GONE);
     }
 
@@ -282,7 +282,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
             mainActivity.onFilter(getFilterText());
         }
         binding.notFound.setVisibility(adapter.getItemCount() == 0
-                && !binding.groupStoragePermission.isShown()
+                && !(binding.groupStoragePermission.getVisibility() == View.VISIBLE)
                 && !(binding.progressGroup.getVisibility() == View.VISIBLE) ?
                 View.VISIBLE : View.GONE);
     }
@@ -355,8 +355,8 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         System.out.println("onSaveInstanceState");
-        outState.putBoolean("com.drhowdydoo.appinfo.empty-list-placeholder-visible",binding.notFound.isShown());
-        outState.putBoolean("com.drhowdydoo.appinfo.progress-indicator-visible",binding.progressGroup.isShown());
+        outState.putBoolean("com.drhowdydoo.appinfo.empty-list-placeholder-visible",binding.notFound.getVisibility() == View.VISIBLE);
+        outState.putBoolean("com.drhowdydoo.appinfo.progress-indicator-visible",binding.progressGroup.getVisibility() == View.VISIBLE);
     }
 
 }

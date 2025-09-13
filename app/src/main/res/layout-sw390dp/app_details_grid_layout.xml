@@ -23,6 +23,7 @@
     <Button
         android:id="@+id/btnShare"
         style="@style/Widget.App.IconButton"
+        app:materialSizeOverlay="@style/SizeOverlay.Material3Expressive.Button.IconButton.Small.Wide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="Share app playStore link"
@@ -56,7 +57,8 @@
             style="?attr/materialSplitButtonLeadingFilledStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Extract Apk"/>
+            android:text="Extract Apk"
+            app:icon="@drawable/round_extract_24" />
 
         <Button
             android:id="@+id/expand_more_or_less_filled"
@@ -82,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="52dp"
             android:layout_gravity="start"
             android:checkable="false"
             android:text="Uninstall"
@@ -115,7 +117,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.45" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
@@ -128,7 +130,7 @@
         android:id="@+id/tvMetadataTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="42dp"
         android:text="App metadata"
         android:textAppearance="?textAppearanceTitleMedium"
         app:layout_constraintTop_toBottomOf="@id/barrier" />

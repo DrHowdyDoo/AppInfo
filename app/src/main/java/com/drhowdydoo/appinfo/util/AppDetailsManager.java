@@ -107,12 +107,12 @@ public class AppDetailsManager {
 
     public String getInstalledDate() {
         long installDate = packageInfo.firstInstallTime;
-        return installDate > 0 ? DateFormat.getDateInstance().format(installDate) : "Not installed";
+        return installDate > 0 ? DateFormat.getDateTimeInstance().format(installDate) : "Not installed";
     }
 
     public String getUpdatedDate() {
         long lastUpdateTime = packageInfo.lastUpdateTime;
-        return lastUpdateTime > 0 ? DateFormat.getDateInstance().format(lastUpdateTime) : "Not Updated";
+        return lastUpdateTime > 0 ? DateFormat.getDateTimeInstance().format(lastUpdateTime) : "Not Updated";
     }
 
     public String getMainClass() {
