@@ -72,26 +72,30 @@
         app:drawableTopCompat="@drawable/ic_android_black_56dp" />
 
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressBar"
-        android:layout_width="180dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:indicatorSize="200dp"
         android:indeterminate="true"
-        android:layout_marginTop="8dp"
-        app:trackCornerRadius="6dp"
-        app:trackThickness="6dp"
-        app:wavelength="30dp"
-        app:waveSpeed="1dp"
-        app:waveAmplitude="2dp"
-        app:layout_constraintEnd_toEndOf="@+id/tvProgressText"
-        app:layout_constraintStart_toStartOf="@+id/tvProgressText"
-        app:layout_constraintTop_toBottomOf="@+id/tvProgressText"/>
+        app:layout_constraintVertical_bias="0.26"
+        app:trackCornerRadius="12dp"
+        app:trackThickness="12dp"
+        app:wavelength="40dp"
+        app:hideAnimationBehavior="outward"
+        app:indeterminateAnimatorDurationScale="2"
+        app:waveAmplitude="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/progressGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        tools:visibility="visible"
         app:constraint_referenced_ids="tvProgressText,progressBar"/>
 
     <TextView
@@ -103,7 +107,6 @@
         android:drawablePadding="8dp"
         android:visibility="gone"
         android:gravity="center"
-        tools:visibility="visible"
         android:textAppearance="?textAppearanceLabelLarge"
         app:layout_constraintVertical_bias="0.2"
         app:layout_constraintBottom_toBottomOf="parent"

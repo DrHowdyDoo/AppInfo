@@ -269,7 +269,10 @@ public class MainActivity extends AppCompatActivity implements OnSortFilterListe
 
                     deleteDialogLayoutBinding.tvTitle.setText(paths.size() == 1 ? "Delete this apk ?" : "Delete " + "these " + paths.size() + " apks ?");
                     deleteDialogLayoutBinding.btnDelete.setOnClickListener(v -> {
-                        if (apkFragment != null) apkFragment.updateList();
+                        if (apkFragment != null) {
+                            apkFragment.updateList();
+                            binding.btnFilter.setText(apkFragment.getFilterText());
+                        }
                         paths.forEach(apkPath -> {
                             File file = new File(apkPath);
                             if (file.exists()) file.delete();

@@ -86,5 +86,15 @@
         <item name="containerPaddingBottom">24dp</item>
         <item name="containerIconSize">24dp</item>
     </style>
+
+    <style name="ShapeAppearance.Pill" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item> <!-- makes it pill-shaped -->
+    </style>
+
+    <style name="Widget.PillBottomNavigationView" parent="Widget.Material3Expressive.BottomNavigationView">
+        <item name="shapeAppearance">@style/ShapeAppearance.Pill</item>
+    </style>
+
     
 </resources>

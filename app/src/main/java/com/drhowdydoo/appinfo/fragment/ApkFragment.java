@@ -207,7 +207,7 @@ public class ApkFragment extends Fragment implements View.OnClickListener, Adapt
         else return "Size";
     }
 
-    private String getFilterText() {
+    public String getFilterText() {
         int filter = apkListViewModel.getFilterState();
         int count = adapter.getItemCount();
         String suffix = count > 0 ? "(" + count + ")" : "";

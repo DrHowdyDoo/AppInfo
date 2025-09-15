@@ -125,6 +125,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
     @SuppressLint("NotifyDataSetChanged")
     public void removeDeletedApksFromList() {
         apkInfoList.removeIf(ApkInfo::isSelected);
+
         notifyDataSetChanged();
     }
 
