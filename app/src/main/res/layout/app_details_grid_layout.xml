@@ -78,11 +78,11 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnUninstallApp"
             style="?attr/materialButtonTonalStyle"
-            app:shapeAppearance="@style/ShapeAppearance.App.SplitButton.Options"
+            app:shapeAppearance="@style/ShapeAppearance.Pill"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="6dp"
             android:layout_gravity="start"
             android:checkable="false"
             android:text="Uninstall"
