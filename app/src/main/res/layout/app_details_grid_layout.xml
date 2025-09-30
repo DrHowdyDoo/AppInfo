@@ -48,7 +48,7 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="@+id/center_guideline"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
@@ -111,7 +111,7 @@
         app:layout_constraintTop_toTopOf="@+id/splitBtn" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
+        android:id="@+id/center_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -133,322 +133,378 @@
         android:textAppearance="?textAppearanceTitleMedium"
         app:layout_constraintTop_toBottomOf="@id/barrier" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardCategory"
-        style="@style/Widget.App.CardView.Elevated.Round"
-        android:layout_width="0dp"
-        android:layout_height="0dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
-            android:layout_marginVertical="@dimen/pill_margin_vertical"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:src="@drawable/round_category_24" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvCategoryTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Category"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
-
-                <TextView
-                    android:id="@+id/tvCategoryValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
-                    tools:text="Undefined" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardSource"
-        style="@style/Widget.App.CardView.Elevated.Round"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
-            android:layout_marginVertical="@dimen/pill_margin_vertical"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:src="@drawable/ic_playstore_24" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvSourceTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Source"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
-
-                <TextView
-                    android:id="@+id/tvSourceValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textIsSelectable="true"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
-                    tools:text="Undefined\nasasas" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardInstalledDt"
-        style="@style/Widget.App.CardView.Elevated.Round"
-        android:layout_width="0dp"
-        android:layout_height="0dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
-            android:layout_marginVertical="@dimen/pill_margin_vertical"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:src="@drawable/round_calendar_today_24" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvInstalledDtTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Installed On"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
-
-                <TextView
-                    android:id="@+id/tvInstalledDtValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textIsSelectable="true"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
-                    tools:text="30-May-2023" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardUpdatedDt"
-        style="@style/Widget.App.CardView.Elevated.Round"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
-            android:layout_marginVertical="@dimen/pill_margin_vertical"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:src="@drawable/round_update_24" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvUpdatedDtTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Last Updated On"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
-
-                <TextView
-                    android:id="@+id/tvUpdatedDtValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textIsSelectable="true"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
-                    tools:text="30-May-2023" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardMinSdk"
-        style="@style/Widget.App.CardView.Elevated.Round"
-        android:layout_width="0dp"
-        android:layout_height="0dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
-            android:layout_marginVertical="@dimen/pill_margin_vertical"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:src="@drawable/round_android_24" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvMinSdkTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="MinSDK"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
-
-                <TextView
-                    android:id="@+id/tvMinSdkValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textIsSelectable="true"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
-                    tools:text="API 27 \nAndroid 8.0 Oreo" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardTargetSdk"
-        style="@style/Widget.App.CardView.Elevated.Round"
+    <GridLayout
+        android:id="@+id/app_metadata_grid_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/cardUpdatedDt">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
-            android:layout_marginVertical="@dimen/pill_margin_vertical"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:src="@drawable/round_android_24" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvTargetSdkTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TargetSDK"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
-
-                <TextView
-                    android:id="@+id/tvTargetSdkValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textIsSelectable="true"
-                    android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
-                    tools:text="API 33 \nAndroid 13 \nTIRAMISU" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/flowAppMetadata"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:constraint_referenced_ids="cardCategory,cardSource,
-                cardInstalledDt,cardUpdatedDt,
-                cardMinSdk,cardTargetSdk"
-        app:flow_horizontalGap="8dp"
-        app:flow_maxElementsWrap="2"
-        app:flow_verticalGap="8dp"
-        app:flow_wrapMode="chain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvMetadataTitle" />
+        app:layout_constraintTop_toBottomOf="@id/tvMetadataTitle"
+        android:useDefaultMargins="false"
+        android:columnCount="3"
+        android:rowCount="6"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp">
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/flowBarrier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="cardTargetSdk,cardMinSdk" />
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardCategory"
+            android:layout_columnWeight="1"
+            android:layout_row="0"
+            android:layout_column="0"
+            style="@style/Widget.App.CardView.Elevated.Round"
+            android:layout_width="0dp"
+            android:layout_gravity="fill"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
+                android:layout_marginVertical="@dimen/pill_margin_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:src="@drawable/round_category_24" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvCategoryTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Category"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
+
+                    <TextView
+                        android:id="@+id/tvCategoryValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
+                        tools:text="Undefined \nUndefined" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <Space
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_gravity="fill_vertical"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardSource"
+            style="@style/Widget.App.CardView.Elevated.Round"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_width="0dp"
+            android:layout_gravity="fill"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
+                android:layout_marginVertical="@dimen/pill_margin_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:src="@drawable/ic_playstore_24" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvSourceTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Source"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
+
+                    <TextView
+                        android:id="@+id/tvSourceValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textIsSelectable="true"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
+                        tools:text="Undefined" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <Space
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardInstalledDt"
+            style="@style/Widget.App.CardView.Elevated.Round"
+            android:layout_columnWeight="1"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:layout_width="0dp"
+            android:layout_gravity="fill"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
+                android:layout_marginVertical="@dimen/pill_margin_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:src="@drawable/round_calendar_today_24" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvInstalledDtTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Installed On"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
+
+                    <TextView
+                        android:id="@+id/tvInstalledDtValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textIsSelectable="true"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
+                        tools:text="30-May-2023" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <Space
+            android:layout_row="2"
+            android:layout_column="1"
+            android:layout_gravity="fill_vertical"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardUpdatedDt"
+            style="@style/Widget.App.CardView.Elevated.Round"
+            android:layout_columnWeight="1"
+            android:layout_row="2"
+            android:layout_column="2"
+            android:layout_width="0dp"
+            android:layout_gravity="fill"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
+                android:layout_marginVertical="@dimen/pill_margin_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:src="@drawable/round_update_24" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvUpdatedDtTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Last Updated On"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
+
+                    <TextView
+                        android:id="@+id/tvUpdatedDtValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textIsSelectable="true"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
+                        tools:text="30-May-2023" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <Space
+            android:layout_row="3"
+            android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardMinSdk"
+            style="@style/Widget.App.CardView.Elevated.Round"
+            android:layout_columnWeight="1"
+            android:layout_row="4"
+            android:layout_column="0"
+            android:layout_width="0dp"
+            android:layout_gravity="fill"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
+                android:layout_marginVertical="@dimen/pill_margin_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:src="@drawable/round_android_24" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvMinSdkTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MinSDK"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
+
+                    <TextView
+                        android:id="@+id/tvMinSdkValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textIsSelectable="true"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
+                        tools:text="API 27 \nAndroid 8.0 Oreo" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <Space
+            android:layout_row="4"
+            android:layout_column="1"
+            android:layout_gravity="fill_vertical"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardTargetSdk"
+            style="@style/Widget.App.CardView.Elevated.Round"
+            android:layout_row="4"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_width="0dp"
+            android:layout_gravity="fill"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/pill_margin_horizontal"
+                android:layout_marginVertical="@dimen/pill_margin_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|start"
+                    android:src="@drawable/round_android_24" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvTargetSdkTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TargetSDK"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Title" />
+
+                    <TextView
+                        android:id="@+id/tvTargetSdkValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textIsSelectable="true"
+                        android:textAppearance="@style/App.TextAppearance.AppDetails.Body"
+                        tools:text="API 33 \nAndroid 13 \nTIRAMISU" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </GridLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardPackageName"
@@ -456,7 +512,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/flowBarrier">
+        app:layout_constraintTop_toBottomOf="@id/app_metadata_grid_layout">
 
         <LinearLayout
             android:layout_width="match_parent"
