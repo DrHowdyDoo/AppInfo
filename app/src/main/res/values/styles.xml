@@ -63,11 +63,11 @@
         <item name="cornerSize">24dp</item>
     </style>
 
-    <style name="ShapeAppearance.App.SplitButton.Options" parent="">
+    <style name="ShapeAppearance.App.Trapezium" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">50%</item>
-        <item name="cornerSizeBottomLeft">50%</item>
-        <item name="cornerSizeTopRight">4dp</item>
+        <item name="cornerSizeTopLeft">25%</item>
+        <item name="cornerSizeBottomLeft">4dp</item>
+        <item name="cornerSizeTopRight">25%</item>
         <item name="cornerSizeBottomRight">4dp</item>
     </style>
 
@@ -93,7 +93,7 @@
     </style>
 
     <style name="Widget.PillBottomNavigationView" parent="Widget.Material3Expressive.BottomNavigationView">
-        <item name="shapeAppearance">@style/ShapeAppearance.Pill</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.Trapezium</item>
     </style>
 
     
