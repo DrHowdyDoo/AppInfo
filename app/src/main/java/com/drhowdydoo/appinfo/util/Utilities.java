@@ -1,17 +1,25 @@
 package com.drhowdydoo.appinfo.util;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.Log;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 public class Utilities {
@@ -116,5 +124,72 @@ public class Utilities {
             }
         }
     }
+
+    public static File extractToTempFile(ZipFile zipFile, ZipEntry entry, Context context) throws IOException {
+        File tempFile = File.createTempFile(getNameWithoutExtension(entry.getName()), getExtension(entry.getName()), context.getCacheDir());
+
+        try (InputStream inputStream = zipFile.getInputStream(entry);
+             FileOutputStream outputStream = new FileOutputStream(tempFile)) {
+
+            byte[] buffer = new byte[4096];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+        }
+
+        return tempFile;
+    }
+
+    public static String getNameWithoutExtension(String fileName) {
+        int indexOfDot = fileName.lastIndexOf(".");
+        if (indexOfDot == -1) return fileName;
+        return fileName.substring(0, indexOfDot);
+    }
+
+    public static String getExtension(String fileName) {
+        int indexOfDot = fileName.lastIndexOf(".");
+        if (indexOfDot == -1) return "";
+        return fileName.substring(indexOfDot).toLowerCase();
+    }
+
+    public static PackageInfo getBundleApkPackageInfo(Context context, PackageManager packageManager, String apkFilePath) {
+        try (ZipFile zipFile = new ZipFile(apkFilePath)) {
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                // Look for base.apk or other APK files
+                if (!isSplitApk(entry.getName()) && entry.getName().endsWith(".apk")) {
+                    // Extract to temporary file and analyze
+                    File tempApk = extractToTempFile(zipFile, entry, context);
+                    PackageInfo info = packageManager.getPackageArchiveInfo(
+                            tempApk.getAbsolutePath(),
+                            Constants.packageManagerFlags);
+                    boolean deleteSuccess = tempApk.delete();
+                    if (!deleteSuccess) tempApk.deleteOnExit();
+                    return info;
+                }
+            }
+        } catch (IOException e) {
+            Log.e("ApksAnalyzer", "Error analyzing APKS file", e);
+        }
+        return null;
+    }
+
+    public static boolean isSplitApk(String fileName){
+        return fileName.startsWith("split_") || fileName.startsWith("config.");
+    }
+
+    public static boolean isInstalled(String packageName, PackageManager packageManager) {
+        try {
+            packageManager.getPackageInfo(packageName, PackageManager.GET_META_DATA);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+
 
 }

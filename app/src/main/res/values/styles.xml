@@ -65,10 +65,10 @@
 
     <style name="ShapeAppearance.App.Trapezium" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">25%</item>
-        <item name="cornerSizeBottomLeft">4dp</item>
-        <item name="cornerSizeTopRight">25%</item>
-        <item name="cornerSizeBottomRight">4dp</item>
+        <item name="cornerSizeTopLeft">28%</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeTopRight">28%</item>
+        <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
     <style name="SizeOverlay.Material3Expressive.Button.IconButton" parent="SizeOverlay.Material3Expressive.Button.IconButton.Large">

@@ -147,7 +147,9 @@
         android:columnCount="3"
         android:rowCount="6"
         android:orientation="horizontal"
-        android:layout_marginTop="24dp">
+        android:layout_marginTop="24dp"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardCategory"
@@ -514,7 +516,6 @@
         style="@style/Widget.App.CardView.Elevated.Round"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/app_metadata_grid_layout">
 
         <LinearLayout

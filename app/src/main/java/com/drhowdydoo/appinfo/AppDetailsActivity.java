@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,6 +24,8 @@ import com.drhowdydoo.appinfo.adapter.AppDetailsListAdapter;
 import com.drhowdydoo.appinfo.databinding.ActivityAppDetailsBinding;
 import com.drhowdydoo.appinfo.model.AppDetailItem;
 import com.drhowdydoo.appinfo.model.AppMetadata;
+import com.drhowdydoo.appinfo.model.BundleInfo;
+import com.drhowdydoo.appinfo.model.LRUCache;
 import com.drhowdydoo.appinfo.model.StringCount;
 import com.drhowdydoo.appinfo.util.AppDetailsManager;
 import com.drhowdydoo.appinfo.util.AppInfoManager;
@@ -45,13 +48,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class AppDetailsActivity extends AppCompatActivity {
 
     private static String TAG = "AppDetailsActivity";
-    private static int packageManagerFlags = PackageManager.GET_PERMISSIONS |
-            PackageManager.GET_RECEIVERS |
-            PackageManager.GET_PROVIDERS |
-            PackageManager.GET_ACTIVITIES |
-            PackageManager.GET_SERVICES |
-            PackageManager.GET_META_DATA |
-            PackageManager.GET_SIGNATURES;
     private ActivityAppDetailsBinding binding;
     private AppDetailsManager appDetailsManager;
     private boolean isApk = false;
@@ -62,6 +58,7 @@ public class AppDetailsActivity extends AppCompatActivity {
     private String appName;
     private boolean isInstalled;
     private boolean permissionAskedForFirstTime = true;
+    private LRUCache lruCache;
 
     @SuppressLint({"CheckResult", "SetTextI18n"})
     @Override
@@ -84,6 +81,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         isInstalled = intent.getBooleanExtra("isInstalled", true);
         String packageName = intent.getStringExtra("packageName");
         String identifier = (isApk && !isInstalled) ? apkAbsolutePath : packageName;
+        lruCache = LRUCache.getInstance();
 
         //Initial conditional setups
         handleToolbarContentAlignment();
@@ -132,10 +130,17 @@ public class AppDetailsActivity extends AppCompatActivity {
     private Optional<PackageInfo> getPackageInfo(String identifier) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                packageManagerFlags |= PackageManager.GET_SIGNING_CERTIFICATES;
-            if (isApk && !isInstalled)
-                return Optional.ofNullable(getPackageManager().getPackageArchiveInfo(identifier, packageManagerFlags));
-            return Optional.ofNullable(getPackageManager().getPackageInfo(identifier, packageManagerFlags));
+                Constants.packageManagerFlags |= PackageManager.GET_SIGNING_CERTIFICATES;
+            Log.d(TAG, "getPackageInfo: " + appName + " " + apkAbsolutePath);
+            if (Constants.apkBundleExtensions.contains(Utilities.getExtension(appName))) {
+                BundleInfo info = lruCache.get(apkAbsolutePath);
+                if (info != null) return Optional.ofNullable(info.getPackageInfo());
+                return Optional.ofNullable(Utilities.getBundleApkPackageInfo(this, getPackageManager(), apkAbsolutePath));
+            }
+            if (isApk && !isInstalled) {
+                return Optional.ofNullable(getPackageManager().getPackageArchiveInfo(identifier, Constants.packageManagerFlags));
+            }
+            return Optional.ofNullable(getPackageManager().getPackageInfo(identifier, Constants.packageManagerFlags));
         } catch (PackageManager.NameNotFoundException e) {
             return Optional.empty();
         }
@@ -146,7 +151,7 @@ public class AppDetailsActivity extends AppCompatActivity {
     private void init(PackageInfo packageInfo) {
 
 
-        Disposable iconDisposable = Observable.just(appDetailsManager.getIcon(isApk, apkAbsolutePath))
+        Disposable iconDisposable = Observable.just(appDetailsManager.getIcon(apkAbsolutePath))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(icon -> binding.imgIcon.setImageDrawable(icon));
@@ -194,7 +199,7 @@ public class AppDetailsActivity extends AppCompatActivity {
         appDetails.add(new AppDetailItem(R.drawable.outline_stars_24, "Features", "loading • • • • •"));
         appDetails.add(new AppDetailItem(R.drawable.outline_backup_24, "Backup agent name", backupAgent != null ? backupAgent : "NOT SPECIFIED"));
         appDetails.add(new AppDetailItem(R.drawable.outline_folder_24, "Data dir path", appDetailsManager.getDataDirPath()));
-        appDetails.add(new AppDetailItem(R.drawable.outline_source_24, "Source dir path", appDetailsManager.getSourceDirPath()));
+        appDetails.add(new AppDetailItem(R.drawable.outline_source_24, "Source dir path", appDetailsManager.getSourceDirPath(apkAbsolutePath)));
         appDetails.add(new AppDetailItem(R.drawable.outline_folder_shared_24, "Native library path", appDetailsManager.getNativeLibraryPath()));
         appDetails.add(new AppDetailItem(R.drawable.outline_vpn_key_24, "Signature", "loading • • • • •"));
         appDetails.add(new AppDetailItem(R.drawable.round_fingerprint_24, "Certificate fingerprints", "loading • • • • •"));

@@ -19,6 +19,8 @@ import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 
+import com.drhowdydoo.appinfo.model.BundleInfo;
+import com.drhowdydoo.appinfo.model.LRUCache;
 import com.drhowdydoo.appinfo.model.StringCount;
 
 import java.io.ByteArrayInputStream;
@@ -42,10 +44,12 @@ public class AppDetailsManager {
 
     private final Context context;
     private final PackageInfo packageInfo;
+    private LRUCache lruCache;
 
     public AppDetailsManager(Context context, PackageInfo packageInfo) {
         this.context = context;
         this.packageInfo = packageInfo;
+        lruCache = LRUCache.getInstance();
     }
 
     public static String extractFonts(String apkFilePath, String appName) {
@@ -90,10 +94,14 @@ public class AppDetailsManager {
         return new StringCount(fontFiles.toString().trim(), count);
     }
 
-    public Drawable getIcon(boolean isApk, String apkAbsolutePath) {
-        if (!isApk)
-            return context.getPackageManager().getApplicationIcon(packageInfo.applicationInfo);
-        else {
+    public Drawable getIcon(String apkAbsolutePath) {
+        BundleInfo bundleInfo = lruCache.get(apkAbsolutePath);
+        if (bundleInfo != null && bundleInfo.getIcon() != null) {
+            return bundleInfo.getIcon();
+        }
+        try {
+            return context.getPackageManager().getApplicationIcon(packageInfo.packageName);
+        }catch (PackageManager.NameNotFoundException e) {
             packageInfo.applicationInfo.sourceDir = apkAbsolutePath;
             packageInfo.applicationInfo.publicSourceDir = apkAbsolutePath;
             return packageInfo.applicationInfo.loadIcon(context.getPackageManager());
@@ -259,7 +267,8 @@ public class AppDetailsManager {
         return path != null ? path : "NOT FOUND";
     }
 
-    public String getSourceDirPath() {
+    public String getSourceDirPath(String apkAbsolutePath) {
+        if (Constants.apkBundleExtensions.contains(Utilities.getExtension(apkAbsolutePath))) return apkAbsolutePath;
         return packageInfo.applicationInfo.sourceDir;
     }
 

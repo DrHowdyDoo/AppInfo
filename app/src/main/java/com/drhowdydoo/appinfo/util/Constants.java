@@ -1,5 +1,10 @@
 package com.drhowdydoo.appinfo.util;
 
+import android.content.pm.PackageManager;
+
+import java.util.Arrays;
+import java.util.List;
+
 public class Constants {
 
     public static final int SHOW_LAST_USED_TIME = 0;
@@ -38,5 +43,13 @@ public class Constants {
     public static final int RESULT_CODE_APK_RESULT_CHANGE = 1002;
     public static final String showSplitApks = "SHOW_SPLIT_APKS";
 
+    public static final List<String> apkBundleExtensions = Arrays.asList(".apks", ".apkm", ".xapk", ".apkmx");
+    public static int packageManagerFlags = PackageManager.GET_PERMISSIONS |
+            PackageManager.GET_RECEIVERS |
+            PackageManager.GET_PROVIDERS |
+            PackageManager.GET_ACTIVITIES |
+            PackageManager.GET_SERVICES |
+            PackageManager.GET_META_DATA |
+            PackageManager.GET_SIGNATURES;
 
 }
