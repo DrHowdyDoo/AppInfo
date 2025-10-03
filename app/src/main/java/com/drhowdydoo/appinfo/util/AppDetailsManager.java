@@ -13,6 +13,7 @@ import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
@@ -97,7 +98,7 @@ public class AppDetailsManager {
     public Drawable getIcon(String apkAbsolutePath) {
         BundleInfo bundleInfo = lruCache.get(apkAbsolutePath);
         if (bundleInfo != null && bundleInfo.getIcon() != null) {
-            return bundleInfo.getIcon();
+            return new BitmapDrawable(context.getResources(), bundleInfo.getIcon());
         }
         try {
             return context.getPackageManager().getApplicationIcon(packageInfo.packageName);

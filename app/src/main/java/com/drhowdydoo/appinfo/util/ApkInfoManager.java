@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
@@ -233,7 +235,8 @@ public class ApkInfoManager {
                 }
             }
 
-            lruCache.put(apkFilePath, new BundleInfo(info, apkIcon));
+
+            lruCache.put(apkFilePath, new BundleInfo(info, Utilities.getBitmapFromDrawable(apkIcon)));
 
             // Clean up temporary file
             if (tempApk != null) {

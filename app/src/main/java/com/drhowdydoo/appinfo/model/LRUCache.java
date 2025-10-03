@@ -49,4 +49,8 @@ public class LRUCache {
     public void clearCache() {
         bundleApkCache.evictAll();
     }
+
+    public long getSize(){
+        return bundleApkCache.size();
+    }
 }

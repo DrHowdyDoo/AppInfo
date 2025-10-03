@@ -3,6 +3,9 @@ package com.drhowdydoo.appinfo.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
@@ -142,18 +145,21 @@ public class Utilities {
     }
 
     public static String getNameWithoutExtension(String fileName) {
+        if (fileName == null) return "";
         int indexOfDot = fileName.lastIndexOf(".");
         if (indexOfDot == -1) return fileName;
         return fileName.substring(0, indexOfDot);
     }
 
     public static String getExtension(String fileName) {
+        if (fileName == null) return "";
         int indexOfDot = fileName.lastIndexOf(".");
         if (indexOfDot == -1) return "";
         return fileName.substring(indexOfDot).toLowerCase();
     }
 
     public static PackageInfo getBundleApkPackageInfo(Context context, PackageManager packageManager, String apkFilePath) {
+        if (apkFilePath == null) return null;
         try (ZipFile zipFile = new ZipFile(apkFilePath)) {
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
@@ -178,6 +184,7 @@ public class Utilities {
     }
 
     public static boolean isSplitApk(String fileName){
+        if (fileName == null) return false;
         return fileName.startsWith("split_") || fileName.startsWith("config.");
     }
 
@@ -190,6 +197,36 @@ public class Utilities {
         }
     }
 
+
+    public static Bitmap getBitmapFromDrawable(Drawable drawable) {
+        if (drawable == null) return null;
+
+        try {
+            // If already a BitmapDrawable, just return its bitmap
+            if (drawable instanceof BitmapDrawable) {
+                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+                if (bitmap != null) return bitmap;
+            }
+
+            // Otherwise, render drawable into a bitmap
+            int width = drawable.getIntrinsicWidth();
+            int height = drawable.getIntrinsicHeight();
+
+            // fallback size if drawable has no intrinsic size (some vectors/adaptive icons)
+            if (width <= 0) width = 128;
+            if (height <= 0) height = 128;
+
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+
+            return bitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 }
