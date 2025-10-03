@@ -106,7 +106,7 @@ public class AppDetailsActivity extends AppCompatActivity {
                 .subscribe(packageInfo -> {
                     packageInfo.ifPresent(value -> {
                         appDetailsManager = new AppDetailsManager(this, value);
-                        adapter.addApkDetails(appName, value.applicationInfo.publicSourceDir, isInstalled, isApk, isSplitApp);
+                        adapter.addApkDetails(appName, value.applicationInfo.publicSourceDir, isInstalled, isApk, isSplitApp, apkAbsolutePath);
                         adapter.setPackageInfo(value);
                         init(value);
                     });

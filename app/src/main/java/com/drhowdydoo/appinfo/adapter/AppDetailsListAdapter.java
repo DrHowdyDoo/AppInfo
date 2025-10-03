@@ -62,7 +62,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private final Context context;
     private List<Object> appDetails;
     private String appName;
-    private String apkFilePath;
+    private String apkFilePath, apkAbsolutePath;
     private boolean isInstalled, isApk, isSplitApp;
     private PackageInfo packageInfo;
     private ActivityResultLauncher<Intent> activityResultLauncher;
@@ -191,7 +191,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             Bundle args = new Bundle();
             args.putString("packageName", packageInfo.packageName);
             args.putString("appName", appName);
-            args.putString("apkPath", packageInfo.applicationInfo.publicSourceDir);
+            args.putString("apkPath", isApk ? apkAbsolutePath : apkFilePath);
             args.putBoolean("isSplitApp", isSplitApp);
             shareBottomSheet.setArguments(args);
             shareBottomSheet.show(activity.getSupportFragmentManager(), "shareBottomSheet");
@@ -261,12 +261,13 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
 
-    public void addApkDetails(String appName, String apkFilePath, boolean isInstalled, boolean isApk, boolean isSplitApp) {
+    public void addApkDetails(String appName, String apkFilePath, boolean isInstalled, boolean isApk, boolean isSplitApp, String apkAbsolutePath) {
         this.appName = appName;
         this.apkFilePath = apkFilePath;
         this.isApk = isApk;
         this.isInstalled = isInstalled;
         this.isSplitApp = isSplitApp;
+        this.apkAbsolutePath = apkAbsolutePath;
     }
 
     @Override
