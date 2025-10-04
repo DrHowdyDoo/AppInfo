@@ -3,8 +3,10 @@ package com.drhowdydoo.appinfo.contentprovider;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+import android.provider.OpenableColumns;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,10 +21,23 @@ public class ApkFileProvider extends ContentProvider {
         return true;
     }
 
+
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        return null;
+        MatrixCursor cursor = new MatrixCursor(
+                new String[]{OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE});
+
+        File file = new File(uri.getPath()); // adjust depending on your uri structure
+        String nameParam = uri.getQueryParameter("displayName");
+        String fileName = nameParam != null ? nameParam : file.getName();
+
+        cursor.addRow(new Object[]{
+                fileName,   // 👈 this is the filename that other apps will see
+                file.length()
+        });
+
+        return cursor;
     }
 
     @Nullable
@@ -58,7 +73,6 @@ public class ApkFileProvider extends ContentProvider {
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
         return 0;
     }
-
 
 }
 

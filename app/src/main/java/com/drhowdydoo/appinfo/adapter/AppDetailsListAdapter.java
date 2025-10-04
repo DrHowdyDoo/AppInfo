@@ -193,6 +193,7 @@ public class AppDetailsListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             args.putString("appName", appName);
             args.putString("apkPath", isApk ? apkAbsolutePath : apkFilePath);
             args.putBoolean("isSplitApp", isSplitApp);
+            args.putBoolean("isApk", isApk);
             shareBottomSheet.setArguments(args);
             shareBottomSheet.show(activity.getSupportFragmentManager(), "shareBottomSheet");
         });

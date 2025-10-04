@@ -12,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.drhowdydoo.appinfo.R;
+import com.drhowdydoo.appinfo.contentprovider.ApkFileProvider;
 import com.drhowdydoo.appinfo.databinding.BottomSheetShareBinding;
+import com.drhowdydoo.appinfo.util.Utilities;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -22,6 +24,7 @@ public class ShareBottomSheet extends BottomSheetDialogFragment implements View.
     private String appName;
     private String apkPath;
     private boolean isSplitApp;
+    private boolean isApk;
     private BottomSheetShareBinding binding;
 
     public ShareBottomSheet() {
@@ -37,9 +40,14 @@ public class ShareBottomSheet extends BottomSheetDialogFragment implements View.
             appName = args.getString("appName");
             apkPath = args.getString("apkPath");
             isSplitApp = args.getBoolean("isSplitApp");
+            isApk = args.getBoolean("isApk");
         } else {
             dismiss();
         }
+        if (!isApk) {
+            appName += ".apk";
+        }
+
         binding = BottomSheetShareBinding.inflate(inflater, container, false);
         binding.btnShareApk.setOnClickListener(this);
         binding.btnShareLink.setOnClickListener(this);
@@ -90,7 +98,7 @@ public class ShareBottomSheet extends BottomSheetDialogFragment implements View.
     }
 
     private void shareApkFile(String apkPath, String appName) {
-        Uri apkUri = Uri.parse("content://com.drhowdydoo.appinfo.provider" + apkPath);
+        Uri apkUri = getUri(apkPath, appName);
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("application/vnd.android.package-archive");
         shareIntent.putExtra(Intent.EXTRA_STREAM, apkUri);
@@ -98,5 +106,14 @@ public class ShareBottomSheet extends BottomSheetDialogFragment implements View.
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         startActivity(Intent.createChooser(shareIntent, "Share APK via"));
+    }
+
+    private Uri getUri(String apkPath, String appName) {
+        return new Uri.Builder()
+                .scheme("content")
+                .authority("com.drhowdydoo.appinfo.provider")
+                .appendPath(apkPath)
+                .appendQueryParameter("displayName", appName)
+                .build();
     }
 }
