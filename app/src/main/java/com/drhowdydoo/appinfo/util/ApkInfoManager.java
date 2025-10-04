@@ -173,7 +173,7 @@ public class ApkInfoManager {
             apkIcon = apkInfo.applicationInfo.loadIcon(packageManager);
         }
 
-        return new ApkInfo(apkName, apkIcon, apkSize, apkPath, apkAbsolutePath, apkVersion, apkInfo, isInstalled, Utilities.isSplitApk(apkName.toLowerCase()));
+        return new ApkInfo(apkName, apkIcon, apkSize, apkPath, apkAbsolutePath, apkVersion, apkInfo, isInstalled, Utilities.isSplitApk(apkName.toLowerCase()), false);
 
     }
 
@@ -244,7 +244,7 @@ public class ApkInfoManager {
                 if (!deleteSuccess) tempApk.deleteOnExit();
             }
 
-            return new ApkInfo(apkName, apkIcon, apkSize, apksFile.getParent(), apksFile.getAbsolutePath(), apkVersion, info, isInstalled, false);
+            return new ApkInfo(apkName, apkIcon, apkSize, apksFile.getParent(), apksFile.getAbsolutePath(), apkVersion, info, isInstalled, false, true);
 
         } catch (IOException e) {
             Log.e("ApksAnalyzer", "Error analyzing APKS file", e);

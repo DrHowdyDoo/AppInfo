@@ -66,6 +66,12 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
             holder.parent.setActivated(false);
         }
 
+        if (apkInfo.isBundleApk()) {
+            holder.packageIcon.setVisibility(View.VISIBLE);
+        } else {
+            holder.packageIcon.setVisibility(View.INVISIBLE);
+        }
+
         holder.tvApkName.setText(apkInfo.getApkName());
         holder.tvApkSize.setText(Formatter.formatShortFileSize(context, apkInfo.getApkSize()));
         String apkVersion = apkInfo.getApkVersion();
@@ -150,7 +156,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
 
         public ImageView imgApkIcon;
         public TextView tvApkName, tvApkSize, tvApkVersion, tvApkPath, tvApkStatus;
-        public ImageView checkbox;
+        public ImageView checkbox,packageIcon;
         public ConstraintLayout parent;
 
         public ViewHolder(@NonNull ApkListItemBinding binding) {
@@ -164,6 +170,7 @@ public class ApkRecyclerViewAdapter extends RecyclerView.Adapter<ApkRecyclerView
             tvApkPath = binding.tvApkPath;
             tvApkStatus = binding.tvApkStatus;
             checkbox = binding.checkbox;
+            packageIcon = binding.icPackage;
             parent = binding.getRoot();
         }
 

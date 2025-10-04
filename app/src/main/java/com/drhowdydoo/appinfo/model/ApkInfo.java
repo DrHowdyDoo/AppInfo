@@ -17,6 +17,7 @@ public class ApkInfo {
     private boolean isSelected;
 
     private boolean isInstalled;
+    private boolean isBundleApk;
 
 
     private boolean isSplitConfigApk;
@@ -27,7 +28,8 @@ public class ApkInfo {
                    String apkPath,
                    String apkAbsolutePath, String apkVersion,
                    PackageInfo apkInfo, boolean isInstalled,
-                   boolean isSplitConfigApk) {
+                   boolean isSplitConfigApk,
+                   boolean isBundleApk) {
 
         this.apkName = apkName;
         this.apkIcon = apkIcon;
@@ -38,6 +40,7 @@ public class ApkInfo {
         this.apkInfo = apkInfo;
         this.isInstalled = isInstalled;
         this.isSplitConfigApk = isSplitConfigApk;
+        this.isBundleApk = isBundleApk;
     }
 
     public boolean isSelected() {
@@ -118,6 +121,14 @@ public class ApkInfo {
 
     public void setSplitConfigApk(boolean splitConfigApk) {
         isSplitConfigApk = splitConfigApk;
+    }
+
+    public boolean isBundleApk() {
+        return isBundleApk;
+    }
+
+    public void setBundleApk(boolean bundleApk) {
+        isBundleApk = bundleApk;
     }
 
     @Override

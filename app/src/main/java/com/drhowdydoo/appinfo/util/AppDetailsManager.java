@@ -116,12 +116,12 @@ public class AppDetailsManager {
 
     public String getInstalledDate() {
         long installDate = packageInfo.firstInstallTime;
-        return installDate > 0 ? DateFormat.getDateTimeInstance().format(installDate) : "Not installed";
+        return installDate > 0 ? DateFormat.getDateTimeInstance().format(installDate) : "-- NA --";
     }
 
     public String getUpdatedDate() {
         long lastUpdateTime = packageInfo.lastUpdateTime;
-        return lastUpdateTime > 0 ? DateFormat.getDateTimeInstance().format(lastUpdateTime) : "Not Updated";
+        return lastUpdateTime > 0 ? DateFormat.getDateTimeInstance().format(lastUpdateTime) : "-- NA --";
     }
 
     public String getMainClass() {
@@ -130,10 +130,10 @@ public class AppDetailsManager {
     }
 
     public String getTheme() {
-        String theme = "NOT FOUND 😅";
+        String theme = "NOT FOUND";
         try {
             theme = context.getPackageManager().getResourcesForApplication(packageInfo.applicationInfo).getResourceEntryName(packageInfo.applicationInfo.theme);
-            if (theme == null || theme.isEmpty()) return "NOT FOUND 😅";
+            if (theme == null || theme.isEmpty()) return "NOT FOUND";
         } catch (Exception e) {
             e.printStackTrace();
         }

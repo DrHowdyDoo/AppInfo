@@ -21,6 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
         android:id="@+id/tvApkName"
         android:layout_width="0dp"
@@ -96,6 +97,19 @@
         tools:text="INSTALLED" />
 
     <ImageView
+        android:id="@+id/ic_package"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="package icon"
+        android:src="@drawable/ic_package"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="2dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imgApkIcon"
+        tools:visibility="visible" />
+
+    <ImageView
         android:id="@+id/checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -103,6 +117,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/imgApkIcon"
         app:layout_constraintEnd_toEndOf="@+id/imgApkIcon"
-        tools:visibility="visible" />
+        tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

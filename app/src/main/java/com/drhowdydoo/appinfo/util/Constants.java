@@ -43,7 +43,7 @@ public class Constants {
     public static final int RESULT_CODE_APK_RESULT_CHANGE = 1002;
     public static final String showSplitApks = "SHOW_SPLIT_APKS";
 
-    public static final List<String> apkBundleExtensions = Arrays.asList(".apks", ".apkm", ".xapk", ".apkmx");
+    public static final List<String> apkBundleExtensions = Arrays.asList(".apks", ".apkm", ".xapk", ".apkmx", ".aspk");
     public static int packageManagerFlags = PackageManager.GET_PERMISSIONS |
             PackageManager.GET_RECEIVERS |
             PackageManager.GET_PROVIDERS |
