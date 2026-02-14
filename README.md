@@ -5,6 +5,7 @@
 </p>
 
 ### AppInfo: Your app’s tell-all diary.🔍
+https://play.google.com/store/apps/details?id=com.drhowdydoo.appinfo&hl=en_IN
 
 ### AppInfo features :
 -  Shows a list of all installed apps and apks in your device (uninstalled apks will also be listed).
